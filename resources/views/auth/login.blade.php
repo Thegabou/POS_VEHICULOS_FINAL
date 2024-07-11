@@ -37,7 +37,7 @@
                                     <form method="POST" action="{{ route('login') }}">
                                         @csrf
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" name="email" value="{{ old('email') }}" required autofocus />
+                                            <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" name="correo" value="{{ old('email') }}" required autofocus />
                                             <label for="inputEmail">Correo Electronico</label>
                                         </div>
                                         <div class="form-floating mb-3">
@@ -66,7 +66,7 @@
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                        <div class="text-muted">Copyright &copy; Your Website 2024</div>
                         <div>
                             <a href="#">Privacy Policy</a>
                             &middot;
@@ -80,5 +80,6 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/scripts_system.js') }}"></script>
+    <script src="{{ asset('js/ajax.js') }}"></script>
 </body>
 </html>

@@ -8,78 +8,74 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\Usuario;
+
 
 class LoginRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
-     */
-    public function rules(): array
+    public function rules()
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'correo' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ];
     }
 
-    /**
-     * Attempt to authenticate the request's credentials.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function authenticate(): void
+    public function authenticate()
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+        $user = Usuario::where('correo', $this->input('correo'))->first();
+
+        if (!$user || hash('sha256', $this->input('password')) !== $user->contrasena) {
+            $this->incrementLoginAttempts();
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'correo' => __('auth.failed'),
             ]);
         }
 
-        RateLimiter::clear($this->throttleKey());
+        Auth::login($user);
+
+        $this->clearLoginAttempts();
     }
 
-    /**
-     * Ensure the login request is not rate limited.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function ensureIsNotRateLimited(): void
+    protected function ensureIsNotRateLimited()
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (! $this->hasTooManyLoginAttempts()) {
             return;
         }
 
-        event(new Lockout($this));
-
-        $seconds = RateLimiter::availableIn($this->throttleKey());
-
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
+            'correo' => __('auth.throttle', [
+                'seconds' => $this->secondsRemaining(),
+                'minutes' => ceil($this->secondsRemaining() / 60),
             ]),
         ]);
     }
 
-    /**
-     * Get the rate limiting throttle key for the request.
-     */
-    public function throttleKey(): string
+    protected function hasTooManyLoginAttempts()
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return RateLimiter::tooManyAttempts($this->throttleKey(), 5);
+    }
+
+    protected function incrementLoginAttempts()
+    {
+        RateLimiter::hit($this->throttleKey());
+    }
+
+    protected function clearLoginAttempts()
+    {
+        RateLimiter::clear($this->throttleKey());
+    }
+
+    protected function secondsRemaining()
+    {
+        return RateLimiter::availableIn($this->throttleKey());
+    }
+
+    public function throttleKey()
+    {
+        return strtolower($this->input('correo')).'|'.$this->ip();
     }
 }

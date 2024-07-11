@@ -18,5 +18,10 @@ class Empleado extends Model
         'cedula',
         'cargo',
     ];
+
+    public function usuario()
+    {
+        return $this->hasOne(Usuario::class, 'id_empleado');
+    }
 }
 

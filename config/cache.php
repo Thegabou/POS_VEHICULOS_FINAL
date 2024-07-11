@@ -9,9 +9,9 @@ return [
     | Default Cache Store
     |--------------------------------------------------------------------------
     |
-    | This option controls the default cache store that will be used by the
-    | framework. This connection is utilized if another isn't explicitly
-    | specified when running a cache operation inside the application.
+    | This option controls the default cache connection that gets used while
+    | using this caching library. This connection is used when another is
+    | not explicitly specified when executing a given caching function.
     |
     */
 
@@ -26,8 +26,8 @@ return [
     | well as their drivers. You may even define multiple stores for the
     | same cache driver to group types of items stored in your caches.
     |
-    | Supported drivers: "array", "database", "file", "memcached",
-    |                    "redis", "dynamodb", "octane", "null"
+    | Supported drivers: "apc", "array", "database", "file",
+    |         "memcached", "redis", "dynamodb", "octane", "null"
     |
     */
 
