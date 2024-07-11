@@ -123,4 +123,17 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'providers' => [
+        // Otros proveedores...
+
+        App\Providers\RouteServiceProvider::class,
+    ],
+
+    'aliases' => [
+        // Otros alias...
+
+        'Kernel' => App\Http\Kernel::class,
+    ],
+
+
 ];

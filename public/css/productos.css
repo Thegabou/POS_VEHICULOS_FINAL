@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Ubuntu', sans-serif;
+    box-sizing: border-box;
+}
+
+.contenedor{
+    max-width: 1200px;
+    padding: 10px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    contain: paint;
+}
+
+.contenedor .contenedor_productos{
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-gap: 30px;
+    grid-row-gap: 30px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.contenedor .contenedor_productos .producto{
+    max-width: 200px;
+    padding: 10px;
+    margin: auto;
+    border: 2px solid black;
+    border-radius: 15px;
+    padding: 20px;
+    transition: 0.3s;
+}
+
+.contenedor_productos .producto:hover{
+    box-shadow: 0 0 10px black;
+    scale: 1.05;
+}
+
+.contenedor_productos .producto .img-item{
+    width: 100%;
+}
+
+.contenedor_productos .producto .titulo_producto{
+    display: block;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.contenedor_productos .producto .precio_txt{
+    display: block;
+    font-weight: bold;
+    text-align: center;
+}
+
+.contenedor_productos .producto .precio_producto{
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.contenedor_productos .producto .boton_producto{
+    display: block;
+    margin: 10px auto;
+    border: none;
+    background: black;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+/* 
+carrito */
+
+.carrito{
+    border: 2px solid black;
+    width: 35%;
+    margin-top: 30px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: auto;
+    position: sticky !important;
+    top: 0;
+    transition: 0.3s;
+    opacity: 0;
+    margin-right: -100%;
+}
+
+.carrito .header-carrito{
+    color: black;
+    text-align: center;
+    padding: 30px 0;
+}
+
+.carrito .carrito-item{
+    display: flex;
+    align-items: center;
+    position: relative;
+    border-bottom: 1px solid black;
+    padding: 20px;
+}
+
+.carrito .carrito-item img{
+    margin-right: 20px;
+}
+
+.carrito .carrito-item .carrito-item-titulo{
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.carrito .carrito-item .selector-catidad{
+    display: inline-block;
+    margin-right: 25px;
+}
+
+.carrito .carrito-item  .carrito-item-cantidad{
+    border: none;
+    font-size: 18px;
+    background: transparent;
+    display: inline-block;
+    width: 30px;
+    padding: 5px;
+    text-align: center;
+}
+
+.carrito .carrito-item .selector-catidad i{
+    font-size: 18px;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border-radius: 50%;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.carrito .carrito-item .carrito-item-precio{
+    font-weight: bold;
+    display: inline-block;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.carrito .carrito-item .btn_eliminar{
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color: black;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+    border: 1px solid black;
+    cursor: pointer;
+    display: block;
+    background: transparent;
+    z-index: 20;
+}
+
+.carrito .carrito-item .btn_eliminar i{
+    pointer-events: none;
+}
+
+.carrito-total{
+    background-color: #fff;
+    padding: 30px;
+}
+
+.carrito-total .fila{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.carrito-total .btn_pagar{
+    display: block;
+    width: 100%;
+    border: none;
+    background: black;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 18px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.carrito-total .btn_pagar:hover{
+    scale: 1.05;
+}
+
+
+
+@media  screen and (max-width:850px) {
+    .contenedor{
+        display: block;
+    }
+
+    .contenedor_productos{
+        width: 100% !important;
+    }
+
+    .carrito{
+        width: 100%;
+    }
+}

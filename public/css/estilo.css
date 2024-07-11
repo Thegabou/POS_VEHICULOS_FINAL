@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Ubuntu', sans-serif;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 85px;
+    padding: 5px 10%;
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+}
+
+.header .nombre_empresa{
+    cursor: pointer;
+}
+
+.header .nombre_empresa h1{
+    transition: all 0.3s;
+}
+
+.header .nave{
+    list-style: none;
+}
+
+.header .nave li{
+    display: inline-block;
+    padding: 0 20px;
+    transition: all 0.3s;
+}
+
+.header .nave a{
+    font-size: 700;
+    color: #000000;
+    text-decoration: none;
+}
+
+.header .redes{
+    font-weight: 700;
+    padding: 9px 25px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+.fa-brands{
+    color: #000000;
+    margin: 10px;
+}
+
+.fa-solid{
+    color: #000000;
+    margin: 10px;
+}
+
+.header .nombre_empresa h1:hover{
+    transform: scale(1.2);
+}
+
+.header .nave li:hover{
+    transform: scale(1.2);   
+}
+
+.header-scrolled{
+    border-bottom: 2px solid black;
+}
+
+.hamburger {
+    display: none;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: #000;
+    cursor: pointer;
+}
+
+.menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.encabezado{
+    background: #FF4E50;  
+    background: -webkit-linear-gradient(to left, #ffb34f, #FF4E50);  
+    background: linear-gradient(to left, hsla(34, 100%, 65%, 0.651), hsla(359, 100%, 65%, 0.644)),url(../imagenes/fondo1.jpg);
+    width: 100%;
+    height: 400px;
+    background-size: cover;
+    background-attachment: fixed;
+    border-radius: 0px;
+}
+
+.encabezado{
+    display: flex;
+    height: 500px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.fa-brands{
+    transition: 0.3s;
+}
+.fa-brands:hover{
+    transform: scale(1.2);
+} 
+.fa-solid{
+    transition: 0.3s;
+}
+.fa-solid:hover{
+    transform: scale(1.2);
+}
+
+
+
+/* Estilos existentes */
+footer{
+    font-family: 'Ubuntu';
+}
+
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+
+    .nave {
+        position: absolute;
+        top: 0;
+        right: -100%;
+        width: 60%;
+        height: 100%;
+        background: white;
+        transition: right 0.3s ease;
+        z-index: 1000;
+    }
+    .redes{
+        position: absolute;
+        top: 0;
+        right: -100%;
+        width: 60%;
+        height: 100%;
+        background: black;
+        transition: right 0.3s ease;
+        z-index: 1000;
+    }
+
+    .nave.active {
+        right: 0;
+    }
+
+    .menu-overlay.active {
+        display: block;
+    }
+}
