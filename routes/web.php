@@ -49,7 +49,10 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard/creacion-usuarios', [DashboardController::class, 'creacionUsuarios'])->name('creacion-usuarios');
+    Route::get('dashboard/empleados', [DashboardController::class, 'Empleados'])->name('empleados');
 });
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -58,5 +61,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+
+
 
 require __DIR__.'/auth.php';
