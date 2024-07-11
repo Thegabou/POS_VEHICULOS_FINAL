@@ -45,14 +45,13 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Inicio
                         </a>
-                        <div class="sb-sidenav-menu-heading">Interface</div>
-                        <a class="nav-link" href="#" onclick="loadContent('{{ route('creacion-usuarios') }}')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Creacion de Usuario
-                        </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('empleados') }}')">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Empleados
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('usuarios') }}')">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Usuarios
                         </a>
                         <!-- Otros elementos del menú -->
                     </div>

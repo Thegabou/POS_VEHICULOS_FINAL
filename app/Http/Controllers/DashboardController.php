@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Empleado;
+use App\Models\Usuario;
 
 class DashboardController extends Controller
 {
@@ -36,7 +38,14 @@ class DashboardController extends Controller
 
     public function Empleados()
     {
-        return view('partials.empleados-index')->render();
+        $empleados = Empleado::all();
+        return view('partials.empleados-index', compact('empleados'))->render();
+    }
+
+    public function usuarios()
+    {
+        $usuarios = Usuario::with('empleado')->get();
+        return view('partials.usuarios-index', compact('usuarios'))->render();
     }
 
 }

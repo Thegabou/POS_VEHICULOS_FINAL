@@ -23,6 +23,8 @@
             <label for="cargo">Cargo:</label>
             <input type="text" class="form-control" id="cargo" name="cargo" value="{{ $empleado->cargo }}" required>
         </div>
+        <br>
         <button type="submit" class="btn btn-primary">Actualizar Empleado</button>
+        <button type="button" class="btn btn-secondary" onclick="loadContent('{{ route('empleados.index') }}')">Volver</button>
     </form>
 </div>

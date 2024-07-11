@@ -1,6 +1,6 @@
 <div class="container">
-    <h2>Creación de Empleados</h2>
-    <form action="{{ route('empleados.store') }}" method="POST">
+    <h1>Crear Empleado</h1>
+    <form id="form-create-empleado" action="{{ route('empleados.store') }}" method="POST">
         @csrf
         <div class="form-group">
             <label for="nombre">Nombre:</label>
@@ -16,12 +16,14 @@
         </div>
         <div class="form-group">
             <label for="cedula">Cédula:</label>
-            <input type="number" class="form-control" id="cedula" name="cedula" required>
+            <input type="text" class="form-control" id="cedula" name="cedula" required>
         </div>
         <div class="form-group">
             <label for="cargo">Cargo:</label>
             <input type="text" class="form-control" id="cargo" name="cargo" required>
         </div>
+        <br>
         <button type="submit" class="btn btn-primary">Crear Empleado</button>
+        <button type="button" class="btn btn-secondary" onclick="loadContent('{{ route('empleados.index') }}')">Volver</button>
     </form>
 </div>

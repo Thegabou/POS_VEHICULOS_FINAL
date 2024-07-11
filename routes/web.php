@@ -51,6 +51,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('dashboard/creacion-usuarios', [DashboardController::class, 'creacionUsuarios'])->name('creacion-usuarios');
     Route::get('dashboard/empleados', [DashboardController::class, 'Empleados'])->name('empleados');
+    Route::get('dashboard/usuarios', [DashboardController::class, 'Usuarios'])->name('usuarios');
+    Route::get('usuarios/search-empleado', [UsuarioController::class, 'searchEmpleado'])->name('usuarios.search-empleado');
 });
 
 

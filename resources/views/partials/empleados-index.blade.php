@@ -1,5 +1,6 @@
 <div class="container">
     <h1>Lista de Empleados</h1>
+    <button class="btn btn-primary mb-3" onclick="loadContent('{{ route('empleados.create') }}')">Crear Empleado</button>
     <table class="table">
         <thead>
             <tr>
