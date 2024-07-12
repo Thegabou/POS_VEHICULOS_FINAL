@@ -1,6 +1,10 @@
 <div class="container">
     <h1>Lista de Usuarios</h1>
-    <button class="btn btn-primary mb-3" onclick="loadContent('{{ route('usuarios.create') }}')">Crear Usuario</button>
+    <button class="btn btn-primary mb-3" onclick="loadContent('{{ route('usuarios.create') }}')">Crear Usuario</button> 
+    <div class="d-flex justify-content-end mb-3">
+        <input type="text" id="search" class="form-control form-control-sm me-2" placeholder="Buscar por nombre o apellido">
+        <button class="btn btn-secondary" onclick="filterUsuarios()">Buscar</button>
+    </div>
     <table class="table">
         <thead>
             <tr>

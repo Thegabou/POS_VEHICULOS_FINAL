@@ -4,6 +4,7 @@ function loadContent(url) {
         .then(html => {
             document.getElementById('main-content').innerHTML = html;
             attachSearchHandler();
+            
         })
         .catch(error => console.warn(error));
 }
@@ -40,6 +41,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 .catch(error => console.error('Error:', error));
         }
     });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', filterUsuarios);
+    const searchInputEmpleado = document.getElementById('search-empleado');
+    searchInputEmpleado.addEventListener('input', filterEmpleados);
+    attachSearchHandler();
 });
 
 function deleteEmpleado(event, form) {
@@ -83,6 +92,109 @@ function deleteEmpleado(event, form) {
     });
 }
 
+function attachSearchHandler() {
+    const searchInput = document.getElementById('search');
+    if (searchInput) {
+        searchInput.addEventListener('input', filterUsuarios);
+    }
+}
+
+
+function attachSearchHandler() {
+    const searchInputEmpleado = document.getElementById('search');
+    if (searchInputEmpleado) {
+        searchInputEmpleado.addEventListener('input', filterEmpleados);
+    }
+}
+
+
+
+function filterEmpleados() {
+    const searchInput = document.getElementById('search');
+    const searchValue = searchInput.value.toLowerCase();
+    const tbody = document.getElementById('empleados-tbody');
+    const rows = tbody.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const nombre = row.cells[0].textContent.toLowerCase();
+        const apellido = row.cells[1].textContent.toLowerCase();
+        const correo = row.cells[2].textContent.toLowerCase();
+        const cedula = row.cells[3].textContent.toLowerCase();
+        const cargo = row.cells[4].textContent.toLowerCase();
+
+        if (nombre.includes(searchValue) || apellido.includes(searchValue) || correo.includes(searchValue) || cedula.includes(searchValue) || cargo.includes(searchValue)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    }
+}
+
+
+function searchEmpleado() {
+    const cedula = document.getElementById('cedula').value;
+    fetch(`/usuarios/search-empleado?cedula=${cedula}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: data.error,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                const empleadoSelect = document.getElementById('id_empleado');
+                empleadoSelect.innerHTML = `<option value="${data.id}">${data.nombre} ${data.apellido} - ${data.cedula}</option>`;
+                empleadoSelect.value = data.id;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const cedulaInput = document.getElementById('cedula');
+    const empleadoSelect = document.getElementById('id_empleado');
+    const createButton = document.querySelector('button[type="submit"]');
+
+    cedulaInput.addEventListener('input', function () {
+        const cedula = cedulaInput.value.trim();
+        let found = false;
+
+        for (let i = 0; i < empleadoSelect.options.length; i++) {
+            const option = empleadoSelect.options[i];
+            if (option.text.includes(cedula)) {
+                option.style.display = '';
+                found = true;
+            } else {
+                option.style.display = 'none';
+            }
+        }
+
+        if (!found) {
+            Swal.fire({
+                title: 'No encontrado',
+                text: 'No se encontró ningún empleado con esa cédula.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            const noResultsOption = document.createElement('option');
+            noResultsOption.text = 'Sin resultados';
+            noResultsOption.disabled = true;
+            noResultsOption.style.color = 'red';
+            empleadoSelect.appendChild(noResultsOption);
+            empleadoSelect.style.borderColor = 'red';
+            createButton.disabled = true;
+        } else {
+            empleadoSelect.style.borderColor = '';
+            createButton.disabled = false;
+        }
+    });
+});
+
+
+
 function deleteUsuario(event, form) {
     event.preventDefault();
     Swal.fire({
@@ -124,65 +236,23 @@ function deleteUsuario(event, form) {
     });
 }
 
-function attachSearchHandler() {
+
+function filterUsuarios() {
     const searchInput = document.getElementById('search');
-    if (searchInput) {
-        searchInput.addEventListener('input', function () {
-            const searchValue = searchInput.value;
-            fetch(`/dashboard/usuarios?search=${searchValue}`)
-                .then(response => response.text())
-                .then(html => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    const newTableBody = doc.querySelector('#usuarios-tbody');
-                    document.querySelector('#usuarios-tbody').innerHTML = newTableBody.innerHTML;
-                })
-                .catch(error => console.warn(error));
-        });
+    const searchValue = searchInput.value.toLowerCase();
+    const tbody = document.getElementById('usuarios-tbody');
+    const rows = tbody.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const empleadoName = row.cells[1].textContent.toLowerCase();
+        if (empleadoName.includes(searchValue)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
     }
 }
 
-function searchEmpleado() {
-    const cedula = document.getElementById('cedula').value;
-    fetch(`/usuarios/search-empleado?cedula=${cedula}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: data.error,
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            } else {
-                const empleadoSelect = document.getElementById('id_empleado');
-                empleadoSelect.innerHTML = `<option value="${data.id}">${data.nombre} ${data.apellido} - ${data.cedula}</option>`;
-                empleadoSelect.value = data.id;
-            }
-        })
-        .catch(error => console.error('Error:', error));
-}
 
-document.addEventListener('DOMContentLoaded', function () {
-    const cedulaInput = document.getElementById('cedula');
-    const empleadoSelect = document.getElementById('id_empleado');
 
-    cedulaInput.addEventListener('input', function () {
-        const cedula = cedulaInput.value;
-
-        if (cedula.length >= 3) {
-            fetch(`/usuarios/search-empleado?cedula=${cedula}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        empleadoSelect.innerHTML = '<option value="">Empleado no encontrado</option>';
-                    } else {
-                        empleadoSelect.innerHTML = `<option value="${data.id}">${data.nombre} ${data.apellido} - ${data.cedula}</option>`;
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        } else {
-            empleadoSelect.innerHTML = '<option value="">Seleccione un empleado</option>';
-        }
-    });
-});

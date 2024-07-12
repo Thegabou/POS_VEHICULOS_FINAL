@@ -1,6 +1,10 @@
 <div class="container">
     <h1>Lista de Empleados</h1>
     <button class="btn btn-primary mb-3" onclick="loadContent('{{ route('empleados.create') }}')">Crear Empleado</button>
+    <div class="d-flex justify-content-end mb-3">
+        <input type="text" id="search" class="form-control form-control-sm me-2" placeholder="Buscar por nombre, apellido, correo, cédula o cargo">
+        <button class="btn btn-secondary" onclick="filterEmpleados()">Buscar</button>
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -12,7 +16,7 @@
                 <th>Acciones</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="empleados-tbody">
             @foreach($empleados as $empleado)
                 <tr>
                     <td>{{ $empleado->nombre }}</td>

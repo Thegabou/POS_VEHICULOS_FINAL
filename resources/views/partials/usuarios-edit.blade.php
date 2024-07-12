@@ -26,6 +26,8 @@
             <label for="contrasena">Contraseña (dejar en blanco para mantener actual):</label>
             <input type="password" class="form-control" id="contrasena" name="contrasena">
         </div>
+        <br>
         <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
+        <button type="button" class="btn btn-secondary" onclick="loadContent('{{ route('usuarios.index') }}')">Volver</button>
     </form>
 </div>

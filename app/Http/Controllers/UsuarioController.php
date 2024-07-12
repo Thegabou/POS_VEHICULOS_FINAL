@@ -10,50 +10,34 @@ class UsuarioController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Usuario::with('empleado');
-
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->whereHas('empleado', function ($q) use ($search) {
-                $q->where('nombre', 'like', "%{$search}%")
-                  ->orWhere('apellido', 'like', "%{$search}%");
+        $search = $request->input('search');
+        $usuarios = Usuario::when($search, function ($query, $search) {
+            $query->whereHas('empleado', function ($query) use ($search) {
+                $query->where('nombre', 'like', "%$search%")
+                    ->orWhere('apellido', 'like', "%$search%");
             });
-        }
+        })->get();
 
-        $usuarios = $query->get();
-
-        return view('partials.usuarios-index', compact('usuarios'))->render();
+        return view('partials.usuarios-index', compact('usuarios'));
     }
 
     public function create()
     {
         $empleados = Empleado::all();
-        return view('partials.usuarios-create', compact('empleados'))->render();
-    }
-
-    public function searchEmpleado(Request $request)
-    {
-        $cedula = $request->input('cedula');
-        $empleado = Empleado::where('cedula', $cedula)->first();
-
-        if ($empleado) {
-            return response()->json($empleado);
-        } else {
-            return response()->json(['error' => 'Empleado no encontrado'], 404);
-        }
+        return view('partials.usuarios-create', compact('empleados'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'correo' => 'required|string|email|max:255|unique:usuarios',
-            'contrasena' => 'required|string|min:8',
+            'correo' => 'required|email|unique:usuarios,correo',
+            'contrasena' => 'required',
             'id_empleado' => 'required|exists:empleados,id',
         ]);
 
         Usuario::create([
             'correo' => $request->correo,
-            'contrasena' => hash('sha256', $request->contrasena),
+            'contrasena' => $request->contrasena, // Asegúrate de hashear la contraseña si es necesario
             'id_empleado' => $request->id_empleado,
         ]);
 
@@ -64,14 +48,14 @@ class UsuarioController extends Controller
     {
         $usuario = Usuario::findOrFail($id);
         $empleados = Empleado::all();
-        return view('partials.usuarios-edit', compact('usuario', 'empleados'))->render();
+        return view('partials.usuarios-edit', compact('usuario', 'empleados'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'correo' => 'required|string|email|max:255|unique:usuarios,correo,' . $id,
-            'contrasena' => 'nullable|string|min:8',
+            'correo' => 'required|email|unique:usuarios,correo,' . $id,
+            'contrasena' => 'required',
             'id_empleado' => 'required|exists:empleados,id',
         ]);
 
@@ -89,6 +73,19 @@ class UsuarioController extends Controller
     {
         $usuario = Usuario::findOrFail($id);
         $usuario->delete();
+
         return response()->json(['success' => 'Usuario eliminado exitosamente.']);
+    }
+
+    public function searchEmpleado(Request $request)
+    {
+        $cedula = $request->input('cedula');
+        $empleado = Empleado::where('cedula', $cedula)->first();
+
+        if (!$empleado) {
+            return response()->json(['error' => 'Empleado no encontrado.'], 404);
+        }
+
+        return response()->json($empleado);
     }
 }

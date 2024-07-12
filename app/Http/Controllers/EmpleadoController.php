@@ -7,10 +7,22 @@ use Illuminate\Http\Request;
 
 class EmpleadoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $empleados = Empleado::all();
-        return view('partials.empleados-index', compact('empleados'))->render();
+        $query = Empleado::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('nombre', 'like', "%{$search}%")
+                ->orWhere('apellido', 'like', "%{$search}%")
+                ->orWhere('correo', 'like', "%{$search}%")
+                ->orWhere('cedula', 'like', "%{$search}%")
+                ->orWhere('cargo', 'like', "%{$search}%");
+        }
+
+        $empleados = $query->get();
+
+        return view('partials.empleados-index', compact('empleados'));
     }
 
     public function create()
