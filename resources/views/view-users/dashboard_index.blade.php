@@ -91,5 +91,6 @@
     <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
     <script src="{{ asset('js/dashboard_index.js') }}"></script>
     <script src="{{ asset('js/dashboard_empleados.js') }}"></script>
+    <script src="{{asset('js/utilis.js')}}"></script>
 </body>
 </html>

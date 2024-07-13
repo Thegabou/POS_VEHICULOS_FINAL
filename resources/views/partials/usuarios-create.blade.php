@@ -3,17 +3,17 @@
     <form id="form-create-usuario" action="{{ route('usuarios.store') }}" method="POST">
         @csrf
         <div class="mb-3">
-            <label for="cedula" class="form-label">Buscar Empleado por Cédula:</label>
-            <input type="text" class="form-control" id="cedula" name="cedula">
-        </div>
-        <div class="mb-3">
-            <label for="id_empleado" class="form-label">Empleado:</label>
-            <select class="form-control" id="id_empleado" name="id_empleado" required>
-                <option value="">Seleccione un empleado</option>
-                @foreach($empleados as $empleado)
-                    <option value="{{ $empleado->id }}">{{ $empleado->nombre }} {{ $empleado->apellido }} - {{ $empleado->cedula }}</option>
-                @endforeach
-            </select>
+            <label for="dropdownEmpleado" class="form-label">Empleado:</label>
+            <div class="dropdown">
+                <input type="text" class="form-control dropdown-toggle" id="dropdownEmpleado" readonly aria-haspopup="true" aria-expanded="false" placeholder="Seleccionar" onclick="toggleDropdown('dropdownMenuEmpleado')">
+                <div class="dropdown-menu" id="dropdownMenuEmpleado" aria-labelledby="dropdownEmpleado">
+                    <input type="text" class="form-control" placeholder="Buscar..." id="searchInputEmpleado" onkeyup="filterFunction('searchInputEmpleado', 'dropdownMenuEmpleado')">
+                    @foreach($empleados as $empleado)
+                        <a class="dropdown-item" href="#" onclick="selectOption('dropdownEmpleado', 'hiddenEmpleado', this)" data-id="{{ $empleado->id }}">{{ $empleado->nombre }} {{ $empleado->apellido }} - {{ $empleado->cedula }}</a>
+                    @endforeach
+                </div>
+            </div>
+            <input type="hidden" name="id_empleado" id="hiddenEmpleado" required>
         </div>
         <div class="mb-3">
             <label for="correo" class="form-label">Correo:</label>

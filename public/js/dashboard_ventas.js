@@ -29,14 +29,12 @@ function buscarCliente() {
     const cedula = document.getElementById('cedula').value;
     console.log(cedula);
     if (cedula.length > 0) {
-        const form = e.target;
-        const url = form.action+'/'+cedula;
+        const form = document.getElementById('form-buscar-cliente');
+        const url = "/vendedor/buscar-cliente/" + cedula;
         const formData = new FormData(form);
-        
-        fetch(url, {
-            method: form.method,
-            body: formData,
-        })
+        console.log(url);
+
+        fetch(url)
             .then(response => response.json())
             .then(data => {
                 if (data) {

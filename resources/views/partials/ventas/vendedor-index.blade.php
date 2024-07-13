@@ -2,7 +2,7 @@
     <h1>Punto de Facturación</h1>
 
     <!-- Selección de Cliente -->
-    <form id="form-buscar-cliente">
+    <form id="form-buscar-cliente" >
         @csrf
         <div class="mb-3">
             <label for="cedula" class="form-label">Cédula del Cliente:</label>
@@ -28,15 +28,20 @@
 
     <!-- Selección de Vendedor -->
     <div class="mb-3">
-        <label for="vendedor" class="form-label">Vendedor:</label>
-        <select class="form-control" id="vendedor" name="vendedor">
-            <option value="{{ auth()->user()->id }}">{{ auth()->user()->name }}</option>
-            @foreach ($empleados as $empleado)
-                @if (in_array($empleado->cargo, ['vendedor', 'gerente']))
-                    <option value="{{ $empleado->id }}">{{ $empleado->nombre }} {{ $empleado->apellido }}</option>
-                @endif
-            @endforeach
-        </select>
+        <label for="dropdownVendedor" class="form-label">Vendedor:</label>
+        <div class="dropdown">
+            <input type="text" class="form-control dropdown-toggle" id="dropdownVendedor" readonly aria-haspopup="true" aria-expanded="false" placeholder="Seleccionar" onclick="toggleDropdown('dropdownMenuVendedor')">
+            <div class="dropdown-menu" id="dropdownMenuVendedor" aria-labelledby="dropdownVendedor">
+                <input type="text" class="form-control" placeholder="Buscar..." id="searchInputVendedor" onkeyup="filterFunction('searchInputVendedor', 'dropdownMenuVendedor')">
+                <a class="dropdown-item" href="#" onclick="selectOption('dropdownVendedor', 'hiddenVendedor', this)" data-id="{{ auth()->user()->id }}">{{ auth()->user()->name }}</a>
+                @foreach ($empleados as $empleado)
+                    @if (in_array($empleado->cargo, ['vendedor', 'gerente']))
+                        <a class="dropdown-item" href="#" onclick="selectOption('dropdownVendedor', 'hiddenVendedor', this)" data-id="{{ $empleado->id }}">{{ $empleado->nombre }} {{ $empleado->apellido }}</a>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+        <input type="hidden" name="vendedor" id="hiddenVendedor">
     </div>
 
     <!-- Selección de Vehículo -->
@@ -101,3 +106,5 @@
     </div>
     <button class="btn btn-success" onclick="finalizarCompra()">Finalizar Compra</button>
 </div>
+
+<script src="{{asset('js/utilis.js')}}"></script>
