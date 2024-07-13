@@ -53,7 +53,6 @@ class ClienteController extends Controller
     public function buscarCliente($cedula)
     {
         $cliente = Cliente::where('cedula', $cedula)->first();
-
         if ($cliente) {
             return response()->json($cliente);
         } else {

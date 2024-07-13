@@ -1,27 +1,48 @@
+// Función para cargar contenido dinámicamente
 function loadContent(url) {
     fetch(url)
         .then(response => response.text())
         .then(html => {
             document.getElementById('main-content').innerHTML = html;
             attachSearchHandler();
-            
         })
         .catch(error => console.warn(error));
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    const cedulaInput = document.getElementById('cedula');
+    cedulaInput.addEventListener('input', buscarCliente);
+});
+
+// Variables globales para el carrito
 let carrito = [];
 let total = 0;
 
+// function attachSearchHandler() {
+//     const cedulaInput = document.getElementById('cedula');
+//     if (cedulaInput) {
+//         cedulaInput.addEventListener('input', buscarCliente);
+//     }
+// }
+// Función para buscar cliente por cédula
 function buscarCliente() {
     const cedula = document.getElementById('cedula').value;
     console.log(cedula);
     if (cedula.length > 0) {
-        axios.get('/clientes/buscar/' + cedula)
-            .then(response => {
-                if (response.data) {
-                    document.getElementById('nombre_apellido').value = response.data.nombre + ' ' + response.data.apellido;
-                    document.getElementById('telefono').value = response.data.numero_telefono;
-                    document.getElementById('correo').value = response.data.correo;
+        const form = e.target;
+        const url = form.action+'/'+cedula;
+        const formData = new FormData(form);
+        
+        fetch(url, {
+            method: form.method,
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    document.getElementById('nombre_apellido').value = data.nombre + ' ' + data.apellido;
+                    document.getElementById('telefono').value = data.numero_telefono;
+                    document.getElementById('correo').value = data.correo;
                     document.getElementById('nombre_apellido').disabled = true;
                     document.getElementById('telefono').disabled = true;
                     document.getElementById('correo').disabled = true;
@@ -32,6 +53,14 @@ function buscarCliente() {
                         text: 'No se encontró ningún cliente con esa cédula',
                     });
                 }
+            })
+            .catch(error => {
+                console.error('Error al buscar el cliente:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un problema al buscar el cliente. Por favor, inténtelo nuevamente.',
+                });
             });
     } else {
         document.getElementById('nombre_apellido').value = '';
@@ -43,7 +72,8 @@ function buscarCliente() {
     }
 }
 
-function addVehicle() {
+// Función para agregar un vehículo al carrito
+function addVehiculo() {
     const vehiculoInput = document.getElementById('vehiculo');
     const vehiculoId = vehiculoInput.value;
     const vehiculoOption = document.querySelector(`#vehiculosList option[value="${vehiculoId}"]`);
@@ -73,6 +103,7 @@ function addVehicle() {
     }
 }
 
+// Función para actualizar el carrito
 function updateCarrito() {
     const tbody = document.getElementById('carrito-tbody');
     tbody.innerHTML = '';
@@ -86,35 +117,52 @@ function updateCarrito() {
             <td>${vehiculo.cantidad}</td>
             <td>$${vehiculo.precio.toFixed(2)}</td>
             <td>$${vehiculo.subtotal.toFixed(2)}</td>
-            <td><button class="btn btn-danger" onclick="removeVehicle('${vehiculo.id}')">Eliminar</button></td>
+            <td>
+                <button class="btn btn-danger" onclick="removeVehiculo('${vehiculo.id}')">Eliminar</button>
+                <button class="btn btn-warning" onclick="editVehiculo('${vehiculo.id}')">Editar</button>
+            </td>
         `;
 
         tbody.appendChild(tr);
         total += vehiculo.subtotal;
     });
 
-    document.getElementById('total').innerText = total.toFixed(2);
+    document.getElementById('sub_total').innerText = total.toFixed(2);
+    const iva = total * 0.15;
+    document.getElementById('iva').innerText = iva.toFixed(2);
+    document.getElementById('total').innerText = (total + iva).toFixed(2);
 }
 
-function removeVehicle(id) {
+// Función para eliminar un vehículo del carrito
+function removeVehiculo(id) {
     carrito = carrito.filter(vehiculo => vehiculo.id !== id);
     updateCarrito();
 }
 
+// Función para editar un vehículo del carrito
+function editVehiculo(id) {
+    const vehiculo = carrito.find(vehiculo => vehiculo.id === id);
+    if (vehiculo) {
+        // Implementa la lógica para editar el vehículo
+        // Por ejemplo, podrías mostrar un modal con un formulario para editar la cantidad y el precio
+    }
+}
+
+// Función para finalizar la compra
 function finalizarCompra() {
-    const clienteId = document.getElementById('cliente').value;
+    const clienteId = document.getElementById('cedula').value;
     const metodoPago = document.getElementById('metodo_pago').value;
 
     if (clienteId && carrito.length > 0) {
-        // Simulate a call to backend to finalize the purchase
+        // Simula una llamada al backend para finalizar la compra
         Swal.fire({
             title: 'Compra Finalizada',
             text: 'La compra se ha realizado con éxito',
             icon: 'success',
             confirmButtonText: 'OK'
         }).then(() => {
-            // Clear the form and carrito
-            document.getElementById('cliente').value = '';
+            // Limpia el formulario y el carrito
+            document.getElementById('cedula').value = '';
             document.getElementById('vehiculo').value = '';
             carrito = [];
             updateCarrito();

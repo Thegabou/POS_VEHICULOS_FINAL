@@ -1,35 +1,38 @@
 <div class="container mt-5">
     <h1>Punto de Facturación</h1>
-    
+
     <!-- Selección de Cliente -->
-    <div class="mb-3">
-        <label for="cedula" class="form-label">Cédula del Cliente:</label>
-        <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Ingrese Cédula del Cliente" oninput="buscarCliente()">
-    </div>
-    <div class="mb-3">
-        <label for="nombre_apellido" class="form-label">Nombre y Apellido:</label>
-        <input type="text" class="form-control" id="nombre_apellido" name="nombre_apellido" disabled>
-    </div>
-    <div class="mb-3">
-        <label for="telefono" class="form-label">Teléfono:</label>
-        <input type="text" class="form-control" id="telefono" name="telefono" disabled>
-    </div>
-    <div class="mb-3">
-        <label for="correo" class="form-label">Correo Electrónico:</label>
-        <input type="text" class="form-control" id="correo" name="correo" disabled>
-    </div>
-    <div class="mb-3">
-        <label for="fecha" class="form-label">Fecha:</label>
-        <input type="date" class="form-control" id="fecha" name="fecha" value="{{ date('Y-m-d') }}">
-    </div>
+    <form id="form-buscar-cliente">
+        @csrf
+        <div class="mb-3">
+            <label for="cedula" class="form-label">Cédula del Cliente:</label>
+            <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Ingrese Cédula del Cliente" oninput="buscarCliente()">
+        </div>
+        <div class="mb-3">
+            <label for="nombre_apellido" class="form-label">Nombre y Apellido:</label>
+            <input type="text" class="form-control" id="nombre_apellido" name="nombre_apellido" disabled>
+        </div>
+        <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono:</label>
+            <input type="text" class="form-control" id="telefono" name="telefono" disabled>
+        </div>
+        <div class="mb-3">
+            <label for="correo" class="form-label">Correo Electrónico:</label>
+            <input type="text" class="form-control" id="correo" name="correo" disabled>
+        </div>
+        <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha:</label>
+            <input type="date" class="form-control" id="fecha" name="fecha" value="{{ date('Y-m-d') }}">
+        </div>
+    </form>
 
     <!-- Selección de Vendedor -->
     <div class="mb-3">
         <label for="vendedor" class="form-label">Vendedor:</label>
         <select class="form-control" id="vendedor" name="vendedor">
             <option value="{{ auth()->user()->id }}">{{ auth()->user()->name }}</option>
-            @foreach($empleados as $empleado)
-                @if(in_array($empleado->cargo, ['vendedor', 'gerente']))
+            @foreach ($empleados as $empleado)
+                @if (in_array($empleado->cargo, ['vendedor', 'gerente']))
                     <option value="{{ $empleado->id }}">{{ $empleado->nombre }} {{ $empleado->apellido }}</option>
                 @endif
             @endforeach
@@ -41,7 +44,7 @@
         <label for="vehiculo" class="form-label">Vehículo:</label>
         <input type="text" class="form-control" id="vehiculo" name="vehiculo" placeholder="Buscar Vehículo por Código o Nombre" list="vehiculosList">
         <datalist id="vehiculosList">
-            @foreach($vehiculos as $vehiculo)
+            @foreach ($vehiculos as $vehiculo)
                 <option value="{{ $vehiculo->id }}">{{ $vehiculo->marca }} {{ $vehiculo->modelo }} - ${{ $vehiculo->precio_venta }}</option>
             @endforeach
         </datalist>
