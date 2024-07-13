@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Empleado;
 use App\Models\Usuario;
+use App\Models\Cliente;
+use App\Models\Vehiculo;
 
 class DashboardController extends Controller
 {
@@ -15,25 +17,11 @@ class DashboardController extends Controller
 
         if ($empleado->cargo == 'gerente') {
             return view('view-users.dashboard_gerente');
-        } elseif ($empleado->cargo == 'ventas') {
+        } elseif ($empleado->cargo == 'vendedor') {
             return view('view-users.dashboard_ventas');
         } else if ($empleado->cargo == 'Admin') {
             return view('view-users.dashboard_index');
         }
-    }
-    public function creacionUsuarios()
-    {
-        return view('partials.creacion-usuarios')->render();
-    }
-
-    public function inventario()
-    {
-        return view('partials.inventario')->render();
-    }
-
-    public function creacionEmpleados()
-    {
-        return view('partials.creacion-empleados')->render();
     }
 
     public function Empleados()
@@ -47,5 +35,7 @@ class DashboardController extends Controller
         $usuarios = Usuario::with('empleado')->get();
         return view('partials.usuarios-index', compact('usuarios'))->render();
     }
+
+    
 
 }

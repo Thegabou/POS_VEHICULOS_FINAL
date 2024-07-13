@@ -37,7 +37,7 @@ class UsuarioController extends Controller
 
         Usuario::create([
             'correo' => $request->correo,
-            'contrasena' => $request->contrasena, // Asegúrate de hashear la contraseña si es necesario
+            'contrasena' => hash('sha256', $request->contrasena),
             'id_empleado' => $request->id_empleado,
         ]);
 

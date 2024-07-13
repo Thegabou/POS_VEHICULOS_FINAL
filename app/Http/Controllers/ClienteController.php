@@ -49,4 +49,15 @@ class ClienteController extends Controller
         $cliente->delete();
         return redirect()->route('clientes.index');
     }
+
+    public function buscarCliente($cedula)
+    {
+        $cliente = Cliente::where('cedula', $cedula)->first();
+
+        if ($cliente) {
+            return response()->json($cliente);
+        } else {
+            return response()->json(null, 404);
+        }
+    }
 }

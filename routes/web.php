@@ -11,6 +11,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\CompraVehiculoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\VentaVehiculoController;
+use App\Http\Controllers\VendedorController; // Add this line
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -53,8 +54,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard/empleados', [DashboardController::class, 'Empleados'])->name('empleados');
     Route::get('dashboard/usuarios', [DashboardController::class, 'Usuarios'])->name('usuarios');
     Route::get('usuarios/search-empleado', [UsuarioController::class, 'searchEmpleado'])->name('usuarios.search-empleado');
-});
+    Route::get('vendedor/punto_venta', [VendedorController::class, 'punto_Ventas'])->name('punto_venta');
+    Route::get('vendedor/buscar-cliente/{cedula}', [ClienteController::class, 'buscarCliente'])->name('buscar-cliente');
 
+});    
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
