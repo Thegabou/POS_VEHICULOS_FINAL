@@ -56,6 +56,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('usuarios/search-empleado', [UsuarioController::class, 'searchEmpleado'])->name('usuarios.search-empleado');
     Route::get('vendedor/punto_venta', [VendedorController::class, 'punto_Ventas'])->name('punto_venta');
     Route::get('vendedor/buscar-cliente/{cedula}', [ClienteController::class, 'buscarCliente'])->name('buscar-cliente');
+    Route::get('dashboard/clientes', [DashboardController::class, 'Clientes'])->name('clientes');
 
 });    
 

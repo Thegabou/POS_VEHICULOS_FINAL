@@ -7,6 +7,8 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Dashboard-Admin</title>
+    <link rel="shortcut icon" href="{{asset('imagenes/logo_barra.png')}}" type="image/png">
+    <link rel="apple-touch-icon" href="{{asset('imagenes/logo_barra.png')}}">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="{{asset('css/styles_system.css')}}" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>

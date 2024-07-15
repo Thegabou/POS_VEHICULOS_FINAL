@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Venta Vehiculos, Sistema de Facturacion">
-    <title>Productos</title>
-    <link rel="apple-touch-icon" href="images/kirby.png">
+    <title>GroundHogDriver</title>
+    <link rel="apple-touch-icon" href="{{asset('imagenes/logo_barra.png')}}">
     <link rel="stylesheet" href="{{asset('css/estilo.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -20,7 +20,7 @@
         href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700&family=Montserrat:wght@300&family=Rubik+Broken+Fax&family=Silkscreen&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/productos.css')}}">
-    <link rel="shortcut icon" href="Images/kirby_logo.png" type="image/png">
+    <link rel="shortcut icon" href="{{asset('imagenes/logo_barra.png')}}" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
@@ -44,7 +44,7 @@
         <div class="menu-overlay"></div>
     </header>
     <section class="encabezado">
-        <img src="{{asset('imagenes/logo_cars.png')}}" alt="" width="160" />
+        <img src="{{asset('imagenes/logo_marmota.png')}}" alt="" width="160" />
         <h1>
             "GroundhogDriver:<br> Todo lo que hagas sobre ruedas"
         </h1>

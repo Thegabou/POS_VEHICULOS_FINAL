@@ -18,12 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 let carrito = [];
 let total = 0;
 
-// function attachSearchHandler() {
-//     const cedulaInput = document.getElementById('cedula');
-//     if (cedulaInput) {
-//         cedulaInput.addEventListener('input', buscarCliente);
-//     }
-// }
+
 // Función para buscar cliente por cédula
 function buscarCliente() {
     const cedula = document.getElementById('cedula').value;
@@ -80,15 +75,24 @@ function addVehiculo() {
         const vehiculoNombre = vehiculoData[0];
         const vehiculoPrecio = parseFloat(vehiculoData[1].substring(1));
 
-        const vehiculo = {
-            id: vehiculoId,
-            nombre: vehiculoNombre,
-            precio: vehiculoPrecio,
-            cantidad: 1,
-            subtotal: vehiculoPrecio
-        };
+        // Verificar si el vehículo ya está en el carrito
+        const vehiculoExistente = carrito.find(vehiculo => vehiculo.id === vehiculoId);
+        if (vehiculoExistente) {
+            // Actualizar la cantidad y el subtotal
+            vehiculoExistente.cantidad += 1;
+            vehiculoExistente.subtotal = vehiculoExistente.cantidad * vehiculoExistente.precio;
+        } else {
+            // Agregar el nuevo vehículo al carrito
+            const vehiculo = {
+                id: vehiculoId,
+                nombre: vehiculoNombre,
+                precio: vehiculoPrecio,
+                cantidad: 1,
+                subtotal: vehiculoPrecio
+            };
+            carrito.push(vehiculo);
+        }
 
-        carrito.push(vehiculo);
         updateCarrito();
         vehiculoInput.value = '';
     } else {
@@ -101,23 +105,25 @@ function addVehiculo() {
     }
 }
 
+
 // Función para actualizar el carrito
 function updateCarrito() {
     const tbody = document.getElementById('carrito-tbody');
     tbody.innerHTML = '';
 
     total = 0;
-    carrito.forEach(vehiculo => {
+    carrito.forEach((vehiculo, index) => {
         const tr = document.createElement('tr');
 
         tr.innerHTML = `
-            <td>${vehiculo.nombre}</td>
+            <td>${vehiculo.id}</td>
             <td>${vehiculo.cantidad}</td>
+            <td>${vehiculo.nombre}</td>
             <td>$${vehiculo.precio.toFixed(2)}</td>
             <td>$${vehiculo.subtotal.toFixed(2)}</td>
             <td>
-                <button class="btn btn-danger" onclick="removeVehiculo('${vehiculo.id}')">Eliminar</button>
-                <button class="btn btn-warning" onclick="editVehiculo('${vehiculo.id}')">Editar</button>
+                <button class="btn btn-danger" onclick="removeVehiculo(${index})">Eliminar</button>
+                <button class="btn btn-warning" onclick="editVehiculo(${index})">Editar</button>
             </td>
         `;
 
@@ -131,20 +137,39 @@ function updateCarrito() {
     document.getElementById('total').innerText = (total + iva).toFixed(2);
 }
 
+// Función para editar un vehículo del carrito
+function editVehiculo(index) {
+    const vehiculo = carrito[index];
+    document.getElementById('editCantidad').value = vehiculo.cantidad;
+    document.getElementById('editPrecio').value = vehiculo.precio;
+    document.getElementById('editIndex').value = index;
+
+    const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+    editModal.show();
+}
+
+// Función para guardar los cambios del vehículo editado
+function saveEdit() {
+    const index = document.getElementById('editIndex').value;
+    const cantidad = document.getElementById('editCantidad').value;
+    const precio = document.getElementById('editPrecio').value;
+
+    carrito[index].cantidad = parseInt(cantidad);
+    carrito[index].precio = parseFloat(precio);
+    carrito[index].subtotal = carrito[index].cantidad * carrito[index].precio;
+
+    updateCarrito();
+
+    const editModal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+    editModal.hide();
+}
+
 // Función para eliminar un vehículo del carrito
-function removeVehiculo(id) {
-    carrito = carrito.filter(vehiculo => vehiculo.id !== id);
+function removeVehiculo(index) {
+    carrito.splice(index, 1);
     updateCarrito();
 }
 
-// Función para editar un vehículo del carrito
-function editVehiculo(id) {
-    const vehiculo = carrito.find(vehiculo => vehiculo.id === id);
-    if (vehiculo) {
-        // Implementa la lógica para editar el vehículo
-        // Por ejemplo, podrías mostrar un modal con un formulario para editar la cantidad y el precio
-    }
-}
 
 // Función para finalizar la compra
 function finalizarCompra() {

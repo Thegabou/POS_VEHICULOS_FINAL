@@ -36,6 +36,11 @@ class DashboardController extends Controller
         return view('partials.usuarios-index', compact('usuarios'))->render();
     }
 
+    public function Clientes(){
+        $clientes = Cliente::all();
+        return view('partials.clientes-index', compact('clientes'))->render();
+    }
+
     
 
 }

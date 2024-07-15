@@ -106,5 +106,33 @@
     </div>
     <button class="btn btn-success" onclick="finalizarCompra()">Finalizar Compra</button>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Editar Vehículo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="mb-3">
+                        <label for="editCantidad" class="form-label">Cantidad:</label>
+                        <input type="number" class="form-control" id="editCantidad" name="cantidad" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPrecio" class="form-label">Precio Unit:</label>
+                        <input type="number" step="0.01" class="form-control" id="editPrecio" name="precio" required>
+                    </div>
+                    <input type="hidden" id="editIndex">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="saveEdit()">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="{{asset('js/utilis.js')}}"></script>
