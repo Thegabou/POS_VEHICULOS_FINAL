@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Usuario extends Authenticatable
+class Usuario extends Authenticatable implements MustVerifyEmailContract
 {
     use HasFactory, Notifiable;
 
@@ -21,6 +22,10 @@ class Usuario extends Authenticatable
     protected $hidden = [
         'contrasena',
         'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
     ];
 
     public function empleado()

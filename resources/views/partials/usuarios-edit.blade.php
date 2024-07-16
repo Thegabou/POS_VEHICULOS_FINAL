@@ -4,10 +4,6 @@
         @csrf
         @method('PUT')
         <div class="form-group">
-            <label for="cedula">Buscar Empleado por Cédula:</label>
-            <input type="text" class="form-control" id="cedula" name="cedula" oninput="searchEmpleado()">
-        </div>
-        <div class="form-group">
             <label for="id_empleado">Empleado:</label>
             <select class="form-control" id="id_empleado" name="id_empleado" required>
                 <option value="">Seleccione un empleado</option>
@@ -22,6 +18,7 @@
             <label for="correo">Correo:</label>
             <input type="email" class="form-control" id="correo" name="correo" value="{{ $usuario->correo }}" required>
         </div>
+        
         <div class="form-group">
             <label for="contrasena">Contraseña (dejar en blanco para mantener actual):</label>
             <input type="password" class="form-control" id="contrasena" name="contrasena">

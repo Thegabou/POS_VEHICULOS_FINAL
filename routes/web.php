@@ -11,7 +11,8 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\CompraVehiculoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\VentaVehiculoController;
-use App\Http\Controllers\VendedorController; // Add this line
+use App\Http\Controllers\VendedorController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;

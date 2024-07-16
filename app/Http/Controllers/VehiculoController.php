@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehiculo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Notifications\VerifyEmailNotification;
+use App\Models\Usuario;
+use App\Models\Empleado;
 
 class VehiculoController extends Controller
 {
@@ -20,8 +24,22 @@ class VehiculoController extends Controller
 
     public function store(Request $request)
     {
-        $vehiculo = Vehiculo::create($request->all());
-        return redirect()->route('vehiculos.index');
+        $request->validate([
+            'id_empleado' => 'required|exists:empleados,id',
+            'correo' => 'required|email|unique:usuarios,correo',
+            'contrasena' => 'required|min:8',
+        ]);
+
+        $usuario = Usuario::create([
+            'id_empleado' => $request->id_empleado,
+            'correo' => $request->correo,
+            'password' => Hash::make($request->contrasena),
+        ]);
+
+        // Enviar notificación de verificación de correo
+        $usuario->notify(new VerifyEmailNotification());
+
+        return redirect()->route('usuarios.index')->with('success', 'Usuario creado y correo de verificación enviado.');
     }
 
     public function show($id)
