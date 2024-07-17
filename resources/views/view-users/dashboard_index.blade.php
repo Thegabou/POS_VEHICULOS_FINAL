@@ -8,6 +8,7 @@
     <meta name="author" content="" />
     <title>Dashboard-Admin</title>
     <link rel="shortcut icon" href="{{asset('imagenes/logo_barra.png')}}" type="image/png">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="apple-touch-icon" href="{{asset('imagenes/logo_barra.png')}}">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="{{asset('css/styles_system.css')}}" rel="stylesheet" />
@@ -92,7 +93,7 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
     <script src="{{ asset('js/dashboard_index.js') }}"></script>
-    <script src="{{ asset('js/dashboard_empleados.js') }}"></script>
+    <script src="{{ asset('js/dashboard_usuarios.js') }}"></script>
     <script src="{{asset('js/utilis.js')}}"></script>
 </body>
 </html>

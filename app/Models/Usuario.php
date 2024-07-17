@@ -24,9 +24,9 @@ class Usuario extends Authenticatable implements MustVerifyEmailContract
         'remember_token',
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    // protected $casts = [
+    //     'email_verified_at' => 'datetime',
+    // ];
 
     public function empleado()
     {

@@ -6,8 +6,8 @@ use App\Models\Usuario;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
 
-class UsuarioController extends Controller
-{
+
+class UsuarioController extends Controller{
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -28,21 +28,23 @@ class UsuarioController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'correo' => 'required|email|unique:usuarios,correo',
-            'contrasena' => 'required',
-            'id_empleado' => 'required|exists:empleados,id',
-        ]);
+{
+    $request->validate([
+        'correo' => 'required|email|unique:usuarios,correo',
+        'contrasena' => 'required',
+        'id_empleado' => 'required|exists:empleados,id',
+    ]);
 
-        Usuario::create([
-            'correo' => $request->correo,
-            'contrasena' => hash('sha256', $request->contrasena),
-            'id_empleado' => $request->id_empleado,
-        ]);
+    $usuario = Usuario::create([
+        'correo' => $request->correo,
+        'contrasena' => bcrypt($request->contrasena),
+        'id_empleado' => $request->id_empleado,
+    ]);
 
-        return response()->json(['success' => 'Usuario creado exitosamente.']);
-    }
+    $usuario->sendEmailVerificationNotification();
+
+    return response()->json(['success' => 'Usuario creado exitosamente. Se ha enviado un correo de verificación.']);
+}
 
     public function edit($id)
     {
@@ -52,22 +54,28 @@ class UsuarioController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'correo' => 'required|email|unique:usuarios,correo,' . $id,
-            'contrasena' => 'required',
-            'id_empleado' => 'required|exists:empleados,id',
-        ]);
+{
+    $request->validate([
+        'correo' => 'required|email|unique:usuarios,correo,' . $id,
+        'contrasena' => 'sometimes|nullable|min:6',
+        'id_empleado' => 'required|exists:empleados,id',
+    ]);
 
-        $usuario = Usuario::findOrFail($id);
-        $data = $request->only('correo', 'id_empleado');
-        if ($request->filled('contrasena')) {
-            $data['contrasena'] = hash('sha256', $request->contrasena);
-        }
-        $usuario->update($data);
+    $usuario = Usuario::findOrFail($id);
+    $data = $request->only('correo', 'id_empleado');
 
-        return response()->json(['success' => 'Usuario actualizado exitosamente.']);
+    if ($request->filled('contrasena')) {
+        $data['contrasena'] = bcrypt($request->contrasena);
     }
+
+    $usuario->update($data);
+
+    if ($request->correo !== $usuario->correo) {
+        $usuario->sendEmailVerificationNotification();
+    }
+
+    return response()->json(['success' => 'Usuario actualizado exitosamente.']);
+}
 
     public function destroy($id)
     {

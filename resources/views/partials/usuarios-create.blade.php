@@ -18,6 +18,7 @@
         <div class="mb-3">
             <label for="correo" class="form-label">Correo:</label>
             <input type="email" class="form-control" id="correo" name="correo" required>
+            <button type="button" class="btn btn-info" onclick="verificarCorreo()">Verificar Correo</button>
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Contraseña:</label>
