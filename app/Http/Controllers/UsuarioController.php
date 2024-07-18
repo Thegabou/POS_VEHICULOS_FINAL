@@ -37,7 +37,7 @@ class UsuarioController extends Controller{
 
     $usuario = Usuario::create([
         'correo' => $request->correo,
-        'contrasena' => bcrypt($request->contrasena),
+        'contrasena' => hash('sha256', $request->contrasena),
         'id_empleado' => $request->id_empleado,
     ]);
 
@@ -54,28 +54,23 @@ class UsuarioController extends Controller{
     }
 
     public function update(Request $request, $id)
-{
-    $request->validate([
-        'correo' => 'required|email|unique:usuarios,correo,' . $id,
-        'contrasena' => 'sometimes|nullable|min:6',
-        'id_empleado' => 'required|exists:empleados,id',
-    ]);
+    {
+        $request->validate([
+            'correo' => 'required|string|email|max:255|unique:usuarios,correo,' . $id,
+            'contrasena' => 'nullable|string|min:8',
+            'id_empleado' => 'required|exists:empleados,id',
+        ]);
 
-    $usuario = Usuario::findOrFail($id);
-    $data = $request->only('correo', 'id_empleado');
+        $usuario = Usuario::findOrFail($id);
+        $data = $request->only('correo', 'id_empleado');
+        if ($request->filled('contrasena')) {
+            $data['contrasena'] = hash('sha256', $request->contrasena);
+        }
+        $usuario->update($data);
 
-    if ($request->filled('contrasena')) {
-        $data['contrasena'] = bcrypt($request->contrasena);
+        return response()->json(['success' => 'Usuario actualizado exitosamente.']);
     }
 
-    $usuario->update($data);
-
-    if ($request->correo !== $usuario->correo) {
-        $usuario->sendEmailVerificationNotification();
-    }
-
-    return response()->json(['success' => 'Usuario actualizado exitosamente.']);
-}
 
     public function destroy($id)
     {

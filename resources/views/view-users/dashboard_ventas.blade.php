@@ -13,6 +13,7 @@
     <link href="{{asset('css/styles_system.css')}}" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="sb-nav-fixed">
@@ -29,7 +30,7 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{{route('login')}}">Logout</a></li>
+                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
                 </ul>
             </li>
         </ul>
@@ -96,7 +97,7 @@
     <script src="{{ asset('js/chart-bar-demo.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
-    <script src="{{ asset('js/dashboard_index.js') }}"></script>
+    {{-- <script src="{{ asset('js/dashboard_index.js') }}"></script> --}}
     <script src="{{ asset('js/dashboard_ventas.js') }}"></script>
     <script src="{{asset('js/utilis.js')}}"></script>
     <script src="{{asset('js/dashboard_clientes.js')}}"></script>
