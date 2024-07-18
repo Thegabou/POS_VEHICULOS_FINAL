@@ -48,12 +48,28 @@
                             Inicio
                         </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('empleados') }}')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-user-tie"></i></div>
                             Empleados
                         </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('usuarios') }}')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
                             Usuarios
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('punto_venta') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                            Punta de Venta
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('usuarios') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                            Ingresar Facturas
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('clientes') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
+                            Clientes
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('vehiculos') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-car"></i></div>
+                            Vehiculos
                         </a>
                         <!-- Otros elementos del menú -->
                     </div>
@@ -94,6 +110,9 @@
     <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
     <script src="{{ asset('js/dashboard_index.js') }}"></script>
     <script src="{{ asset('js/dashboard_usuarios.js') }}"></script>
+    <script src="{{ asset('js/dashboard_ventas.js') }}"></script>
+    <script src="{{asset('js/dashboard_clientes.js')}}"></script>
+    <script src="{{ asset('js/dashboard_vehiculos.js') }}"></script>
     <script src="{{asset('js/utilis.js')}}"></script>
 </body>
 </html>

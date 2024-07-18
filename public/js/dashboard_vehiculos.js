@@ -25,10 +25,9 @@ function attachSearchHandler() {
 }
 //Funcion para crear un vehiculo
 document.addEventListener('DOMContentLoaded', function () {
-    const formCrearVehiculo = document.getElementById('form-crear-vehiculo');
-    if (formCrearVehiculo) {
-        console.log('formCrearVehiculo:', formCrearVehiculo);
-        formCrearVehiculo.addEventListener('submit', function(event) {
+    document.body.addEventListener('submit', function(event) {
+        if (event.target.matches('#form-crear-vehiculo')) {
+        console.log('formCrearVehiculo:', event.target);
             event.preventDefault();
 
             const form = event.target;
@@ -36,10 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             fetch(form.action, {
                 method: form.method,
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
@@ -50,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
-                        window.location.href = '/vehiculos';
+                        loadContent('/dashboard/vehiculos');
                     });
                 } else {
                     Swal.fire({
@@ -70,8 +66,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     confirmButtonText: 'OK'
                 });
             });
-        });
-    }
+        }
+    });
 });
 
 //Funcion para editar un vehiculo

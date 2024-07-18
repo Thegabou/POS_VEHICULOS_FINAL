@@ -3,50 +3,97 @@
 namespace App\Http\Controllers;
 
 use App\Models\VentaVehiculo;
+use App\Models\Vehiculo;
+use App\Models\Inventario;
+use App\Models\Factura;
 use Illuminate\Http\Request;
 
 class VentaVehiculoController extends Controller
 {
     public function index()
     {
-        $ventaVehiculos = VentaVehiculo::all();
-        return view('venta_vehiculos.index', compact('ventaVehiculos'));
+        $ventas = VentaVehiculo::with('vehiculo', 'factura')->get();
+        return view('ventas.index', compact('ventas'));
     }
 
     public function create()
     {
-        return view('venta_vehiculos.create');
+        $vehiculos = Vehiculo::all();
+        return view('ventas.create', compact('vehiculos'));
     }
 
     public function store(Request $request)
     {
-        $ventaVehiculo = VentaVehiculo::create($request->all());
-        return redirect()->route('venta_vehiculos.index');
-    }
+        $request->validate([
+            'id_vehiculo' => 'required|exists:vehiculos,id',
+            'cantidad' => 'required|integer|min:1',
+            'id_factura' => 'required|exists:facturas,id',
+        ]);
 
-    public function show($id)
-    {
-        $ventaVehiculo = VentaVehiculo::findOrFail($id);
-        return view('venta_vehiculos.show', compact('ventaVehiculo'));
+        $vehiculo = Vehiculo::findOrFail($request->id_vehiculo);
+        $inventario = Inventario::where('id_vehiculo', $vehiculo->id)->first();
+
+        if ($inventario->stock < $request->cantidad) {
+            return redirect()->back()->with('error', 'No hay suficiente stock disponible.');
+        }
+
+        $inventario->stock -= $request->cantidad;
+        $inventario->save();
+
+        VentaVehiculo::create([
+            'id_vehiculo' => $vehiculo->id,
+            'cantidad' => $request->cantidad,
+            'id_factura' => $request->id_factura,
+        ]);
+
+        return redirect()->route('ventas.index')->with('success', 'Venta realizada exitosamente.');
     }
 
     public function edit($id)
     {
-        $ventaVehiculo = VentaVehiculo::findOrFail($id);
-        return view('venta_vehiculos.edit', compact('ventaVehiculo'));
+        $venta = VentaVehiculo::findOrFail($id);
+        $vehiculos = Vehiculo::all();
+        return view('ventas.edit', compact('venta', 'vehiculos'));
     }
 
     public function update(Request $request, $id)
     {
-        $ventaVehiculo = VentaVehiculo::findOrFail($id);
-        $ventaVehiculo->update($request->all());
-        return redirect()->route('venta_vehiculos.index');
+        $request->validate([
+            'id_vehiculo' => 'required|exists:vehiculos,id',
+            'cantidad' => 'required|integer|min:1',
+            'id_factura' => 'required|exists:facturas,id',
+        ]);
+
+        $venta = VentaVehiculo::findOrFail($id);
+        $inventario = Inventario::where('id_vehiculo', $venta->id_vehiculo)->first();
+
+        if ($inventario->stock + $venta->cantidad < $request->cantidad) {
+            return redirect()->back()->with('error', 'No hay suficiente stock disponible.');
+        }
+
+        // Revert the stock changes of the old sale
+        $inventario->stock += $venta->cantidad;
+
+        // Apply the new stock changes
+        $inventario->stock -= $request->cantidad;
+        $inventario->save();
+
+        $venta->update($request->all());
+
+        return redirect()->route('ventas.index')->with('success', 'Venta actualizada exitosamente.');
     }
 
     public function destroy($id)
     {
-        $ventaVehiculo = VentaVehiculo::findOrFail($id);
-        $ventaVehiculo->delete();
-        return redirect()->route('venta_vehiculos.index');
+        $venta = VentaVehiculo::findOrFail($id);
+        $inventario = Inventario::where('id_vehiculo', $venta->id_vehiculo)->first();
+
+        // Revert the stock changes of the sale
+        $inventario->stock += $venta->cantidad;
+        $inventario->save();
+
+        $venta->delete();
+
+        return redirect()->route('ventas.index')->with('success', 'Venta eliminada exitosamente.');
     }
 }

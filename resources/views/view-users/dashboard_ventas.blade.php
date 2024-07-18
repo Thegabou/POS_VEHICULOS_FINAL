@@ -50,15 +50,15 @@
                             Punta de Venta
                         </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('usuarios') }}')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-file-invoice"></i></div>
                             Ingresar Facturas
                         </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('clientes') }}')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
                             Clientes
                         </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('vehiculos') }}')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-car"></i></div>
                             Vehiculos
                         </a>
                         <!-- Otros elementos del menú -->

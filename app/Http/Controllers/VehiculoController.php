@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehiculo;
 use Illuminate\Http\Request;
+use App\Models\Inventario;
+use App\Models\VentaVehiculo;
 
 class VehiculoController extends Controller
 {
@@ -38,7 +40,12 @@ class VehiculoController extends Controller
             'foto_url' => 'required|url',
         ]);
 
-        Vehiculo::create($request->all());
+        $vehiculo = Vehiculo::create($request->all());
+
+        Inventario::create([
+            'id_vehiculo' => $vehiculo->id,
+            'stock' => 0,
+        ]);
 
         return response()->json(['success' => 'Vehículo creado exitosamente.']);
     }
@@ -75,4 +82,38 @@ class VehiculoController extends Controller
 
         return response()->json(['success' => 'Vehículo eliminado exitosamente.']);
     }
+
+    // VehiculoController.php
+    public function welcome()
+    {
+        $vehiculos = Vehiculo::all();
+        return view('welcome', compact('vehiculos'));
+    }
+
+    public function venta(Request $request)
+    {
+        $request->validate([
+            'id_vehiculo' => 'required|exists:vehiculos,id',
+            'cantidad' => 'required|integer|min:1',
+        ]);
+
+        $vehiculo = Vehiculo::findOrFail($request->id_vehiculo);
+        $inventario = Inventario::where('id_vehiculo', $vehiculo->id)->first();
+
+        if ($inventario->stock < $request->cantidad) {
+            return response()->json(['error' => 'No hay suficiente stock disponible.'], 400);
+        }
+
+        $inventario->stock -= $request->cantidad;
+        $inventario->save();
+
+        VentaVehiculo::create([
+            'id_vehiculo' => $vehiculo->id,
+            'cantidad' => $request->cantidad,
+            'id_factura' => $request->id_factura, // Este campo debe ser manejado según tu lógica de facturación
+        ]);
+
+        return response()->json(['success' => 'Venta realizada exitosamente.']);
+    }
+
 }

@@ -66,8 +66,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
-
+Route::get('/', [VehiculoController::class, 'welcome'])->name('welcome');
 
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 

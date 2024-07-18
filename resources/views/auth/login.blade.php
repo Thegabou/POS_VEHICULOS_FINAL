@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Catalogos Vehiculares" />
     <meta name="author" content="Elgavo" />
-    <title>Login - SB Admin</title>
+    <title>Login</title>
     <link href="{{ asset('css/styles_system.css') }}" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -41,7 +41,7 @@
                                             <label for="inputEmail">Correo Electronico</label>
                                         </div>
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" id="inputPassword" type="password" placeholder="Password" name="password" required />
+                                            <input class="form-control" id="inputPassword" type="password" placeholder="Contraseña" name="password" required />
                                             <label for="inputPassword">Contraseña</label>
                                         </div>
                                         <div class="form-check mb-3">
