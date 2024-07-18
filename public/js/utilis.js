@@ -1,3 +1,13 @@
+function loadContent(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('main-content').innerHTML = html;
+            attachSearchHandler();
+        })
+        .catch(error => console.warn(error));
+}
+
 function filterFunction(searchInputId, dropdownMenuId) {
     var input, filter, div, a, i;
     input = document.getElementById(searchInputId);

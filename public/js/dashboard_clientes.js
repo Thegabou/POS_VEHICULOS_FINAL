@@ -54,6 +54,46 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+document.getElementById('form-edit-cliente').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const form = this;
+    const formData = new FormData(form);
+    const url = form.action;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Cliente actualizado',
+                text: data.success,
+            }).then(() => {
+                loadContent('/dashboard/clientes');
+            });
+        } else {
+            throw new Error(data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error al actualizar el cliente:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un problema al actualizar el cliente. Por favor, inténtelo nuevamente.',
+        });
+    });
+});
+
+
+
 function attachSearchHandler() {
     const searchInput = document.getElementById('search');
     if (searchInput) {

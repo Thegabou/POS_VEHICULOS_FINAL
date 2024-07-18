@@ -26,4 +26,3 @@
         <button type="button" class="btn btn-secondary" onclick="loadContent('{{ route('clientes.index') }}')">Volver</button>
     </form>
 </div>
-

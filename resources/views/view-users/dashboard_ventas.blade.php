@@ -29,7 +29,7 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    <li><a class="dropdown-item" href="{{route('login')}}">Logout</a></li>
                 </ul>
             </li>
         </ul>
@@ -39,13 +39,13 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Core</div>
+                        <div class="sb-sidenav-menu-heading">Menu</div>
                         <a class="nav-link" href="{{ route('dashboard') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Inicio
                         </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('punto_venta') }}')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
                             Punta de Venta
                         </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('usuarios') }}')">
@@ -55,6 +55,10 @@
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('clientes') }}')">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Clientes
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('vehiculos') }}')">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Vehiculos
                         </a>
                         <!-- Otros elementos del menú -->
                     </div>
@@ -96,5 +100,6 @@
     <script src="{{ asset('js/dashboard_ventas.js') }}"></script>
     <script src="{{asset('js/utilis.js')}}"></script>
     <script src="{{asset('js/dashboard_clientes.js')}}"></script>
+    <script src="{{ asset('js/dashboard_vehiculos.js') }}"></script>
 </body>
 </html>

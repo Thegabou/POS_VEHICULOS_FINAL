@@ -41,6 +41,10 @@ class DashboardController extends Controller
         return view('partials.clientes-index', compact('clientes'))->render();
     }
 
+    public function Vehiculos(){
+        $vehiculos = Vehiculo::all();
+        return view('partials.vehiculos-index', compact('vehiculos'))->render();
+    }
     
 
 }

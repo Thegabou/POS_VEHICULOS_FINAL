@@ -4,67 +4,75 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehiculo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use App\Notifications\VerifyEmailNotification;
-use App\Models\Usuario;
-use App\Models\Empleado;
 
 class VehiculoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $vehiculos = Vehiculo::all();
-        return view('vehiculos.index', compact('vehiculos'));
+        $search = $request->input('search');
+        $vehiculos = Vehiculo::when($search, function ($query, $search) {
+            $query->where('marca', 'like', "%$search%")
+                ->orWhere('modelo', 'like', "%$search%")
+                ->orWhere('tipo_vehiculo', 'like', "%$search%")
+                ->orWhere('año_modelo', 'like', "%$search%");
+        })->get();
+
+        return view('partials.vehiculos-index', compact('vehiculos'));
     }
 
     public function create()
     {
-        return view('vehiculos.create');
+        return view('partials.vehiculos-create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'id_empleado' => 'required|exists:empleados,id',
-            'correo' => 'required|email|unique:usuarios,correo',
-            'contrasena' => 'required|min:8',
+            'marca' => 'required|string|max:255',
+            'modelo' => 'required|string|max:255',
+            'año_modelo' => 'required|integer',
+            'tipo_vehiculo' => 'required|string|max:255',
+            'precio_compra' => 'required|numeric',
+            'kilometraje' => 'required|numeric',
+            'precio_venta' => 'required|numeric',
+            'foto_url' => 'required|url',
         ]);
 
-        $usuario = Usuario::create([
-            'id_empleado' => $request->id_empleado,
-            'correo' => $request->correo,
-            'password' => Hash::make($request->contrasena),
-        ]);
+        Vehiculo::create($request->all());
 
-        // Enviar notificación de verificación de correo
-        $usuario->notify(new VerifyEmailNotification());
-
-        return redirect()->route('usuarios.index')->with('success', 'Usuario creado y correo de verificación enviado.');
-    }
-
-    public function show($id)
-    {
-        $vehiculo = Vehiculo::findOrFail($id);
-        return view('vehiculos.show', compact('vehiculo'));
+        return response()->json(['success' => 'Vehículo creado exitosamente.']);
     }
 
     public function edit($id)
     {
         $vehiculo = Vehiculo::findOrFail($id);
-        return view('vehiculos.edit', compact('vehiculo'));
+        return view('partials.vehiculos-edit', compact('vehiculo'));
     }
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'marca' => 'required|string|max:255',
+            'modelo' => 'required|string|max:255',
+            'año_modelo' => 'required|integer',
+            'tipo_vehiculo' => 'required|string|max:255',
+            'precio_compra' => 'required|numeric',
+            'kilometraje' => 'required|numeric',
+            'precio_venta' => 'required|numeric',
+            'foto_url' => 'required|url',
+        ]);
+
         $vehiculo = Vehiculo::findOrFail($id);
         $vehiculo->update($request->all());
-        return redirect()->route('vehiculos.index');
+
+        return response()->json(['success' => 'Vehículo actualizado exitosamente.']);
     }
 
     public function destroy($id)
     {
         $vehiculo = Vehiculo::findOrFail($id);
         $vehiculo->delete();
-        return redirect()->route('vehiculos.index');
+
+        return response()->json(['success' => 'Vehículo eliminado exitosamente.']);
     }
 }

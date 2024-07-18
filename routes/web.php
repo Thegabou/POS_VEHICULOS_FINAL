@@ -12,12 +12,9 @@ use App\Http\Controllers\CompraVehiculoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\VentaVehiculoController;
 use App\Http\Controllers\VendedorController;
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\EmailVerificationController; // Add this line
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthenticatedSessionController::class, 'store']);
@@ -59,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('vendedor/punto_venta', [VendedorController::class, 'punto_Ventas'])->name('punto_venta');
     Route::get('vendedor/buscar-cliente/{cedula}', [ClienteController::class, 'buscarCliente'])->name('buscar-cliente');
     Route::get('dashboard/clientes', [DashboardController::class, 'Clientes'])->name('clientes');
-
+    Route::get('dashboard/vehiculos', [DashboardController::class, 'Vehiculos'])->name('vehiculos');
 });    
 
 Route::middleware('auth')->group(function () {
@@ -68,24 +65,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Rutas de verificación de correo
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
-
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-
-    return redirect('/home');
-})->middleware(['auth', 'signed'])->name('verification.verify');
-
-// Route::post('/email/resend', [EmailVerificationController::class, 'resend'])->name('verification.resend');
-
-Route::post('/email/resend', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-
-    return back()->with('message', 'Se ha reenviado el enlace de verificación a su dirección de correo.');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
 
 
 
