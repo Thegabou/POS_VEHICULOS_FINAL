@@ -9,21 +9,19 @@ class CompraVehiculo extends Model
 {
     use HasFactory;
 
-    protected $table = 'compra_vehiculo';
-
     protected $fillable = [
+        'id_compra',
         'id_vehiculo',
         'cantidad',
-        'id_compra',
     ];
-
-    public function vehiculo()
-    {
-        return $this->belongsTo(Vehiculo::class, 'id_vehiculo');
-    }
 
     public function compra()
     {
         return $this->belongsTo(Compra::class, 'id_compra');
+    }
+
+    public function vehiculo()
+    {
+        return $this->belongsTo(Vehiculo::class, 'id_vehiculo');
     }
 }

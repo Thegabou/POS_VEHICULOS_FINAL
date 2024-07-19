@@ -8,6 +8,7 @@ use App\Models\Empleado;
 use App\Models\Usuario;
 use App\Models\Cliente;
 use App\Models\Vehiculo;
+use App\Models\Proveedor;
 
 class DashboardController extends Controller
 {
@@ -45,6 +46,10 @@ class DashboardController extends Controller
         $vehiculos = Vehiculo::all();
         return view('partials.vehiculos-index', compact('vehiculos'))->render();
     }
-    
+
+    public function Proveedores(){
+        $proveedores = Proveedor::all();
+        return view('partials.proveedor-index', compact('proveedores'))->render();
+    }
 
 }

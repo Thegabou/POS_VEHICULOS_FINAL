@@ -7,46 +7,62 @@ use Illuminate\Http\Request;
 
 class ProveedorController extends Controller
 {
+    // Listar Proveedores
     public function index()
     {
         $proveedores = Proveedor::all();
-        return view('proveedores.index', compact('proveedores'));
+        return view('partials.proveedor-index', compact('proveedores'));
     }
 
+    // Mostrar formulario de creación
     public function create()
     {
-        return view('proveedores.create');
+        return view('partials.proveedor-create');
     }
 
+    // Guardar nuevo proveedor
     public function store(Request $request)
     {
-        $proveedor = Proveedor::create($request->all());
-        return redirect()->route('proveedores.index');
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'ruc' => 'required|string|max:20',
+            'telefono' => 'required|string|max:10',
+            'correo' => 'required|email|max:255',
+            'direccion' => 'required|string|max:255',
+        ]);
+
+        Proveedor::create($request->all());
+
+        return redirect()->route('proveedores.index')->with('success', 'Proveedor creado correctamente');
     }
 
-    public function show($id)
+    // Mostrar formulario de edición
+    public function edit(Proveedor $proveedor)
     {
-        $proveedor = Proveedor::findOrFail($id);
-        return view('proveedores.show', compact('proveedor'));
+        return view('partials.proveedor-edit', compact('proveedores'));
     }
 
-    public function edit($id)
+    // Actualizar proveedor
+    public function update(Request $request, Proveedor $proveedor)
     {
-        $proveedor = Proveedor::findOrFail($id);
-        return view('proveedores.edit', compact('proveedor'));
-    }
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'ruc' => 'required|string|max:20',
+            'telefono' => 'required|string|max:10',
+            'correo' => 'required|email|max:255',
+            'direccion' => 'required|string|max:255',
+        ]);
 
-    public function update(Request $request, $id)
-    {
-        $proveedor = Proveedor::findOrFail($id);
         $proveedor->update($request->all());
-        return redirect()->route('proveedores.index');
+
+        return redirect()->route('proveedores.index')->with('success', 'Proveedor actualizado correctamente');
     }
 
-    public function destroy($id)
+    // Eliminar proveedor
+    public function destroy(Proveedor $proveedor)
     {
-        $proveedor = Proveedor::findOrFail($id);
         $proveedor->delete();
-        return redirect()->route('proveedores.index');
+
+        return redirect()->route('proveedores.index')->with('success', 'Proveedor eliminado correctamente');
     }
 }

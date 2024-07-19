@@ -10,7 +10,8 @@ class Inventario extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_vehiculo', 'stock'
+        'id_vehiculo',
+        'stock',
     ];
 
     public function vehiculo()

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehiculo;
-use Illuminate\Http\Request;
 use App\Models\Inventario;
-use App\Models\VentaVehiculo;
+use Illuminate\Http\Request;
 
 class VehiculoController extends Controller
 {
@@ -42,6 +41,7 @@ class VehiculoController extends Controller
 
         $vehiculo = Vehiculo::create($request->all());
 
+        // Create an entry in the inventory with default stock 0
         Inventario::create([
             'id_vehiculo' => $vehiculo->id,
             'stock' => 0,
@@ -83,37 +83,16 @@ class VehiculoController extends Controller
         return response()->json(['success' => 'Vehículo eliminado exitosamente.']);
     }
 
-    // VehiculoController.php
+    public function showAvailableVehicles()
+    {
+        $vehiculos = Vehiculo::with('inventario')->get();
+
+        return view('partials.index.contenedor-vehiculos', compact('vehiculos'));
+    }
+
     public function welcome()
     {
-        $vehiculos = Vehiculo::all();
+        $vehiculos = Vehiculo::with('inventario')->get();
         return view('welcome', compact('vehiculos'));
     }
-
-    public function venta(Request $request)
-    {
-        $request->validate([
-            'id_vehiculo' => 'required|exists:vehiculos,id',
-            'cantidad' => 'required|integer|min:1',
-        ]);
-
-        $vehiculo = Vehiculo::findOrFail($request->id_vehiculo);
-        $inventario = Inventario::where('id_vehiculo', $vehiculo->id)->first();
-
-        if ($inventario->stock < $request->cantidad) {
-            return response()->json(['error' => 'No hay suficiente stock disponible.'], 400);
-        }
-
-        $inventario->stock -= $request->cantidad;
-        $inventario->save();
-
-        VentaVehiculo::create([
-            'id_vehiculo' => $vehiculo->id,
-            'cantidad' => $request->cantidad,
-            'id_factura' => $request->id_factura, // Este campo debe ser manejado según tu lógica de facturación
-        ]);
-
-        return response()->json(['success' => 'Venta realizada exitosamente.']);
-    }
-
 }

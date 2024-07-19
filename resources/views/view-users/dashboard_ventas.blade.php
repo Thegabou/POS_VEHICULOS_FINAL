@@ -49,7 +49,7 @@
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
                             Punta de Venta
                         </a>
-                        <a class="nav-link" href="#" onclick="loadContent('{{ route('usuarios') }}')">
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('compra_create') }}')">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-file-invoice"></i></div>
                             Ingresar Facturas
                         </a>
@@ -60,6 +60,10 @@
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('vehiculos') }}')">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-car"></i></div>
                             Vehiculos
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('proveedores') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-car"></i></div>
+                            Proveedores
                         </a>
                         <!-- Otros elementos del menú -->
                     </div>
@@ -102,5 +106,7 @@
     <script src="{{asset('js/utilis.js')}}"></script>
     <script src="{{asset('js/dashboard_clientes.js')}}"></script>
     <script src="{{ asset('js/dashboard_vehiculos.js') }}"></script>
+    <script src="{{asset('js/dashboard_proveedores.js')}}"></script>
+    <script src="{{asset('js/dashboard_compra.js')}}"></script>
 </body>
 </html>

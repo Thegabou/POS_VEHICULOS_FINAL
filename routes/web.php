@@ -15,6 +15,8 @@ use App\Http\Controllers\VendedorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\InventarioController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthenticatedSessionController::class, 'store']);
@@ -57,6 +59,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('vendedor/buscar-cliente/{cedula}', [ClienteController::class, 'buscarCliente'])->name('buscar-cliente');
     Route::get('dashboard/clientes', [DashboardController::class, 'Clientes'])->name('clientes');
     Route::get('dashboard/vehiculos', [DashboardController::class, 'Vehiculos'])->name('vehiculos');
+    Route::get('compra/create', [CompraController::class, 'create'])->name('compra_create');
+    Route::post('compra', [CompraController::class, 'store'])->name('compra.store');
+    Route::get('dashboard/proveedores', [DashboardController::class, 'Proveedores'])->name('proveedores');
 });    
 
 Route::middleware('auth')->group(function () {
@@ -65,8 +70,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
 Route::get('/', [VehiculoController::class, 'welcome'])->name('welcome');
+Route::resource('inventarios', InventarioController::class)->middleware('auth');
+Route::resource('ventas', VentaVehiculoController::class)->middleware('auth');
 
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 

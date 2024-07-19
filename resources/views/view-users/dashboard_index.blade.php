@@ -59,7 +59,7 @@
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
                             Punta de Venta
                         </a>
-                        <a class="nav-link" href="#" onclick="loadContent('{{ route('usuarios') }}')">
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('compra_create') }}')">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-file-invoice"></i></div>
                             Ingresar Facturas
                         </a>
@@ -113,6 +113,8 @@
     <script src="{{ asset('js/dashboard_ventas.js') }}"></script>
     <script src="{{asset('js/dashboard_clientes.js')}}"></script>
     <script src="{{ asset('js/dashboard_vehiculos.js') }}"></script>
+    <script src="{{asset('js/dashboard_compra.js')}}"></script>
+    <script src="{{asset('js/dashboard_proveedor.js')}}"></script>
     <script src="{{asset('js/utilis.js')}}"></script>
 </body>
 </html>

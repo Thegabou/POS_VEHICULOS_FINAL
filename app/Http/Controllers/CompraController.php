@@ -3,50 +3,61 @@
 namespace App\Http\Controllers;
 
 use App\Models\Compra;
+use App\Models\CompraVehiculo;
+use App\Models\Inventario;
+use App\Models\Proveedor;
+use App\Models\Vehiculo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CompraController extends Controller
 {
-    public function index()
-    {
-        $compras = Compra::all();
-        return view('compras.index', compact('compras'));
-    }
-
     public function create()
-    {
-        return view('compras.create');
-    }
+{
+    $proveedores = Proveedor::all();
+    $vehiculos = Vehiculo::all();
+
+    return view('partials.factura-index', compact('proveedores', 'vehiculos'));
+}
 
     public function store(Request $request)
-    {
-        $compra = Compra::create($request->all());
-        return redirect()->route('compras.index');
+{
+    $request->validate([
+        'numero_factura' => 'required',
+        'fecha_compra' => 'required|date',
+        'id_proveedor' => 'required|exists:proveedores,id',
+        'vehiculos.*.id_vehiculo' => 'required|exists:vehiculos,id',
+        'vehiculos.*.cantidad' => 'required|integer|min:1',
+        'monto_final' => 'required|numeric',
+    ]);
+
+    $compra = Compra::create([
+        'numero_factura' => $request->numero_factura,
+        'fecha_compra' => $request->fecha_compra,
+        'id_proveedor' => $request->id_proveedor,
+        'monto_final' => $request->monto_final,
+    ]);
+
+    foreach ($request->vehiculos as $vehiculo) {
+        CompraVehiculo::create([
+            'id_compra' => $compra->id,
+            'id_vehiculo' => $vehiculo['id_vehiculo'],
+            'cantidad' => $vehiculo['cantidad'],
+        ]);
+
+        // Actualizar el inventario
+        $inventario = Inventario::where('id_vehiculo', $vehiculo['id_vehiculo'])->first();
+        if ($inventario) {
+            $inventario->stock += $vehiculo['cantidad'];
+            $inventario->save();
+        } else {
+            Inventario::create([
+                'id_vehiculo' => $vehiculo['id_vehiculo'],
+                'stock' => $vehiculo['cantidad'],
+            ]);
+        }
     }
 
-    public function show($id)
-    {
-        $compra = Compra::findOrFail($id);
-        return view('compras.show', compact('compra'));
-    }
-
-    public function edit($id)
-    {
-        $compra = Compra::findOrFail($id);
-        return view('compras.edit', compact('compra'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $compra = Compra::findOrFail($id);
-        $compra->update($request->all());
-        return redirect()->route('compras.index');
-    }
-
-    public function destroy($id)
-    {
-        $compra = Compra::findOrFail($id);
-        $compra->delete();
-        return redirect()->route('compras.index');
-    }
+    return redirect()->route('compra_create')->with('success', 'Compra creada exitosamente.');
+}
 }
