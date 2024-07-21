@@ -16,11 +16,11 @@
         </div>
         <div class="mb-3">
             <label for="numero_telefono" class="form-label">Número de Teléfono:</label>
-            <input type="text" class="form-control" id="numero_telefono" name="numero_telefono" required>
+            <input type="number" class="form-control" id="numero_telefono" name="numero_telefono" required>
         </div>
         <div class="mb-3">
             <label for="cedula" class="form-label">Cédula:</label>
-            <input type="text" class="form-control" id="cedula" name="cedula" required>
+            <input type="number" class="form-control" id="cedula" name="cedula" required>
         </div>
         <button type="submit" class="btn btn-success">Crear Cliente</button>
         <button type="button" class="btn btn-secondary" onclick="loadContent('{{ route('clientes.index') }}')">Volver</button>

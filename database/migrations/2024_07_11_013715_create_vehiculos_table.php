@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('kilometraje', 10, 2);
             $table->string('foto_url', 250);
             $table->decimal('precio_venta', 10, 2);
+            $table->enum('estado', ['Disponible', 'Vendido', 'Reservado'])->default('Disponible');
             $table->timestamps();
         });
     }

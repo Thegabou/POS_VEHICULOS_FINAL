@@ -17,7 +17,7 @@
         </div>
         <div class="form-group">
             <label for="cedula">Cédula:</label>
-            <input type="text" class="form-control" id="cedula" name="cedula" value="{{ $empleado->cedula }}" required>
+            <input type="number" class="form-control" id="cedula" name="cedula" value="{{ $empleado->cedula }}" required>
         </div>
         <div class="form-group">
             <label for="cargo">Cargo:</label>

@@ -17,16 +17,14 @@
         </div>
         <div class="form-group">
             <label for="numero_telefono">Número de Teléfono:</label>
-            <input type="text" class="form-control" id="numero_telefono" name="numero_telefono" value="{{ $cliente->numero_telefono }}" required>
+            <input type="number" class="form-control" id="numero_telefono" name="numero_telefono" value="{{ $cliente->numero_telefono }}" required>
         </div>
         <div class="form-group">
             <label for="cedula">Cédula:</label>
-            <input type="text" class="form-control" id="cedula" name="cedula" value="{{ $cliente->cedula }}" required>
+            <input type="number" class="form-control" id="cedula" name="cedula" value="{{ $cliente->cedula }}" required>
         </div>
         <br>
         <button type="submit" class="btn btn-primary">Actualizar Cliente</button>
         <button type="button" class="btn btn-secondary" onclick="loadContent('{{ route('clientes.index') }}')">Volver</button>
     </form>
 </div>
-
-

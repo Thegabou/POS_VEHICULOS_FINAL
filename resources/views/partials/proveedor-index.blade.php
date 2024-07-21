@@ -3,7 +3,7 @@
     <button class="btn btn-primary mb-3" onclick="loadContent('{{ route('proveedores.create') }}')">Crear Proveedor</button>
     <div class="d-flex justify-content-end mb-3">
         <input type="text" id="search" class="form-control form-control-sm me-2" placeholder="Buscar por nombre, RUC, teléfono, correo o dirección">
-        <button class="btn btn-secondary" onclick="filterProveedores()">Buscar</button>
+        <button type="submit" class="btn btn-secondary" onclick="filterProveedores()">Buscar</button>
     </div>
     <table class="table">
         <thead>
@@ -25,11 +25,11 @@
                     <td>{{ $proveedor->correo }}</td>
                     <td>{{ $proveedor->direccion }}</td>
                     <td>
-                        <a href="#" onclick="loadContent('{{ route('proveedores.edit', $proveedor->id) }}')" class="btn btn-warning">Editar</a>
+                        <a href="#" onclick="loadContent('{{ route('proveedores.edit', $proveedor->id) }}')" class="btn btn-warning"><i class="fa-solid fa-pencil"></i> Editar</a>
                         <form action="{{ route('proveedores.destroy', $proveedor->id) }}" method="POST" style="display:inline;" onsubmit="return deleteProveedor(event, this);">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Eliminar</button>
                         </form>
                     </td>
                 </tr>

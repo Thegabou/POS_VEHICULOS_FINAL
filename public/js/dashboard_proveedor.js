@@ -1,19 +1,58 @@
-document.addEventListener('DOMContentLoaded', function() {
-    attachSearchHandler();
+// Función para cargar contenido dinámicamente
+function loadContent(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('main-content').innerHTML = html;
+            attachSearchHandler();
+        })
+        .catch(error => console.warn(error));
+}
 
-    // Manejar la creación de un proveedor
+// Función para adjuntar el manejador de búsqueda
+function attachSearchHandler() {
+    const searchInput = document.getElementById('search');
+    if (searchInput) {
+        searchInput.addEventListener('input', filterProveedores);
+    }
+}
+
+// Función para filtrar los proveedores
+function filterProveedores() {
+    const searchInput = document.getElementById('search');
+    const searchValue = searchInput.value.toLowerCase();
+    const tbody = document.getElementById('proveedores-tbody');
+    const rows = tbody.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const cells = row.getElementsByTagName('td');
+        const nombre = cells[0].textContent.toLowerCase();
+        const ruc = cells[1].textContent.toLowerCase();
+        const telefono = cells[2].textContent.toLowerCase();
+        const correo = cells[3].textContent.toLowerCase();
+        const direccion = cells[4].textContent.toLowerCase();
+
+        if (nombre.includes(searchValue) || ruc.includes(searchValue) || telefono.includes(searchValue) || correo.includes(searchValue) || direccion.includes(searchValue)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    }
+}
+
+// Función para crear un proveedor
+document.addEventListener('DOMContentLoaded', function () {
     document.body.addEventListener('submit', function(event) {
         if (event.target.matches('#form-crear-proveedor')) {
             event.preventDefault();
+
             const form = event.target;
             const formData = new FormData(form);
 
             fetch(form.action, {
                 method: form.method,
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
@@ -24,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
-                        loadContent('/proveedores');
+                        loadContent('/dashboard/proveedores');
                     });
                 } else {
                     Swal.fire({
@@ -46,12 +85,16 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+});
 
-    // Manejar la edición de un proveedor
-    document.body.addEventListener('submit', function(event) {
-        if (event.target.matches('#form-edit-proveedor')) {
+// Función para editar un proveedor
+document.addEventListener('DOMContentLoaded', function () {
+    const formEditProveedor = document.getElementById('form-edit-proveedor');
+    if (formEditProveedor) {
+        formEditProveedor.addEventListener('submit', function(event) {
             event.preventDefault();
-            const form = event.target;
+
+            const form = this;
             const formData = new FormData(form);
             const url = form.action;
 
@@ -70,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         title: 'Proveedor actualizado',
                         text: data.success,
                     }).then(() => {
-                        loadContent('/proveedores');
+                        loadContent('/dashborad/proveedores');
                     });
                 } else {
                     throw new Error(data.error);
@@ -84,44 +127,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     text: 'Hubo un problema al actualizar el proveedor. Por favor, inténtelo nuevamente.',
                 });
             });
-        }
-    });
-
-    // Filtrar proveedores
-    document.getElementById('search').addEventListener('input', function() {
-        filterProveedores();
-    });
-});
-
-// Función para cargar contenido
-function loadContent(url) {
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('main-content').innerHTML = html;
-            attachSearchHandler();
-        })
-        .catch(error => console.warn(error));
-}
-
-// Función para adjuntar el manejador de búsqueda
-function attachSearchHandler() {
-    const searchValue = document.getElementById('search');
-    if (searchValue) {
-        searchValue.addEventListener('input', filterProveedores);
+        });
     }
-}
-
-// Función para filtrar los proveedores
-function filterProveedores() {
-    const searchValue = document.getElementById('search').value.toLowerCase();
-    const rows = document.querySelectorAll('#proveedores-tbody tr');
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchValue));
-        row.style.display = match ? '' : 'none';
-    });
-}
+});
 
 // Función para eliminar un proveedor
 function deleteProveedor(event, form) {

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Vehiculo;
@@ -23,7 +22,7 @@ class VehiculoController extends Controller
 
     public function create()
     {
-        return view('partials.vehiculos-create');
+        return view('partials.compra-index');
     }
 
     public function store(Request $request)
@@ -43,7 +42,7 @@ class VehiculoController extends Controller
 
         // Create an entry in the inventory with default stock 0
         Inventario::create([
-            'id_vehiculo' => $vehiculo->id,
+            'vehiculo_id' => $vehiculo->id,
             'stock' => 0,
         ]);
 
@@ -94,5 +93,17 @@ class VehiculoController extends Controller
     {
         $vehiculos = Vehiculo::with('inventario')->get();
         return view('welcome', compact('vehiculos'));
+    }
+
+    public function getMarcas()
+    {
+        $marcas = Vehiculo::distinct()->pluck('marca');
+        return response()->json($marcas);
+    }
+
+    public function getModelos()
+    {
+        $modelos = Vehiculo::distinct()->pluck('modelo');
+        return response()->json($modelos);
     }
 }

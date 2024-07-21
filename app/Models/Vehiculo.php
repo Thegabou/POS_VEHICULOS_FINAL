@@ -15,10 +15,16 @@ class Vehiculo extends Model
         'año_modelo', 
         'tipo_vehiculo', 
         'precio_compra', 
-        'kilometraje', 
+        'kilometraje',
+        'estado', 
         'foto_url', 
         'precio_venta'
     ];
+
+    public function compraVehiculos()
+    {
+        return $this->hasMany(CompraVehiculo::class);
+    }
 
     public function inventario()
     {

@@ -59,9 +59,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('vendedor/buscar-cliente/{cedula}', [ClienteController::class, 'buscarCliente'])->name('buscar-cliente');
     Route::get('dashboard/clientes', [DashboardController::class, 'Clientes'])->name('clientes');
     Route::get('dashboard/vehiculos', [DashboardController::class, 'Vehiculos'])->name('vehiculos');
-    Route::get('compra/create', [CompraController::class, 'create'])->name('compra_create');
-    Route::post('compra', [CompraController::class, 'store'])->name('compra.store');
     Route::get('dashboard/proveedores', [DashboardController::class, 'Proveedores'])->name('proveedores');
+    Route::get('vehiculo/marcas', [VehiculoController::class, 'getMarcas'])->name('marcas');
+    Route::get('/modelos', [VehiculoController::class, 'getModelos'])->name('modelos');
+    Route::get('compra/buscar-proveedor/{ruc}', [ProveedorController::class, 'getByRuc'])->name('buscar-proveedor');
+    Route::get('dashboard/compras', [CompraController::class, 'index'])->name('dashboard.compras');
+    Route::post('/dashboard/compras', [CompraController::class, 'store'])->name('compras.store');
 });    
 
 Route::middleware('auth')->group(function () {
@@ -69,6 +72,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('compra',[CompraController::class, 'index'])->name('compras');
 
 Route::get('/', [VehiculoController::class, 'welcome'])->name('welcome');
 Route::resource('inventarios', InventarioController::class)->middleware('auth');

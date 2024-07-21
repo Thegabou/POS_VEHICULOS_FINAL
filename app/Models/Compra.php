@@ -9,22 +9,21 @@ class Compra extends Model
 {
     use HasFactory;
 
-    protected $table = 'compras';
-
     protected $fillable = [
+        'numero_factura',
         'fecha_compra',
-        'id_proveedor',
-        'id_vehiculo',
+        'proveedor_id',
+        'vehiculo_id',
         'monto_final',
     ];
 
     public function proveedor()
     {
-        return $this->belongsTo(Proveedor::class, 'id_proveedor');
+        return $this->belongsTo(Proveedor::class);
     }
 
-    public function vehiculo()
+    public function vehiculos()
     {
-        return $this->belongsTo(Vehiculo::class, 'id_vehiculo');
+        return $this->hasMany(CompraVehiculo::class);
     }
 }

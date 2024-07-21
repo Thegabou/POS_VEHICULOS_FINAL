@@ -19,11 +19,11 @@
                     <td>{{ $usuario->correo }}</td>
                     <td>{{ $usuario->empleado->nombre }} {{ $usuario->empleado->apellido }}</td>
                     <td>
-                        <a href="#" onclick="loadContent('{{ route('usuarios.edit', $usuario->id) }}')" class="btn btn-warning">Editar</a>
+                        <a href="#" onclick="loadContent('{{ route('usuarios.edit', $usuario->id) }}')" class="btn btn-warning"><i class="fa-solid fa-pencil"></i> Editar</a>
                         <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" style="display:inline;" onsubmit="return deleteUsuario(event, this);">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Eliminar</button>
                         </form>
                     </td>
                 </tr>

@@ -8,7 +8,7 @@
         </div>
         <div class="mb-3">
             <label for="ruc" class="form-label">RUC:</label>
-            <input type="text" class="form-control" id="ruc" name="ruc" required>
+            <input type="number" class="form-control" id="ruc" name="ruc" required>
         </div>
         <div class="mb-3">
             <label for="telefono" class="form-label">Teléfono:</label>

@@ -1,6 +1,6 @@
 <div class="container">
     <h1>Lista de Vehículos</h1>
-    <button class="btn btn-primary mb-3" onclick="loadContent('{{ route('vehiculos.create') }}')">Crear Vehículo</button>
+    {{-- <button class="btn btn-primary mb-3" onclick="loadContent('{{ route('vehiculos.create') }}')">Crear Vehículo</button> --}}
     <div class="d-flex justify-content-end mb-3">
         <input type="text" id="search" class="form-control form-control-sm me-2" placeholder="Buscar por marca, modelo, año, tipo o precio">
         <button class="btn btn-secondary" onclick="filterVehiculos()">Buscar</button>
@@ -29,11 +29,11 @@
                     <td>{{ $vehiculo->kilometraje }}</td>
                     <td>{{ $vehiculo->precio_venta }}</td>
                     <td>
-                        <a href="#" onclick="loadContent('{{ route('vehiculos.edit', $vehiculo->id) }}')" class="btn btn-warning">Editar</a>
+                        <a href="#" onclick="loadContent('{{ route('vehiculos.edit', $vehiculo->id) }}')" class="btn btn-warning"><i class="fa-solid fa-pencil"></i> Editar</a>
                         <form action="{{ route('vehiculos.destroy', $vehiculo->id) }}" method="POST" style="display:inline;" onsubmit="return deleteVehiculo(event, this);">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Eliminar</button>
                         </form>
                     </td>
                 </tr>

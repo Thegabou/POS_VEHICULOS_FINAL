@@ -42,14 +42,14 @@
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Menu</div>
                         <a class="nav-link" href="{{ route('dashboard') }}">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Inicio
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-eye"></i></div>
+                            Facturas
                         </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('punto_venta') }}')">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
                             Punta de Venta
                         </a>
-                        <a class="nav-link" href="#" onclick="loadContent('{{ route('compra_create') }}')">
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('dashboard.compras') }}')">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-file-invoice"></i></div>
                             Ingresar Facturas
                         </a>
@@ -62,7 +62,7 @@
                             Vehiculos
                         </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('proveedores') }}')">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-car"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-parachute-box"></i></div>
                             Proveedores
                         </a>
                         <!-- Otros elementos del menú -->
@@ -106,7 +106,7 @@
     <script src="{{asset('js/utilis.js')}}"></script>
     <script src="{{asset('js/dashboard_clientes.js')}}"></script>
     <script src="{{ asset('js/dashboard_vehiculos.js') }}"></script>
-    <script src="{{asset('js/dashboard_proveedores.js')}}"></script>
+    <script src="{{asset('js/dashboard_proveedor.js')}}"></script>
     <script src="{{asset('js/dashboard_compra.js')}}"></script>
 </body>
 </html>

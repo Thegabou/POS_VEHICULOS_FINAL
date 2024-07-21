@@ -25,11 +25,11 @@
                     <td>{{ $cliente->cedula }}</td>
                     <td>{{ $cliente->numero_telefono }}</td>
                     <td>
-                        <a href="#" onclick="loadContent('{{ route('clientes.edit', $cliente->id) }}')" class="btn btn-warning">Editar</a>
+                        <a href="#" onclick="loadContent('{{ route('clientes.edit', $cliente->id) }}')" class="btn btn-warning"><i class="fa-solid fa-pencil"></i> Editar</a>
                         <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" style="display:inline;" onsubmit="return deleteCliente(event, this);">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Eliminar</button>
                         </form>
                     </td>
                 </tr>

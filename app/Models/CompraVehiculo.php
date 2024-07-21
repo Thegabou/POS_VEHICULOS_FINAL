@@ -10,18 +10,19 @@ class CompraVehiculo extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_compra',
-        'id_vehiculo',
+        'compra_id',
+        'vehiculo_id',
         'cantidad',
+        'precio',
     ];
 
     public function compra()
     {
-        return $this->belongsTo(Compra::class, 'id_compra');
+        return $this->belongsTo(Compra::class);
     }
 
     public function vehiculo()
     {
-        return $this->belongsTo(Vehiculo::class, 'id_vehiculo');
+        return $this->belongsTo(Vehiculo::class);
     }
 }

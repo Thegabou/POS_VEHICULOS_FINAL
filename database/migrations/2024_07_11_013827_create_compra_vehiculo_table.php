@@ -4,34 +4,32 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateCompraVehiculosTable extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
     public function up()
     {
-        Schema::create('compra_vehiculo', function (Blueprint $table) {
+        Schema::create('compra_vehiculos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_vehiculo')->constrained('vehiculos')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreignId('compra_id')->constrained()->onDelete('cascade');
+            $table->foreignId('vehiculo_id')->constrained()->onDelete('cascade');
             $table->integer('cantidad');
-            $table->foreignId('id_compra')->constrained('compras')->onDelete('restrict')->onUpdate('restrict');
-            $table->timestamps();
-        });
-    
-        Schema::create('venta_vehiculo', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('id_vehiculo')->constrained('vehiculos')->onDelete('restrict')->onUpdate('restrict');
-            $table->integer('cantidad');
-            $table->foreignId('id_factura')->constrained('facturas')->onDelete('restrict')->onUpdate('restrict');
+            $table->decimal('precio', 10, 2);
             $table->timestamps();
         });
     }
-    
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down()
     {
-        Schema::dropIfExists('compra_vehiculo');
-        Schema::dropIfExists('venta_vehiculo');
+        Schema::dropIfExists('compra_vehiculos');
     }
-    
-};
+}

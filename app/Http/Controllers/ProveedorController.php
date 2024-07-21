@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Proveedor;
@@ -8,9 +7,21 @@ use Illuminate\Http\Request;
 class ProveedorController extends Controller
 {
     // Listar Proveedores
-    public function index()
+    public function index(Request $request)
     {
-        $proveedores = Proveedor::all();
+        $query = Proveedor::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('nombre', 'LIKE', "%{$search}%")
+                ->orWhere('ruc', 'LIKE', "%{$search}%")
+                ->orWhere('correo', 'LIKE', "%{$search}%")
+                ->orWhere('telefono', 'LIKE', "%{$search}%")
+                ->orWhere('direccion', 'LIKE', "%{$search}%");
+        }
+
+        $proveedores = $query->get();
+
         return view('partials.proveedor-index', compact('proveedores'));
     }
 
@@ -33,17 +44,18 @@ class ProveedorController extends Controller
 
         Proveedor::create($request->all());
 
-        return redirect()->route('proveedores.index')->with('success', 'Proveedor creado correctamente');
+        return response()->json(['success' => 'Proveedor creado correctamente']);
     }
 
     // Mostrar formulario de edición
-    public function edit(Proveedor $proveedor)
+    public function edit($id)
     {
-        return view('partials.proveedor-edit', compact('proveedores'));
+        $proveedor = Proveedor::findOrFail($id);
+        return view('partials.proveedor-edit', compact('proveedor'));
     }
 
     // Actualizar proveedor
-    public function update(Request $request, Proveedor $proveedor)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
@@ -53,16 +65,25 @@ class ProveedorController extends Controller
             'direccion' => 'required|string|max:255',
         ]);
 
+        $proveedor = Proveedor::findOrFail($id);
         $proveedor->update($request->all());
 
-        return redirect()->route('proveedores.index')->with('success', 'Proveedor actualizado correctamente');
+        return response()->json(['success' => 'Proveedor actualizado correctamente']);
     }
 
     // Eliminar proveedor
-    public function destroy(Proveedor $proveedor)
+    public function destroy($id)
     {
+        $proveedor = Proveedor::findOrFail($id);
         $proveedor->delete();
 
-        return redirect()->route('proveedores.index')->with('success', 'Proveedor eliminado correctamente');
+        return response()->json(['success' => 'Proveedor eliminado correctamente']);
+    }
+
+    // Obtener proveedor por RUC
+    public function show($ruc)
+    {
+        $proveedor = Proveedor::where('ruc', $ruc)->firstOrFail();
+        return response()->json($proveedor);
     }
 }
