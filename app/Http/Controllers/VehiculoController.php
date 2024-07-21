@@ -84,14 +84,14 @@ class VehiculoController extends Controller
 
     public function showAvailableVehicles()
     {
-        $vehiculos = Vehiculo::with('inventario')->get();
+        $vehiculos = Vehiculo::where('estado', 'Disponible')->get();
 
         return view('partials.index.contenedor-vehiculos', compact('vehiculos'));
     }
 
     public function welcome()
     {
-        $vehiculos = Vehiculo::with('inventario')->get();
+        $vehiculos = Vehiculo::all();
         return view('welcome', compact('vehiculos'));
     }
 

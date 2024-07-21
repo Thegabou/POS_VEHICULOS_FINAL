@@ -64,7 +64,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/modelos', [VehiculoController::class, 'getModelos'])->name('modelos');
     Route::get('compra/buscar-proveedor/{ruc}', [ProveedorController::class, 'getByRuc'])->name('buscar-proveedor');
     Route::get('dashboard/compras', [CompraController::class, 'index'])->name('dashboard.compras');
-    Route::post('/dashboard/compras', [CompraController::class, 'store'])->name('compras.store');
+    Route::post('dashboard/compras', [CompraController::class, 'store'])->name('compras.store');
 });    
 
 Route::middleware('auth')->group(function () {

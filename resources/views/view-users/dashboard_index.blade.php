@@ -59,7 +59,7 @@
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
                             Punta de Venta
                         </a>
-                        <a class="nav-link" href="#" onclick="loadContent('{{ route('compra_create') }}')">
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('dashboard.compras') }}')">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-file-invoice"></i></div>
                             Ingresar Facturas
                         </a>

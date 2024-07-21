@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Compra;
 use App\Models\CompraVehiculo;
+use App\Models\Inventario;
 use App\Models\Proveedor;
 use App\Models\Vehiculo;
 use Illuminate\Http\Request;
@@ -23,8 +24,9 @@ class CompraController extends Controller
         $request->validate([
             'ruc' => 'required|exists:proveedores,ruc',
             'vehiculos' => 'required|array',
-            'vehiculos.*.marca' => 'required',
-            'vehiculos.*.modelo' => 'required',
+            'vehiculos.*.marca' => 'required|string',
+            'vehiculos.*.modelo' => 'required|string',
+            'vehiculos.*.precio' => 'required|numeric',
             'vehiculos.*.estado' => 'required|in:Disponible,Reservado,Vendido',
         ]);
 
@@ -39,17 +41,17 @@ class CompraController extends Controller
 
         // Procesar cada vehículo
         foreach ($request->input('vehiculos') as $vehiculoData) {
-            // Crear o actualizar el vehículo
-            $vehiculo = Vehiculo::updateOrCreate(
-                [
-                    'marca' => $vehiculoData['marca'],
-                    'modelo' => $vehiculoData['modelo'],
-                ],
-                [
-                    'estado' => $vehiculoData['estado'],
-                    'precio' => $vehiculoData['precio'],
-                ]
-            );
+            // Crear el vehículo en la base de datos
+            $vehiculo = Vehiculo::create([
+                'marca' => $vehiculoData['marca'],
+                'modelo' => $vehiculoData['modelo'],
+                'precio' => $vehiculoData['precio_compra'],
+                'estado' => $vehiculoData['estado'],
+                'año_modelo' => $vehiculoData['año_modelo'],
+                'tipo' => $vehiculoData['tipo'],
+                'precio_venta' => $vehiculoData['precio_venta'],
+                'kilometraje' => $vehiculoData['kilometraje'],
+            ]);
 
             // Agregar al detalle de la compra
             CompraVehiculo::create([

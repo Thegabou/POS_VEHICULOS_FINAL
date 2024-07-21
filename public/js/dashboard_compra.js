@@ -63,6 +63,10 @@ function attachHandlers() {
         const precio = parseFloat(document.getElementById('precio_compra').value);
         const estado = document.getElementById('estado').value;
         const total = precio;
+        const año_modelo = document.getElementById('año_modelo').value;
+        const tipo = document.getElementById('tipo_vehiculo').value;
+        const precio_venta = parseFloat(document.getElementById('precio_venta').value);
+        const kilometraje = parseFloat(document.getElementById('kilometraje').value);
 
         const tableBody = document.getElementById('detalleVehiculos').querySelector('tbody');
         const row = tableBody.insertRow();
@@ -106,7 +110,7 @@ function attachHandlers() {
     document.getElementById('detalleVehiculoForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        const formData = new FormData();
+        const formData = new FormData(this);
         const vehiculos = [];
         document.querySelectorAll('#detalleVehiculos tbody tr').forEach(row => {
             vehiculos.push({
@@ -114,22 +118,13 @@ function attachHandlers() {
                 modelo: row.cells[1].textContent,
                 precio: parseFloat(row.cells[2].textContent),
                 estado: row.cells[3].textContent,
-                total: parseFloat(row.cells[4].textContent)
+                total: parseFloat(row.cells[4].textContent),
+                año_modelo: row.cells[5].textContent,
+                tipo: row.cells[6].textContent,
+                precio_venta: row.cells[7].textContent,
+                kilometraje: row.cells[8].textContent
             });
         });
-
-        if (vehiculos.length === 0) {
-            Swal.fire('No se puede crear la factura porque no hay datos para ingresar', '', 'error');
-            return;
-        }
-
-        formData.append('num_factura', document.getElementById('num_factura').value);
-        formData.append('ruc', document.getElementById('ruc').value);
-        formData.append('nombre_proveedor', document.getElementById('nombre_proveedor').value);
-        formData.append('correo_proveedor', document.getElementById('correo_proveedor').value);
-        formData.append('telefono_proveedor', document.getElementById('telefono_proveedor').value);
-        formData.append('direccion_proveedor', document.getElementById('direccion_proveedor').value);
-        formData.append('fecha', document.getElementById('fecha').value);
         formData.append('vehiculos', JSON.stringify(vehiculos));
 
         fetch('/dashboard/compras', {
@@ -140,12 +135,13 @@ function attachHandlers() {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
+            console.log(response);
             return response.json();
         })
         .then(data => {
             if (data.success) {
                 Swal.fire('Compra registrada exitosamente', '', 'success');
-                document.getElementById('detalleVehiculoForm').reset();
+                this.reset();
                 document.querySelector('#detalleVehiculos tbody').innerHTML = '';
                 document.getElementById('monto_final').value = '';
             } else {
@@ -161,7 +157,6 @@ function attachHandlers() {
     // Manejar cancelación
     document.getElementById('cancelarCompra').addEventListener('click', function() {
         document.getElementById('compraForm').reset();
-        document.getElementById('detalleVehiculoForm').reset();
         document.querySelector('#detalleVehiculos tbody').innerHTML = '';
         document.getElementById('monto_final').value = '';
     });

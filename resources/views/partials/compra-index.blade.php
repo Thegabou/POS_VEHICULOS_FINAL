@@ -1,6 +1,6 @@
 <div class="container">
     <h1>Registrar Compra</h1>
-    <form id="compraForm" action="{{ route('compras.store') }}" method="POST">
+    <form id="compraForm" >
         @csrf
         <!-- Proveedor -->
         <div class="mb-3">
@@ -78,7 +78,7 @@
     </form>
     <form id="detalleVehiculoForm" action="{{ route('compras.store') }}" method="POST">
         <!-- Detalle de Vehículos -->
-
+        @csrf
         <h2>Detalle de Vehículos</h2>
         <table class="table" id="detalleVehiculos">
             <thead>

@@ -26,8 +26,4 @@ class Vehiculo extends Model
         return $this->hasMany(CompraVehiculo::class);
     }
 
-    public function inventario()
-    {
-        return $this->hasOne(Inventario::class, 'id_vehiculo');
-    }
 }
