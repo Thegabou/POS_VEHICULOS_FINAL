@@ -8,21 +8,39 @@ function loadContent(url) {
         })
         .catch(error => console.warn(error));
 }
-//Funcion para filtrar los vehiculos
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('search');
-    if (searchInput) {
-        searchInput.addEventListener('input', filterVehiculos);
-    }
-    attachSearchHandler();
-});
-//Funcion para adjuntar el manejador de busqueda
-function attachSearchHandler() {
-    const searchValue = document.getElementById('search');
-    if (searchValue) {
-        searchValue.addEventListener('input', filterVehiculos);
+
+document.getElementById('search').addEventListener('input', filterVehiculos);
+
+function filterVehiculos() {
+    const input = document.getElementById('search');
+    const filter = input.value.toLowerCase();
+    const tbody = document.getElementById('vehiculos-tbody');
+    const rows = tbody.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        let found = false;
+        const cols = rows[i].getElementsByTagName('td');
+        for (let j = 0; j < cols.length - 1; j++) {  // -1 to skip the action column
+            if (cols[j].textContent.toLowerCase().includes(filter)) {
+                found = true;
+                break;
+            }
+        }
+        if (found) {
+            rows[i].style.display = '';
+        } else {
+            rows[i].style.display = 'none';
+        }
     }
 }
+
+// //Funcion para adjuntar el manejador de busqueda
+// function attachSearchHandler() {
+//     const searchValue = document.getElementById('search');
+//     if (searchValue) {
+//         searchValue.addEventListener('input', filterVehiculos);
+//     }
+// }
 //Funcion para crear un vehiculo
 document.addEventListener('DOMContentLoaded', function () {
     document.body.addEventListener('submit', function(event) {
@@ -115,16 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-//Funcion para filtrar los vehiculos
-function filterVehiculos() {
-    const searchValue = document.getElementById('search').value.toLowerCase();
-    const rows = document.querySelectorAll('#vehiculos-tbody tr');
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchValue));
-        row.style.display = match ? '' : 'none';
-    });
-}
+
 
 //Funcion para eliminar un vehiculo
 function deleteVehiculo(event, form) {

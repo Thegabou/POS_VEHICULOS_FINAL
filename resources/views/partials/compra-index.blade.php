@@ -1,6 +1,6 @@
 <div class="container">
     <h1>Registrar Compra</h1>
-    <form id="compraForm" >
+    <form id="compraForm">
         @csrf
         <!-- Proveedor -->
         <div class="mb-3">
@@ -12,20 +12,24 @@
             <input type="text" class="form-control" id="ruc" name="ruc" required>
         </div>
         <div class="form-group">
+            <label for="proveedor" class="form-label">Id</label>
+            <input type="number" class="form-control" id="proveedor" name="proveedor"  disabled required>
+        </div>
+        <div class="form-group">
             <label for="nombre_proveedor">Nombre:</label>
-            <input type="text" class="form-control" id="nombre_proveedor" name="nombre_proveedor" readonly>
+            <input type="text" class="form-control" id="nombre_proveedor" name="nombre_proveedor"  disabled>
         </div>
         <div class="form-group">
             <label for="correo_proveedor">Correo:</label>
-            <input type="email" class="form-control" id="correo_proveedor" name="correo_proveedor" readonly>
+            <input type="email" class="form-control" id="correo_proveedor" name="correo_proveedor"  disabled>
         </div>
         <div class="form-group">
             <label for="telefono_proveedor">Teléfono:</label>
-            <input type="text" class="form-control" id="telefono_proveedor" name="telefono_proveedor" readonly>
+            <input type="text" class="form-control" id="telefono_proveedor" name="telefono_proveedor"  disabled>
         </div>
         <div class="form-group">
             <label for="direccion_proveedor">Dirección:</label>
-            <input type="text" class="form-control" id="direccion_proveedor" name="direccion_proveedor" readonly>
+            <input type="text" class="form-control" id="direccion_proveedor" name="direccion_proveedor"  disabled> 
         </div>
         <div class="mb-3">
             <label for="fecha" class="form-label">Fecha:</label>
@@ -67,6 +71,10 @@
             <input type="number" class="form-control" id="precio_venta" name="precio_venta" required>
         </div>
         <div class="mb-3">
+            <label for="foto_url" class="form-label">Foto URL:</label>
+            <input type="text" class="form-control" id="foto_url" name="foto_url" required>
+        </div>
+        <div class="mb-3">
             <label for="estado" class="form-label">Estado:</label>
             <select class="form-control" id="estado" name="estado" required>
                 <option value="Disponible">Disponible</option>
@@ -76,9 +84,8 @@
         </div>
         <button type="button" id="agregarVehiculo" class="btn btn-primary">Agregar Vehículo</button>
     </form>
-    <form id="detalleVehiculoForm" action="{{ route('compras.store') }}" method="POST">
+    <form id="detalleVehiculoForm">
         <!-- Detalle de Vehículos -->
-        @csrf
         <h2>Detalle de Vehículos</h2>
         <table class="table" id="detalleVehiculos">
             <thead>
@@ -87,6 +94,11 @@
                     <th>Modelo</th>
                     <th>Precio</th>
                     <th>Estado</th>
+                    <th>Año</th>
+                    <th>Precio Venta</th>
+                    <th>Kilometraje</th>
+                    <th>Tipo</th>
+                    <th>Foto</th>
                     <th>Total</th>
                     <th>Acciones</th>
                 </tr>
@@ -105,3 +117,5 @@
         <button type="button" id="cancelarCompra" class="btn btn-danger">Cancelar</button>
     </form>
 </div>
+
+<script src="/path/to/dashboard_compra.js"></script>

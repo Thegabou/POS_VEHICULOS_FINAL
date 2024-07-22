@@ -2,11 +2,15 @@
     <h1>Punto de Facturación</h1>
 
     <!-- Selección de Cliente -->
-    <form id="form-buscar-cliente" >
+    <form id="form-buscar-cliente">
         @csrf
         <div class="mb-3">
             <label for="cedula" class="form-label">Cédula del Cliente:</label>
             <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Ingrese Cédula del Cliente" oninput="buscarCliente()">
+        </div>
+        <div class="mb-3">
+            <label for="id_cliente" class="form-label">ID</label>
+            <input type="number" class="form-contorl" id="id_cliente" name="id_cliente" disabled>
         </div>
         <div class="mb-3">
             <label for="nombre_apellido" class="form-label">Nombre y Apellido:</label>
@@ -50,9 +54,12 @@
         <input type="text" class="form-control" id="vehiculo" name="vehiculo" placeholder="Buscar Vehículo por Código o Nombre" list="vehiculosList">
         <datalist id="vehiculosList">
             @foreach ($vehiculos as $vehiculo)
-                <option value="{{ $vehiculo->id }}">{{ $vehiculo->marca }} {{ $vehiculo->modelo }} - ${{ $vehiculo->precio_venta }}</option>
+                <option value="{{ $vehiculo->id }}" data-marca="{{ $vehiculo->marca }}" data-modelo="{{ $vehiculo->modelo }}" data-año="{{ $vehiculo->año_modelo }}" data-tipo="{{ $vehiculo->tipo_vehiculo }}" data-kilometraje="{{ $vehiculo->kilometraje }}" data-precio="{{ $vehiculo->precio_venta }}" data-foto="{{ $vehiculo->foto_url }}">
+                    {{ $vehiculo->marca }} {{ $vehiculo->modelo }} - {{ $vehiculo->año_modelo }} - {{ $vehiculo->tipo_vehiculo }} - {{ $vehiculo->kilometraje }} - ${{ $vehiculo->precio_venta }}
+                </option>
             @endforeach
         </datalist>
+        
     </div>
     <button class="btn btn-primary" onclick="addVehiculo()">Agregar Vehículo</button>
 
@@ -62,8 +69,12 @@
         <thead>
             <tr>
                 <th>Código</th>
-                <th>Cantidad</th>
-                <th>Vehículo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Año</th>
+                <th>Tipo</th>
+                <th>Kilometraje</th>
+                <th>Foto</th>
                 <th>Precio Unit</th>
                 <th>Precio Total</th>
                 <th>Acciones</th>
@@ -74,19 +85,19 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="3"></td>
+                <td colspan="7"></td>
                 <td>Sub-total:</td>
                 <td>$<span id="sub_total">0.00</span></td>
                 <td></td>
             </tr>
             <tr>
-                <td colspan="3"></td>
+                <td colspan="7"></td>
                 <td>IVA (15%):</td>
                 <td>$<span id="iva">0.00</span></td>
                 <td></td>
             </tr>
             <tr>
-                <td colspan="3"></td>
+                <td colspan="7"></td>
                 <td>Total a Pagar:</td>
                 <td>$<span id="total">0.00</span></td>
                 <td></td>
@@ -97,13 +108,14 @@
     <!-- Opciones de Pago -->
     <div class="mb-3">
         <label for="metodo_pago" class="form-label">Método de Pago:</label>
-        <select class="form-control" id="metodo_pago" name="metodo_pago">
+        <select class="form-control" id="metodo_pago" name="metodo_pago" onchange="mostrarOpcionesPago()">
             <option value="efectivo">Efectivo</option>
             <option value="tarjeta">Tarjeta</option>
             <option value="transferencia">Transferencia Bancaria</option>
-            <option value="credito">Crédito</option>
+            <option value="credito">Financiamiento</option>
         </select>
     </div>
+    <div id="opciones_pago"></div>
     <button class="btn btn-success" onclick="finalizarCompra()">Finalizar Compra</button>
 </div>
 <!-- Modal -->
@@ -116,10 +128,6 @@
             </div>
             <div class="modal-body">
                 <form id="editForm">
-                    <div class="mb-3">
-                        <label for="editCantidad" class="form-label">Cantidad:</label>
-                        <input type="number" class="form-control" id="editCantidad" name="cantidad" required>
-                    </div>
                     <div class="mb-3">
                         <label for="editPrecio" class="form-label">Precio Unit:</label>
                         <input type="number" step="0.01" class="form-control" id="editPrecio" name="precio" required>

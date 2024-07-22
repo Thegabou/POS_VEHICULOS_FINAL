@@ -1,14 +1,3 @@
-// Función para cargar contenido dinámicamente
-function loadContent(url) {
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('main-content').innerHTML = html;
-            attachSearchHandler();
-        })
-        .catch(error => console.warn(error));
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     const cedulaInput = document.getElementById('cedula');
     cedulaInput.addEventListener('input', buscarCliente);
@@ -18,27 +7,21 @@ document.addEventListener('DOMContentLoaded', function () {
 let carrito = [];
 let total = 0;
 
-
 // Función para buscar cliente por cédula
 function buscarCliente() {
     const cedula = document.getElementById('cedula').value;
-    console.log(cedula);
     if (cedula.length > 0) {
         const form = document.getElementById('form-buscar-cliente');
         const url = "/vendedor/buscar-cliente/" + cedula;
-        const formData = new FormData(form);
-        console.log(url);
 
         fetch(url)
             .then(response => response.json())
             .then(data => {
                 if (data) {
+                    document.getElementById('id_cliente').value = data.id;
                     document.getElementById('nombre_apellido').value = data.nombre + ' ' + data.apellido;
                     document.getElementById('telefono').value = data.numero_telefono;
                     document.getElementById('correo').value = data.correo;
-                    document.getElementById('nombre_apellido').disabled = true;
-                    document.getElementById('telefono').disabled = true;
-                    document.getElementById('correo').disabled = true;
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -59,35 +42,43 @@ function buscarCliente() {
         document.getElementById('nombre_apellido').value = '';
         document.getElementById('telefono').value = '';
         document.getElementById('correo').value = '';
-        document.getElementById('nombre_apellido').disabled = false;
-        document.getElementById('telefono').disabled = false;
-        document.getElementById('correo').disabled = false;
     }
 }
 
-// Función para agregar un vehículo al carrito
 function addVehiculo() {
     const vehiculoInput = document.getElementById('vehiculo');
     const vehiculoId = vehiculoInput.value;
     const vehiculoOption = document.querySelector(`#vehiculosList option[value="${vehiculoId}"]`);
+
     if (vehiculoOption) {
-        const vehiculoData = vehiculoOption.innerText.split(' - ');
-        const vehiculoNombre = vehiculoData[0];
-        const vehiculoPrecio = parseFloat(vehiculoData[1].substring(1));
+        const vehiculoMarca = vehiculoOption.getAttribute('data-marca');
+        const vehiculoModelo = vehiculoOption.getAttribute('data-modelo');
+        const vehiculoAño = vehiculoOption.getAttribute('data-año');
+        const vehiculoTipo = vehiculoOption.getAttribute('data-tipo');
+        const vehiculoKilometraje = vehiculoOption.getAttribute('data-kilometraje');
+        const vehiculoPrecio = parseFloat(vehiculoOption.getAttribute('data-precio'));
+        const vehiculoFoto = vehiculoOption.getAttribute('data-foto');
 
         // Verificar si el vehículo ya está en el carrito
         const vehiculoExistente = carrito.find(vehiculo => vehiculo.id === vehiculoId);
         if (vehiculoExistente) {
-            // Actualizar la cantidad y el subtotal
-            vehiculoExistente.cantidad += 1;
-            vehiculoExistente.subtotal = vehiculoExistente.cantidad * vehiculoExistente.precio;
+            Swal.fire({
+                title: 'Error',
+                text: 'El vehículo ya se encuentra en el carrito',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         } else {
             // Agregar el nuevo vehículo al carrito
             const vehiculo = {
                 id: vehiculoId,
-                nombre: vehiculoNombre,
+                marca: vehiculoMarca,
+                modelo: vehiculoModelo,
+                año: vehiculoAño,
+                tipo: vehiculoTipo,
+                kilometraje: vehiculoKilometraje,
+                foto: vehiculoFoto,
                 precio: vehiculoPrecio,
-                cantidad: 1,
                 subtotal: vehiculoPrecio
             };
             carrito.push(vehiculo);
@@ -105,8 +96,6 @@ function addVehiculo() {
     }
 }
 
-
-// Función para actualizar el carrito
 function updateCarrito() {
     const tbody = document.getElementById('carrito-tbody');
     tbody.innerHTML = '';
@@ -117,8 +106,12 @@ function updateCarrito() {
 
         tr.innerHTML = `
             <td>${vehiculo.id}</td>
-            <td>${vehiculo.cantidad}</td>
-            <td>${vehiculo.nombre}</td>
+            <td>${vehiculo.marca}</td>
+            <td>${vehiculo.modelo}</td>
+            <td>${vehiculo.año}</td>
+            <td>${vehiculo.tipo}</td>
+            <td>${vehiculo.kilometraje}</td>
+            <td><img src="${vehiculo.foto}" alt="Foto del vehículo" width="100" height="100"></td>
             <td>$${vehiculo.precio.toFixed(2)}</td>
             <td>$${vehiculo.subtotal.toFixed(2)}</td>
             <td>
@@ -151,12 +144,11 @@ function editVehiculo(index) {
 // Función para guardar los cambios del vehículo editado
 function saveEdit() {
     const index = document.getElementById('editIndex').value;
-    const cantidad = document.getElementById('editCantidad').value;
     const precio = document.getElementById('editPrecio').value;
 
-    carrito[index].cantidad = parseInt(cantidad);
+    
     carrito[index].precio = parseFloat(precio);
-    carrito[index].subtotal = carrito[index].cantidad * carrito[index].precio;
+    carrito[index].subtotal = carrito[index].precio;
 
     updateCarrito();
 
@@ -170,26 +162,177 @@ function removeVehiculo(index) {
     updateCarrito();
 }
 
-
-// Función para finalizar la compra
-function finalizarCompra() {
-    const clienteId = document.getElementById('cedula').value;
+// Función para mostrar las opciones de pago
+function mostrarOpcionesPago() {
     const metodoPago = document.getElementById('metodo_pago').value;
+    const opcionesPagoDiv = document.getElementById('opciones_pago');
+
+    opcionesPagoDiv.innerHTML = '';
+
+    if (metodoPago === 'tarjeta') {
+        opcionesPagoDiv.innerHTML = `
+            <div class="mb-3">
+                <label for="numero_tarjeta" class="form-label">Número de Tarjeta:</label>
+                <input type="text" class="form-control" id="numero_tarjeta" required>
+            </div>
+            <div class="mb-3">
+                <label for="fecha_expiracion" class="form-label">Fecha de Expiración:</label>
+                <input type="text" class="form-control" id="fecha_expiracion" required>
+            </div>
+            <div class="mb-3">
+                <label for="codigo_seguridad" class="form-label">Código de Seguridad:</label>
+                <input type="text" class="form-control" id="codigo_seguridad" required>
+            </div>
+        `;
+    } else if (metodoPago === 'transferencia') {
+        opcionesPagoDiv.innerHTML = `
+            <div class="mb-3">
+                <label for="numero_comprobante" class="form-label">Número de Comprobante:</label>
+                <input type="text" class="form-control" id="numero_comprobante" required>
+            </div>
+        `;
+    } else if (metodoPago === 'credito') {
+        opcionesPagoDiv.innerHTML = `
+            <div class="mb-3">
+                <label for="entrada" class="form-label">Entrada Inicial:</label>
+                <input type="number" class="form-control" id="entrada" oninput="calcularFinanciamiento()" required>
+            </div>
+            <div class="mb-3">
+                <label for="plazo" class="form-label">Plazo (meses):</label>
+                <select class="form-control" id="plazo" onchange="calcularFinanciamiento()" required>
+                    <option value="6">6</option>
+                    <option value="12">12</option>
+                    <option value="24">24</option>
+                    <option value="48">48</option>
+                    <option value="72">72</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </div>
+            <div class="mb-3" id="plazo_otro_div" style="display: none;">
+                <label for="plazo_otro" class="form-label">Otro Plazo (meses):</label>
+                <input type="number" class="form-control" id="plazo_otro" oninput="calcularFinanciamiento()">
+            </div>
+            <div class="mb-3">
+                <label for="cuota" class="form-label">Cuota Mensual:</label>
+                <input type="text" class="form-control" id="cuota" readonly>
+            </div>
+        `;
+
+        document.getElementById('plazo').addEventListener('change', function () {
+            const plazo = this.value;
+            document.getElementById('plazo_otro_div').style.display = plazo === 'otro' ? 'block' : 'none';
+        });
+    }
+}
+
+// Función para calcular el financiamiento
+function calcularFinanciamiento() {
+    const entrada = parseFloat(document.getElementById('entrada').value) || 0;
+    const plazo = document.getElementById('plazo').value === 'otro' ? parseInt(document.getElementById('plazo_otro').value) : parseInt(document.getElementById('plazo').value);
+    const total = parseFloat(document.getElementById('total').innerText) - entrada;
+    const tasaInteres = 0.03; // 3% anual
+
+    if (plazo && total) {
+        const cuotaMensual = (total * (1 + tasaInteres)) / plazo;
+        document.getElementById('cuota').value = cuotaMensual.toFixed(2);
+    }
+}
+
+/// Función para finalizar la compra
+function finalizarCompra() {
+    const clienteId = document.getElementById('id_cliente').value;
+    const metodoPago = document.getElementById('metodo_pago').value;
+    const opcionesPagoDiv = document.getElementById('opciones_pago');
+    let datosPago = '';
+
+    if (metodoPago === 'efectivo') {
+        datosPago = 'Efectivo';
+    } else if (metodoPago === 'tarjeta') {
+        const numeroTarjeta = document.getElementById('numero_tarjeta').value;
+        const fechaExpiracion = document.getElementById('fecha_expiracion').value;
+        const codigoSeguridad = document.getElementById('codigo_seguridad').value;
+        if (!numeroTarjeta || !fechaExpiracion || !codigoSeguridad) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, complete todos los campos de la tarjeta',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+        datosPago = 'Tarjeta de Crédito';
+    } else if (metodoPago === 'transferencia') {
+        const numeroComprobante = document.getElementById('numero_comprobante').value;
+        if (!numeroComprobante) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, ingrese el número de comprobante',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+        datosPago = 'Transferencia - ' + numeroComprobante;
+    } else if (metodoPago === 'credito') {
+        const entrada = document.getElementById('entrada').value;
+        const plazo = document.getElementById('plazo').value === 'otro' ? document.getElementById('plazo_otro').value : document.getElementById('plazo').value;
+        const cuota = document.getElementById('cuota').value;
+        if (!entrada || !plazo || !cuota) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, complete todos los campos de financiamiento',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+        datosPago = `Financiamiento - Entrada: ${entrada}, Plazo: ${plazo} meses, Cuota: ${cuota}`;
+    }
 
     if (clienteId && carrito.length > 0) {
-        // Simula una llamada al backend para finalizar la compra
-        Swal.fire({
-            title: 'Compra Finalizada',
-            text: 'La compra se ha realizado con éxito',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            // Limpia el formulario y el carrito
-            document.getElementById('cedula').value = '';
-            document.getElementById('vehiculo').value = '';
-            carrito = [];
-            updateCarrito();
-        });
+        const ventaData = {
+            clienteId,
+            metodoPago,
+            datosPago,
+            vehiculos: carrito.map(vehiculo => vehiculo.id)
+        };
+
+        fetch('/dashboard/ventas', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(ventaData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Compra Finalizada',
+                        text: 'La compra se ha realizado con éxito',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        // Limpia el formulario y el carrito
+                        document.getElementById('cedula').value = '';
+                        document.getElementById('vehiculo').value = '';
+                        carrito = [];
+                        updateCarrito();
+                    });
+                } else {
+                    Swal.fire('Error al registrar la compra', '', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('Error al registrar la compra', '', 'error');
+            });
     } else {
         Swal.fire({
             title: 'Error',

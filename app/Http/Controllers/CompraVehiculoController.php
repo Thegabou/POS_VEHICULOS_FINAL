@@ -9,44 +9,32 @@ class CompraVehiculoController extends Controller
 {
     public function index()
     {
-        $compraVehiculos = CompraVehiculo::all();
-        return view('compra_vehiculos.index', compact('compraVehiculos'));
+        $compraVehiculos = CompraVehiculo::with('compra', 'vehiculo')->get();
+        return view('compra_vehiculo.index', compact('compraVehiculos'));
     }
 
     public function create()
     {
-        return view('compra_vehiculos.create');
+        return view('compra_vehiculo.create');
     }
 
     public function store(Request $request)
     {
-        $compraVehiculo = CompraVehiculo::create($request->all());
-        return redirect()->route('compra_vehiculos.index');
-    }
+        $request->validate([
+            'id_compra' => 'required|exists:compras,id',
+            'id_vehiculo' => 'required|exists:vehiculos,id',
+        ]);
 
-    public function show($id)
-    {
-        $compraVehiculo = CompraVehiculo::findOrFail($id);
-        return view('compra_vehiculos.show', compact('compraVehiculo'));
-    }
+        CompraVehiculo::create($request->all());
 
-    public function edit($id)
-    {
-        $compraVehiculo = CompraVehiculo::findOrFail($id);
-        return view('compra_vehiculos.edit', compact('compraVehiculo'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $compraVehiculo = CompraVehiculo::findOrFail($id);
-        $compraVehiculo->update($request->all());
-        return redirect()->route('compra_vehiculos.index');
+        return response()->json(['success' => true, 'message' => 'Compra de vehículo registrada exitosamente']);
     }
 
     public function destroy($id)
     {
         $compraVehiculo = CompraVehiculo::findOrFail($id);
         $compraVehiculo->delete();
-        return redirect()->route('compra_vehiculos.index');
+
+        return response()->json(['success' => 'Compra de vehículo eliminada con éxito']);
     }
 }

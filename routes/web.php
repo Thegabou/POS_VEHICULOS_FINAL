@@ -40,7 +40,6 @@ Route::resource('proveedores', ProveedorController::class);
 Route::resource('compras', CompraController::class);
 Route::resource('facturas', FacturaController::class);
 Route::resource('usuarios', UsuarioController::class);
-Route::resource('compra_vehiculos', CompraVehiculoController::class);
 Route::resource('venta_vehiculos', VentaVehiculoController::class);
 
 
@@ -73,10 +72,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('compra',[CompraController::class, 'index'])->name('compras');
-
 Route::get('/', [VehiculoController::class, 'welcome'])->name('welcome');
-Route::resource('inventarios', InventarioController::class)->middleware('auth');
 Route::resource('ventas', VentaVehiculoController::class)->middleware('auth');
 
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

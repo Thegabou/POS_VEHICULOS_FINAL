@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehiculo;
-use App\Models\Inventario;
 use Illuminate\Http\Request;
 
 class VehiculoController extends Controller
@@ -38,14 +37,7 @@ class VehiculoController extends Controller
             'foto_url' => 'required|url',
         ]);
 
-        $vehiculo = Vehiculo::create($request->all());
-
-        // Create an entry in the inventory with default stock 0
-        Inventario::create([
-            'vehiculo_id' => $vehiculo->id,
-            'stock' => 0,
-        ]);
-
+        Vehiculo::create($request->all());
         return response()->json(['success' => 'Vehículo creado exitosamente.']);
     }
 

@@ -35,6 +35,13 @@
             <label for="foto_url">Foto URL:</label>
             <input type="text" class="form-control" id="foto_url" name="foto_url" value="{{ $vehiculo->foto_url }}" required>
         </div>
+        <div class="form-group">
+            <label for="estado">Estado:</label>
+            <select class="form-control" id="estado" name="estado" required>
+                <option value="Disponible" {{ $vehiculo->estado == 'Disponible' ? 'selected' : '' }}>Disponible</option>
+                <option value="Vendido" {{ $vehiculo->estado == 'Vendido' ? 'selected' : '' }}>Vendido</option>
+                <option value="Reservado" {{ $vehiculo->estado == 'Reservado' ? 'selected' : '' }}>Reservado</option>
+            </select>
         <br>
         <button type="submit" class="btn btn-primary">Actualizar Vehículo</button>
         <button type="button" class="btn btn-secondary" onclick="loadContent('{{ route('vehiculos.index') }}')">Volver</button>

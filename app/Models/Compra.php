@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,19 +10,18 @@ class Compra extends Model
 
     protected $fillable = [
         'numero_factura',
+        'id_proveedor',
         'fecha_compra',
-        'proveedor_id',
-        'vehiculo_id',
         'monto_final',
     ];
 
     public function proveedor()
     {
-        return $this->belongsTo(Proveedor::class);
+        return $this->belongsTo(Proveedor::class, 'id_proveedor');
     }
 
     public function vehiculos()
     {
-        return $this->hasMany(CompraVehiculo::class);
+        return $this->belongsToMany(Vehiculo::class, 'id_compra');
     }
 }

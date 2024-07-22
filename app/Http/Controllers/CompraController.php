@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Compra;
 use App\Models\CompraVehiculo;
-use App\Models\Inventario;
 use App\Models\Proveedor;
 use App\Models\Vehiculo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CompraController extends Controller
 {
@@ -20,54 +21,49 @@ class CompraController extends Controller
 
     public function store(Request $request)
     {
-        // Validar la solicitud
-        $request->validate([
-            'ruc' => 'required|exists:proveedores,ruc',
-            'vehiculos' => 'required|array',
-            'vehiculos.*.marca' => 'required|string',
-            'vehiculos.*.modelo' => 'required|string',
-            'vehiculos.*.precio' => 'required|numeric',
-            'vehiculos.*.estado' => 'required|in:Disponible,Reservado,Vendido',
-        ]);
-
+        
+        $compraData = json_decode($request->input('compra'), true);
+        $vehiculosData = json_decode($request->input('vehiculos'), true);
         // Crear la compra
         $compra = Compra::create([
-            'ruc' => $request->input('ruc'),
-            'fecha' => $request->input('fecha'),
-            'total' => 0, // Este se actualizará más tarde
+            'id_proveedor' => $compraData[0]['id_proveedor'],
+            'numero_factura' => $compraData[0]['numero_factura'],
+            'fecha_compra' => $compraData[0]['fecha'],
+            'monto_final' => 0, // Este se actualizará más tarde
         ]);
-
+        Log::info('Compra creada: ', $compra->toArray());
         $total = 0;
 
         // Procesar cada vehículo
-        foreach ($request->input('vehiculos') as $vehiculoData) {
-            // Crear el vehículo en la base de datos
+        foreach ($vehiculosData as $vehiculoData) {
+            // Crear el vehículo
             $vehiculo = Vehiculo::create([
                 'marca' => $vehiculoData['marca'],
                 'modelo' => $vehiculoData['modelo'],
-                'precio' => $vehiculoData['precio_compra'],
+                'precio_compra' => $vehiculoData['precio_compra'],
                 'estado' => $vehiculoData['estado'],
                 'año_modelo' => $vehiculoData['año_modelo'],
-                'tipo' => $vehiculoData['tipo'],
-                'precio_venta' => $vehiculoData['precio_venta'],
+                'tipo_vehiculo' => $vehiculoData['tipo'],
                 'kilometraje' => $vehiculoData['kilometraje'],
+                'precio_venta' => $vehiculoData['precio_venta'],
+                'foto_url' => $vehiculoData['foto_url'], // Si tienes este campo
             ]);
-
+            Log::info('Vehiculo creado: ', $vehiculo->toArray());
             // Agregar al detalle de la compra
             CompraVehiculo::create([
-                'compra_id' => $compra->id,
-                'vehiculo_id' => $vehiculo->id,
-                'estado' => $vehiculoData['estado'],
+                'id_compra' => $compra->id,
+                'id_vehiculo' => $vehiculo->id,
             ]);
+            Log::info('CompraVehiculo creado: ', ['id_compra' => $compra->id, 'id_vehiculo' => $vehiculo->id]);
 
-            // Suponiendo que tu lógica de negocio incluye calcular el precio total
-            $total += $vehiculo->precio; // Ajusta según cómo quieras manejar el precio
+            // Calcular el total de la compra
+            $total += $vehiculo->precio_compra;
         }
 
         // Actualizar el total de la compra
-        $compra->total = $total;
+        $compra->monto_final = $total;
         $compra->save();
-
+        Log::info('Compra actualizada con total: ', $compra->toArray());
         return response()->json(['success' => true, 'message' => 'Compra registrada exitosamente']);
     }
 

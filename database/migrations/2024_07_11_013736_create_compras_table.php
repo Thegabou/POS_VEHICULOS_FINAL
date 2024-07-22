@@ -1,29 +1,34 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateComprasTable extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
     public function up()
     {
         Schema::create('compras', function (Blueprint $table) {
             $table->id();
-            $table->date('fecha_compra')->nullable();
-            $table->foreignId('id_proveedor')->constrained('proveedores')->onDelete('restrict')->onUpdate('restrict');
-            $table->foreignId('id_vehiculo')->constrained('vehiculos')->onDelete('restrict')->onUpdate('restrict');
+            $table->string('num_factura')->unique();
+            $table->foreignId('id_proveedor')->constrained('proveedores');
+            $table->date('fecha_compra');
             $table->decimal('monto_final', 10, 2);
             $table->timestamps();
         });
     }
-    
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down()
     {
         Schema::dropIfExists('compras');
     }
-    
-};
+}

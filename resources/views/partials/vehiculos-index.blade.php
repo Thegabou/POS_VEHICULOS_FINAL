@@ -15,6 +15,7 @@
                 <th>Precio Compra</th>
                 <th>Kilometraje</th>
                 <th>Precio Venta</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -28,6 +29,7 @@
                     <td>{{ $vehiculo->precio_compra }}</td>
                     <td>{{ $vehiculo->kilometraje }}</td>
                     <td>{{ $vehiculo->precio_venta }}</td>
+                    <td>{{ $vehiculo->estado }}</td>
                     <td>
                         <a href="#" onclick="loadContent('{{ route('vehiculos.edit', $vehiculo->id) }}')" class="btn btn-warning"><i class="fa-solid fa-pencil"></i> Editar</a>
                         <form action="{{ route('vehiculos.destroy', $vehiculo->id) }}" method="POST" style="display:inline;" onsubmit="return deleteVehiculo(event, this);">

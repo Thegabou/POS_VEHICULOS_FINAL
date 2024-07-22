@@ -31,21 +31,9 @@ class VentaVehiculoController extends Controller
         ]);
 
         $vehiculo = Vehiculo::findOrFail($request->id_vehiculo);
-        $inventario = Inventario::where('id_vehiculo', $vehiculo->id)->first();
+        //$inventario = Inventario::where('id_vehiculo', $vehiculo->id)->first();
 
-        if ($inventario->stock < $request->cantidad) {
-            return redirect()->back()->with('error', 'No hay suficiente stock disponible.');
-        }
-
-        $inventario->stock -= $request->cantidad;
-        $inventario->save();
-
-        VentaVehiculo::create([
-            'id_vehiculo' => $vehiculo->id,
-            'cantidad' => $request->cantidad,
-            'id_factura' => $request->id_factura,
-        ]);
-
+        
         return redirect()->route('ventas.index')->with('success', 'Venta realizada exitosamente.');
     }
 
@@ -65,19 +53,9 @@ class VentaVehiculoController extends Controller
         ]);
 
         $venta = VentaVehiculo::findOrFail($id);
-        $inventario = Inventario::where('id_vehiculo', $venta->id_vehiculo)->first();
+        
 
-        if ($inventario->stock + $venta->cantidad < $request->cantidad) {
-            return redirect()->back()->with('error', 'No hay suficiente stock disponible.');
-        }
-
-        // Revert the stock changes of the old sale
-        $inventario->stock += $venta->cantidad;
-
-        // Apply the new stock changes
-        $inventario->stock -= $request->cantidad;
-        $inventario->save();
-
+        
         $venta->update($request->all());
 
         return redirect()->route('ventas.index')->with('success', 'Venta actualizada exitosamente.');
@@ -86,12 +64,10 @@ class VentaVehiculoController extends Controller
     public function destroy($id)
     {
         $venta = VentaVehiculo::findOrFail($id);
-        $inventario = Inventario::where('id_vehiculo', $venta->id_vehiculo)->first();
+        
 
         // Revert the stock changes of the sale
-        $inventario->stock += $venta->cantidad;
-        $inventario->save();
-
+       
         $venta->delete();
 
         return redirect()->route('ventas.index')->with('success', 'Venta eliminada exitosamente.');
