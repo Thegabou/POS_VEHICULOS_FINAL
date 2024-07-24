@@ -5,7 +5,7 @@
         <!-- Proveedor -->
         <div class="mb-3">
             <label for="num_factura" class="form-label">Numero de Factura:</label>
-            <input type="text" class="form-control" id="num_factura" name="num_factura" required>
+            <input type="text" class="form-control" id="num_factura" name="num_factura" placeholder="XXX-XXX-XXXXXX" required>
         </div>
         <div class="form-group">
             <label for="ruc">RUC del Proveedor:</label>
@@ -38,14 +38,14 @@
         <!-- Vehículo -->
         <div class="form-group">
             <label for="marca">Marca:</label>
-            <input type="text" class="form-control" id="marca" name="marca" list="marcasList" required>
+            <input type="text" class="form-control" id="marca" name="marca" list="marcasList" style="text-transform:uppercase" required>
             <datalist id="marcasList">
                 <!-- Options populated dynamically -->
             </datalist>
         </div>
         <div class="form-group">
             <label for="modelo">Modelo:</label>
-            <input type="text" class="form-control" id="modelo" name="modelo" list="modelosList" required>
+            <input type="text" class="form-control" id="modelo" name="modelo" list="modelosList" style="text-transform:uppercase" required>
             <datalist id="modelosList">
                 <!-- Options populated dynamically -->
             </datalist>
@@ -64,7 +64,7 @@
         </div>
         <div class="mb-3">
             <label for="kilometraje" class="form-label">Kilometraje:</label>
-            <input type="number" class="form-control" id="kilometraje" name="kilometraje" required>
+            <input type="number" class="form-control" id="kilometraje" name="kilometraje"  required>
         </div>
         <div class="mb-3">
             <label for="precio_venta" class="form-label">Precio Venta:</label>
@@ -73,6 +73,14 @@
         <div class="mb-3">
             <label for="foto_url" class="form-label">Foto URL:</label>
             <input type="text" class="form-control" id="foto_url" name="foto_url" required>
+        </div>
+        <div class="mb-3">
+            <label for="numero_chasis" class="form-label">Numero de Chasis:</label>
+            <input type="text" class="form-control" id="numero_chasis" name="numero_chasis" style="text-transform:uppercase" required>
+        </div>
+        <div class="mb-3">
+            <label for="numero_motor" class="form-label">Numero de Motor:</label>
+            <input type="text" class="form-control" id="numero_motor" name="numero_motor" style="text-transform:uppercase" required>
         </div>
         <div class="mb-3">
             <label for="estado" class="form-label">Estado:</label>
@@ -98,6 +106,8 @@
                     <th>Precio Venta</th>
                     <th>Kilometraje</th>
                     <th>Tipo</th>
+                    <th>Numero Chasis</th>
+                    <th>Numero Motor</th>
                     <th>Foto</th>
                     <th>Total</th>
                     <th>Acciones</th>

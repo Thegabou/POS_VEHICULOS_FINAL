@@ -45,6 +45,7 @@ function filterClientes() {
 document.addEventListener('DOMContentLoaded', function () {
     document.body.addEventListener('submit', function(event) {
         if (event.target.matches('#form-crear-cliente')) {
+            
             event.preventDefault();
 
             const form = event.target;
@@ -88,13 +89,11 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Función para editar un cliente
-document.addEventListener('DOMContentLoaded', function () {
-    const formEditCliente = document.getElementById('form-edit-cliente');
-    if (formEditCliente) {
-        formEditCliente.addEventListener('submit', function(event) {
+    document.body.addEventListener('submit', function (event) {
+        if (event.target.matches('#form-edit-cliente')) {
             event.preventDefault();
 
-            const form = this;
+            const form = event.target;
             const formData = new FormData(form);
             const url = form.action;
 
@@ -127,9 +126,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     text: 'Hubo un problema al actualizar el cliente. Por favor, inténtelo nuevamente.',
                 });
             });
-        });
-    }
-});
+        }
+    });
 
 // Función para eliminar un cliente
 function deleteCliente(event, form) {

@@ -37,3 +37,4 @@
         </tbody>
     </table>
 </div>
+<script src="{{asset('js/dashboard_clientes.js')}}"></script>

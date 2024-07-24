@@ -34,13 +34,13 @@ function filterVehiculos() {
     }
 }
 
-// //Funcion para adjuntar el manejador de busqueda
-// function attachSearchHandler() {
-//     const searchValue = document.getElementById('search');
-//     if (searchValue) {
-//         searchValue.addEventListener('input', filterVehiculos);
-//     }
-// }
+//Funcion para adjuntar el manejador de busqueda
+function attachSearchHandler() {
+    const searchValue = document.getElementById('search');
+    if (searchValue) {
+        searchValue.addEventListener('input', filterVehiculos);
+    }
+}
 //Funcion para crear un vehiculo
 document.addEventListener('DOMContentLoaded', function () {
     document.body.addEventListener('submit', function(event) {
@@ -88,14 +88,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-//Funcion para editar un vehiculo
-document.addEventListener('DOMContentLoaded', function () {
-    const formEditVehiculo = document.getElementById('form-edit-vehiculo');
-    if (formEditVehiculo) {
-        formEditVehiculo.addEventListener('submit', function(event) {
+// Función para editar un vehículo
+    document.body.addEventListener('submit', function(event) {
+        if (event.target.matches('#form-editar-vehiculo')) { // Asegúrate de que el ID del formulario sea correcto
             event.preventDefault();
 
-            const form = this;
+            const form = event.target;
             const formData = new FormData(form);
             const url = form.action;
 
@@ -117,7 +115,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         loadContent('/dashboard/vehiculos');
                     });
                 } else {
-                    throw new Error(data.error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.error || 'Hubo un problema al actualizar el vehículo. Por favor, inténtelo nuevamente.',
+                    });
                 }
             })
             .catch(error => {
@@ -128,11 +130,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     text: 'Hubo un problema al actualizar el vehículo. Por favor, inténtelo nuevamente.',
                 });
             });
-        });
-    }
-});
-
-
+        }
+    });
 
 
 //Funcion para eliminar un vehiculo

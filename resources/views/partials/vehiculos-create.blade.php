@@ -34,7 +34,9 @@
             <label for="foto_url" class="form-label">Foto URL:</label>
             <input type="text" class="form-control" id="foto_url" name="foto_url" required>
         </div>
+        
         <button type="submit" class="btn btn-success">Crear Vehículo</button>
         <button type="button" class="btn btn-secondary" onclick="loadContent('{{ route('vehiculos.index') }}')">Volver</button>
     </form>
 </div>
+<script src="{{ asset('js/dashboard_vehiculos.js') }}"></script>

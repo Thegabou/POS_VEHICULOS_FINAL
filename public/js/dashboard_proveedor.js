@@ -1,13 +1,4 @@
 // Función para cargar contenido dinámicamente
-function loadContent(url) {
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('main-content').innerHTML = html;
-            attachSearchHandler();
-        })
-        .catch(error => console.warn(error));
-}
 
 // Función para adjuntar el manejador de búsqueda
 function attachSearchHandler() {

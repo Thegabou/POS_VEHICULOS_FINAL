@@ -10,8 +10,8 @@ class CompraVehiculo extends Model
 
     protected $table = 'compra_vehiculo';
     protected $fillable = [
-        'compra_id',
-        'vehiculo_id',
+        'id_compra',
+        'id_vehiculo',
     ];
 
     public function compra()

@@ -1,13 +1,3 @@
-function loadContent(url) {
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('main-content').innerHTML = html;
-            attachSearchHandler1();
-            
-        })
-        .catch(error => console.warn(error));
-}
 
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('search');

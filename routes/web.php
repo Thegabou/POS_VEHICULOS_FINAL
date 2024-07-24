@@ -15,8 +15,10 @@ use App\Http\Controllers\VendedorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\InventarioController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\CompraPaginaWeb;
+use App\Http\Controllers\CompraPaginaWebController;
+
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthenticatedSessionController::class, 'store']);
@@ -41,6 +43,9 @@ Route::resource('compras', CompraController::class);
 Route::resource('facturas', FacturaController::class);
 Route::resource('usuarios', UsuarioController::class);
 Route::resource('venta_vehiculos', VentaVehiculoController::class);
+Route::resource('vendedores', VendedorController::class);
+Route::resource('compra_vehiculos', CompraVehiculoController::class);
+
 
 
 
@@ -64,6 +69,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('compra/buscar-proveedor/{ruc}', [ProveedorController::class, 'getByRuc'])->name('buscar-proveedor');
     Route::get('dashboard/compras', [CompraController::class, 'index'])->name('dashboard.compras');
     Route::post('dashboard/compras', [CompraController::class, 'store'])->name('compras.store');
+    ///dashboard/ventas
+    Route::get('dashboard/ventas', [FacturaController::class, 'index'])->name('dashboard.ventas');
+    Route::post('dashboard/ventas', [FacturaController::class, 'store'])->name('venta.store');
 });    
 
 Route::middleware('auth')->group(function () {
@@ -74,6 +82,10 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/', [VehiculoController::class, 'welcome'])->name('welcome');
 Route::resource('ventas', VentaVehiculoController::class)->middleware('auth');
+//ruta para compra de vehiculo con parametro id-vehiculo
+Route::get('/compra-vehiculo/{id}', [CompraPaginaWebController::class, 'index'])->name('compra-vehiculo.index');
+Route::post('/compra-vehiculo/store', [CompraPaginaWebController::class, 'store'])->name('compra-vehiculo.store');
+
 
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 

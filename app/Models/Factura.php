@@ -16,6 +16,7 @@ class Factura extends Model
         'id_empleado',
         'id_cliente',
         'tipo_pago',
+        'datos_pago',
         'sub_total',
         'total',
     ];

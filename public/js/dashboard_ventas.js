@@ -57,6 +57,8 @@ function addVehiculo() {
         const vehiculoTipo = vehiculoOption.getAttribute('data-tipo');
         const vehiculoKilometraje = vehiculoOption.getAttribute('data-kilometraje');
         const vehiculoPrecio = parseFloat(vehiculoOption.getAttribute('data-precio'));
+        const vehiculoChasis = vehiculoOption.getAttribute('data-chasis');
+        const vehiculoMotor = vehiculoOption.getAttribute('data-motor');
         const vehiculoFoto = vehiculoOption.getAttribute('data-foto');
 
         // Verificar si el vehículo ya está en el carrito
@@ -77,6 +79,8 @@ function addVehiculo() {
                 año: vehiculoAño,
                 tipo: vehiculoTipo,
                 kilometraje: vehiculoKilometraje,
+                chasis: vehiculoChasis,
+                motor: vehiculoMotor,
                 foto: vehiculoFoto,
                 precio: vehiculoPrecio,
                 subtotal: vehiculoPrecio
@@ -111,6 +115,8 @@ function updateCarrito() {
             <td>${vehiculo.año}</td>
             <td>${vehiculo.tipo}</td>
             <td>${vehiculo.kilometraje}</td>
+            <td>${vehiculo.chasis}</td>
+            <td>${vehiculo.motor}</td>
             <td><img src="${vehiculo.foto}" alt="Foto del vehículo" width="100" height="100"></td>
             <td>$${vehiculo.precio.toFixed(2)}</td>
             <td>$${vehiculo.subtotal.toFixed(2)}</td>
@@ -238,15 +244,31 @@ function calcularFinanciamiento() {
     }
 }
 
+// Función para obtener el ID del empleado seleccionado
+function getSelectedEmployeeId() {
+    const hiddenInput = document.getElementById('hiddenVendedor');
+    return hiddenInput.value;
+}
+
 /// Función para finalizar la compra
 function finalizarCompra() {
+    const vehiculos_json=[];
     const clienteId = document.getElementById('id_cliente').value;
     const metodoPago = document.getElementById('metodo_pago').value;
+    const fecha = new Date().toISOString().slice(0, 10);
+    const sub_total = parseFloat(document.getElementById('sub_total').innerText);
+    total = parseFloat(document.getElementById('total').innerText);
     const opcionesPagoDiv = document.getElementById('opciones_pago');
     let datosPago = '';
-
+    var datos_pago_json = '';
+    carrito.forEach((vehiculo) => {
+        vehiculos_json.push({id:vehiculo.id});
+    });
     if (metodoPago === 'efectivo') {
         datosPago = 'Efectivo';
+        datos_pago_json = {
+            'datos_efectivo': 'Efectivo'
+        };
     } else if (metodoPago === 'tarjeta') {
         const numeroTarjeta = document.getElementById('numero_tarjeta').value;
         const fechaExpiracion = document.getElementById('fecha_expiracion').value;
@@ -261,6 +283,13 @@ function finalizarCompra() {
             return;
         }
         datosPago = 'Tarjeta de Crédito';
+        //4ultimos digitos de la tarjeta
+        var ultimos4 = numeroTarjeta.slice(-4);
+        datos_pago_json = {
+            'datos_tarjeta': ultimos4,
+            'fecha_expiracion': fechaExpiracion,
+            'codigo_seguridad': codigoSeguridad
+        };
     } else if (metodoPago === 'transferencia') {
         const numeroComprobante = document.getElementById('numero_comprobante').value;
         if (!numeroComprobante) {
@@ -273,6 +302,9 @@ function finalizarCompra() {
             return;
         }
         datosPago = 'Transferencia - ' + numeroComprobante;
+        datos_pago_json = {
+            'numero_comprobante': numeroComprobante
+        };
     } else if (metodoPago === 'credito') {
         const entrada = document.getElementById('entrada').value;
         const plazo = document.getElementById('plazo').value === 'otro' ? document.getElementById('plazo_otro').value : document.getElementById('plazo').value;
@@ -287,14 +319,49 @@ function finalizarCompra() {
             return;
         }
         datosPago = `Financiamiento - Entrada: ${entrada}, Plazo: ${plazo} meses, Cuota: ${cuota}`;
+        datos_pago_json = {
+            'entrada': entrada,
+            'plazo': plazo,
+            'cuota': cuota
+        };
     }
+
+    const id_empleado = getSelectedEmployeeId();
+    datos_pago=JSON.stringify(datos_pago_json);
+    var reth_vehiculos=JSON.stringify(vehiculos_json);
+
+    //verificar si hay un cliente seleccionado
+    if(!clienteId){
+        Swal.fire({
+            title: 'Error',
+            text: 'Seleccione un cliente',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    //validar que el campo de empleado este lleno
+    if (!id_empleado) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Seleccione un empleado',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
 
     if (clienteId && carrito.length > 0) {
         const ventaData = {
-            clienteId,
-            metodoPago,
-            datosPago,
-            vehiculos: carrito.map(vehiculo => vehiculo.id)
+            fecha,
+            id_empleado,
+            id_cliente:clienteId,
+            tipo_pago: metodoPago,
+            datos_pago: datos_pago,
+            sub_total: sub_total,
+            total: total,
+            vehiculos: reth_vehiculos
         };
 
         fetch('/dashboard/ventas', {

@@ -9,8 +9,8 @@
             <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Ingrese Cédula del Cliente" oninput="buscarCliente()">
         </div>
         <div class="mb-3">
-            <label for="id_cliente" class="form-label">ID</label>
-            <input type="number" class="form-contorl" id="id_cliente" name="id_cliente" disabled>
+            <label for="id_cliente" class="form-label" hidden>ID</label>
+            <input type="number" class="form-contorl" id="id_cliente" name="id_cliente" disabled hidden>
         </div>
         <div class="mb-3">
             <label for="nombre_apellido" class="form-label">Nombre y Apellido:</label>
@@ -37,10 +37,10 @@
             <input type="text" class="form-control dropdown-toggle" id="dropdownVendedor" readonly aria-haspopup="true" aria-expanded="false" placeholder="Seleccionar" onclick="toggleDropdown('dropdownMenuVendedor')">
             <div class="dropdown-menu" id="dropdownMenuVendedor" aria-labelledby="dropdownVendedor">
                 <input type="text" class="form-control" placeholder="Buscar..." id="searchInputVendedor" onkeyup="filterFunction('searchInputVendedor', 'dropdownMenuVendedor')">
-                <a class="dropdown-item" href="#" onclick="selectOption('dropdownVendedor', 'hiddenVendedor', this)" data-id="{{ auth()->user()->id }}">{{ auth()->user()->name }}</a>
+                <a class="dropdown-item" href="#" onclick="selectOption('dropdownVendedor', 'hiddenVendedor', this)" data-id="{{ auth()->user()->id }}">{{ auth()->user()->name }}</a> 
                 @foreach ($empleados as $empleado)
                     @if (in_array($empleado->cargo, ['vendedor', 'gerente']))
-                        <a class="dropdown-item" href="#" onclick="selectOption('dropdownVendedor', 'hiddenVendedor', this)" data-id="{{ $empleado->id }}">{{ $empleado->nombre }} {{ $empleado->apellido }}</a>
+                        <a class="dropdown-item" href="#" onclick="selectOption('dropdownVendedor', 'hiddenVendedor', this)" data-id="{{ $empleado->id }}">{{ $empleado->nombre }} {{ $empleado->apellido }}-{{$empleado->cargo}}</a>
                     @endif
                 @endforeach
             </div>
@@ -54,9 +54,11 @@
         <input type="text" class="form-control" id="vehiculo" name="vehiculo" placeholder="Buscar Vehículo por Código o Nombre" list="vehiculosList">
         <datalist id="vehiculosList">
             @foreach ($vehiculos as $vehiculo)
-                <option value="{{ $vehiculo->id }}" data-marca="{{ $vehiculo->marca }}" data-modelo="{{ $vehiculo->modelo }}" data-año="{{ $vehiculo->año_modelo }}" data-tipo="{{ $vehiculo->tipo_vehiculo }}" data-kilometraje="{{ $vehiculo->kilometraje }}" data-precio="{{ $vehiculo->precio_venta }}" data-foto="{{ $vehiculo->foto_url }}">
+            @if($vehiculo->estado === 'Disponible' || $vehiculo->estado === 'Reservado')
+                <option value="{{ $vehiculo->id }}" data-marca="{{ $vehiculo->marca }}" data-modelo="{{ $vehiculo->modelo }}" data-año="{{ $vehiculo->año_modelo }}" data-tipo="{{ $vehiculo->tipo_vehiculo }}" data-kilometraje="{{ $vehiculo->kilometraje }}" data-precio="{{ $vehiculo->precio_venta }}" data-chasis="{{$vehiculo->numero_chasis}}" data-motor="{{$vehiculo->numero_motor}}"data-foto="{{ $vehiculo->foto_url }}" data-estado="{{$vehiculo->estado}}">
                     {{ $vehiculo->marca }} {{ $vehiculo->modelo }} - {{ $vehiculo->año_modelo }} - {{ $vehiculo->tipo_vehiculo }} - {{ $vehiculo->kilometraje }} - ${{ $vehiculo->precio_venta }}
                 </option>
+            @endif
             @endforeach
         </datalist>
         
@@ -74,6 +76,8 @@
                 <th>Año</th>
                 <th>Tipo</th>
                 <th>Kilometraje</th>
+                <th>Numero Chasis</th>
+                <th>Numero Motor</th>
                 <th>Foto</th>
                 <th>Precio Unit</th>
                 <th>Precio Total</th>
@@ -85,19 +89,19 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="7"></td>
+                <td colspan="9"></td>
                 <td>Sub-total:</td>
                 <td>$<span id="sub_total">0.00</span></td>
                 <td></td>
             </tr>
             <tr>
-                <td colspan="7"></td>
+                <td colspan="9"></td>
                 <td>IVA (15%):</td>
                 <td>$<span id="iva">0.00</span></td>
                 <td></td>
             </tr>
             <tr>
-                <td colspan="7"></td>
+                <td colspan="9"></td>
                 <td>Total a Pagar:</td>
                 <td>$<span id="total">0.00</span></td>
                 <td></td>
@@ -117,30 +121,6 @@
     </div>
     <div id="opciones_pago"></div>
     <button class="btn btn-success" onclick="finalizarCompra()">Finalizar Compra</button>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Editar Vehículo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editForm">
-                    <div class="mb-3">
-                        <label for="editPrecio" class="form-label">Precio Unit:</label>
-                        <input type="number" step="0.01" class="form-control" id="editPrecio" name="precio" required>
-                    </div>
-                    <input type="hidden" id="editIndex">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="saveEdit()">Guardar cambios</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script src="{{asset('js/utilis.js')}}"></script>

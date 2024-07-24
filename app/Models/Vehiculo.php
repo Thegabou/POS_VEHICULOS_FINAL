@@ -17,6 +17,8 @@ class Vehiculo extends Model
         'kilometraje',
         'precio_venta',
         'foto_url',
+        'numero_chasis',
+        'numero_motor',
         'estado',
     ];
 

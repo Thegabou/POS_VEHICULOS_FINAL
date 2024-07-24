@@ -36,6 +36,14 @@
             <input type="text" class="form-control" id="foto_url" name="foto_url" value="{{ $vehiculo->foto_url }}" required>
         </div>
         <div class="form-group">
+            <label for="numero_chasis">Numero Chasis:</label>
+            <input type="text" class="form-control" id="numero_chasis" name="numero_chasis" value="{{ $vehiculo->numero_chasis }}" required>
+        </div>
+        <div class="form-group">
+            <label for="numero_motor">Numero Motor:</label>
+            <input type="text" class="form-control" id="numero_motor" name="numero_motor" value="{{ $vehiculo->numero_motor }}" required>
+        </div>
+        <div class="form-group">
             <label for="estado">Estado:</label>
             <select class="form-control" id="estado" name="estado" required>
                 <option value="Disponible" {{ $vehiculo->estado == 'Disponible' ? 'selected' : '' }}>Disponible</option>
@@ -47,5 +55,5 @@
         <button type="button" class="btn btn-secondary" onclick="loadContent('{{ route('vehiculos.index') }}')">Volver</button>
     </form>
 </div>
-
+<script src="{{ asset('js/dashboard_vehiculos.js') }}"></script>
 

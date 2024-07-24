@@ -18,7 +18,7 @@ function attachHandlers() {
             const proveedor = document.getElementById("proveedor");
             const montoFinal = document.getElementById("monto_final");
             const fecha = document.getElementById("fecha");
-    // Poblar marcas y modelos
+    //Poblar marcas y modelos
     fetch("/marcas")
         .then((response) => response.json())
         .then((data) => {
@@ -85,6 +85,8 @@ function attachHandlers() {
             );
             const tipo = document.getElementById("tipo_vehiculo").value;
             const foto = document.getElementById("foto_url").value;
+            const numero_chasis = document.getElementById("numero_chasis").value;
+            const numero_motor = document.getElementById("numero_motor").value;
             const total = precio;
 
             const tableBody = document
@@ -102,6 +104,8 @@ function attachHandlers() {
         <td>${precio_venta.toFixed(2)}</td>
         <td>${kilometraje}</td>
         <td>${tipo}</td>
+        <td>${numero_chasis}</td>
+        <td>${numero_motor}</td>
         <td>${imageElement}</td>
         <td>${total.toFixed(2)}</td>
         <td><button type="button" class="btn btn-danger btn-sm eliminarVehiculo">Eliminar</button></td>
@@ -125,6 +129,8 @@ function attachHandlers() {
             document.getElementById("precio_venta").value = "";
             document.getElementById("kilometraje").value = "";
             document.getElementById("tipo_vehiculo").value = "";
+            document.getElementById("numero_chasis").value = "";
+            document.getElementById("numero_motor").value = "";
             document.getElementById("foto_url").value = "";
         });
 
@@ -134,7 +140,7 @@ function attachHandlers() {
         document
             .querySelectorAll("#detalleVehiculos tbody tr")
             .forEach((row) => {
-                const totalRow = parseFloat(row.cells[9].textContent);
+                const totalRow = parseFloat(row.cells[11].textContent);
                 total += totalRow;
             });
         document.getElementById("monto_final").value = total.toFixed(2);
@@ -155,7 +161,7 @@ function attachHandlers() {
                 .querySelectorAll("#detalleVehiculos tbody tr")
                 .forEach((row) => {
                     //obtener la url de la imagen a partir del elemento img en la celda 8
-                    const img = row.cells[8].querySelector("img");
+                    const img = row.cells[10].querySelector("img");
                     const imgSrc = img.getAttribute("src");
                     vehiculos.push({
                         marca: row.cells[0].textContent,
@@ -166,6 +172,8 @@ function attachHandlers() {
                         precio_venta: parseFloat(row.cells[5].textContent),
                         kilometraje: parseFloat(row.cells[6].textContent),
                         tipo: row.cells[7].textContent,
+                        numero_chasis: row.cells[8].textContent,
+                        numero_motor: row.cells[9].textContent,
                         foto_url: imgSrc, // assuming this is a constant value for all rows
                     });
                 });
@@ -219,7 +227,9 @@ function attachHandlers() {
                         ).innerHTML = "";
                         document.getElementById("monto_final").value = "";
                     } else {
-                        Swal.fire("Error al registrar la compra", "", "error");
+                        //mostrar error en la respuesta como json
+                       var myerror = data.error;
+                        Swal.fire("Numero de Factura Duplicado", myerror, "error");
                     }
                 })
                 .catch((error) => {

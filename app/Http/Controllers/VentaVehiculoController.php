@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\VentaVehiculo;
 use App\Models\Vehiculo;
-use App\Models\Inventario;
 use App\Models\Factura;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class VentaVehiculoController extends Controller
 {
@@ -26,7 +27,6 @@ class VentaVehiculoController extends Controller
     {
         $request->validate([
             'id_vehiculo' => 'required|exists:vehiculos,id',
-            'cantidad' => 'required|integer|min:1',
             'id_factura' => 'required|exists:facturas,id',
         ]);
 
@@ -48,7 +48,6 @@ class VentaVehiculoController extends Controller
     {
         $request->validate([
             'id_vehiculo' => 'required|exists:vehiculos,id',
-            'cantidad' => 'required|integer|min:1',
             'id_factura' => 'required|exists:facturas,id',
         ]);
 
@@ -71,5 +70,67 @@ class VentaVehiculoController extends Controller
         $venta->delete();
 
         return redirect()->route('ventas.index')->with('success', 'Venta eliminada exitosamente.');
+    }
+
+    public function registrarVenta(Request $request)
+    {
+        $validatedData = $request->validate([
+            'clienteId' => 'required|exists:clientes,id',
+            'metodoPago' => 'required|string',
+            'datosPago' => 'nullable|string',
+            'vehiculos' => 'required|array',
+            'vehiculos.*' => 'exists:vehiculos,id'
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // Obtener los datos del cliente y el método de pago
+            $clienteId = $validatedData['clienteId'];
+            $metodoPago = $validatedData['metodoPago'];
+            $datosPago = $validatedData['datosPago'];
+
+            // Calcular el sub_total y total
+            $subTotal = 0;
+            foreach ($validatedData['vehiculos'] as $vehiculoId) {
+                $vehiculo = Vehiculo::findOrFail($vehiculoId);
+                if ($vehiculo->estado === 'Vendido') {
+                    return response()->json(['success' => false, 'message' => 'El vehículo ya está vendido.']);
+                }
+                $subTotal += $vehiculo->precio_venta;
+            }
+            $iva = $subTotal * 0.15;
+            $total = $subTotal + $iva;
+
+            // Crear la factura
+            $factura = Factura::create([
+                'fecha' => now(),
+                'id_empleado' => Auth::id(),
+                'id_cliente' => $clienteId,
+                'tipo_pago' => $metodoPago,
+                'datos_pago' => $datosPago,
+                'sub_total' => $subTotal,
+                'total' => $total,
+            ]);
+
+            // Actualizar el estado de los vehículos y registrar en venta_vehiculo
+            foreach ($validatedData['vehiculos'] as $vehiculoId) {
+                $vehiculo = Vehiculo::findOrFail($vehiculoId);
+                $vehiculo->estado = 'Vendido';
+                $vehiculo->save();
+
+                VentaVehiculo::create([
+                    'id_vehiculo' => $vehiculoId,
+                    'id_factura' => $factura->id,
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json(['success' => true, 'message' => 'Venta registrada exitosamente']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Error al registrar la venta']);
+        }
     }
 }

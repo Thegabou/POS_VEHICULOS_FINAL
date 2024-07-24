@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -8,6 +7,8 @@ use App\Models\Vehiculo;
 use App\Models\VentaVehiculo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use DateTime; 
+use Exception; 
 
 class FacturaController extends Controller
 {
@@ -20,19 +21,35 @@ class FacturaController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-
+        
         try {
+            // Formatear la fecha
+            $fecha = $request->input('fecha');
+            $fechaFormateada = (new DateTime($fecha))->format('Y-m-d H:i:s');
+
+            // Obtener los datos del pago y los vehiculos
+            $datosPago = json_decode($request->input('datos_pago'), true);
+            $vehiculos = json_decode($request->input('vehiculos'), true);
+
+            //validar que empleado no sea null
+            if($request->input('id_empleado') == null){
+                return response()->json(['error' => 'El empleado no puede ser nulo'], 400);
+            }
+            
             // Crear la factura
             $factura = Factura::create([
-                'id_cliente' => $request->input('id_cliente'),
-                'id_vendedor' => $request->input('id_vendedor'),
-                'fecha' => $request->input('fecha'),
-                'monto_final' => $request->input('monto_final'),
-                'metodo_pago' => $request->input('metodo_pago'),
-                'datos_pago' => $request->input('datos_pago') ?? null,
+                'fecha' => $fechaFormateada,                
+                'id_empleado' => $request->input('id_empleado'),  
+                'id_cliente' => $request->input('id_cliente'),                  
+                'tipo_pago' => $request->input('tipo_pago'),                   
+                'datos_pago' => json_encode($datosPago),        
+                'sub_total' => $request->input('sub_total'),
+                'total' => $request->input('total'),
             ]);
 
-            $vehiculos = $request->input('vehiculos');
+            $factura->datos_pago = json_encode($datosPago);
+            $factura->save();
+
             foreach ($vehiculos as $vehiculoData) {
                 // Obtener el vehículo
                 $vehiculo = Vehiculo::findOrFail($vehiculoData['id']);
@@ -56,11 +73,11 @@ class FacturaController extends Controller
             }
 
             DB::commit();
-            return response()->json(['success' => true, 'message' => 'Factura registrada exitosamente']);
-        } catch (\Exception $e) {
+            return response()->json(['success' => true, 'message' => 'Factura registrada exitosamente '.json_encode($datosPago)]);
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error('Error al registrar la factura: ' . $e->getMessage());
-            return response()->json(['error' => 'Error al registrar la factura'], 500);
+            return response()->json(['error' => 'Error al registrar la factura: ' . $e->getMessage()], 500);
         }
     }
 
@@ -95,7 +112,7 @@ class FacturaController extends Controller
 
             DB::commit();
             return response()->json(['success' => 'Factura eliminada con éxito']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error('Error al eliminar la factura: ' . $e->getMessage());
             return response()->json(['error' => 'Error al eliminar la factura'], 500);

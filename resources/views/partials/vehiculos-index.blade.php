@@ -16,6 +16,8 @@
                 <th>Kilometraje</th>
                 <th>Precio Venta</th>
                 <th>Estado</th>
+                <th>Numero Chasis</th>
+                <th>Numero Motor</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -30,6 +32,8 @@
                     <td>{{ $vehiculo->kilometraje }}</td>
                     <td>{{ $vehiculo->precio_venta }}</td>
                     <td>{{ $vehiculo->estado }}</td>
+                    <td>{{ $vehiculo->numero_chasis }}</td>
+                    <td>{{ $vehiculo->numero_motor }}</td>
                     <td>
                         <a href="#" onclick="loadContent('{{ route('vehiculos.edit', $vehiculo->id) }}')" class="btn btn-warning"><i class="fa-solid fa-pencil"></i> Editar</a>
                         <form action="{{ route('vehiculos.destroy', $vehiculo->id) }}" method="POST" style="display:inline;" onsubmit="return deleteVehiculo(event, this);">
@@ -43,3 +47,4 @@
         </tbody>
     </table>
 </div>
+<script src="{{ asset('js/dashboard_vehiculos.js') }}"></script>

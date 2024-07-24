@@ -28,3 +28,4 @@
         <button type="button" class="btn btn-secondary" onclick="loadContent('{{ route('clientes.index') }}')">Volver</button>
     </form>
 </div>
+<script src="{{asset('js/dashboard_clientes.js')}}"></script>

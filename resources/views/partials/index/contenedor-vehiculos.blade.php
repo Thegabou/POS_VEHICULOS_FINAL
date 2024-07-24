@@ -1,4 +1,5 @@
 @foreach($vehiculos as $vehiculo)
+@if($vehiculo->estado === 'Disponible')
         <div class="producto" 
              data-id="{{ $vehiculo->id }}" 
              data-marca="{{ $vehiculo->marca }}" 
@@ -11,9 +12,16 @@
             <span class="precio_txt">Precio:</span>
             <span class="precio_producto">${{ number_format($vehiculo->precio_venta, 2) }}</span>
             @if($vehiculo->estado === 'Disponible')
-                <button class="boton_producto" onclick="agregarcarritoclick(event)">Comprar</button>
+                <button class="boton_producto" onclick="comprarVehiculo({{ $vehiculo->id }})">Comprar</button>
             @else
                 <span class="sin_stock">{{ $vehiculo->estado }}</span>
             @endif
         </div>
+@endif
     @endforeach
+
+    <script>
+        function comprarVehiculo(id) {
+            window.location.href = `/compra-vehiculo/${id}`;
+        }
+    </script>

@@ -12,18 +12,16 @@ class VentaVehiculo extends Model
     protected $table = 'venta_vehiculo';
 
     protected $fillable = [
-        'id_vehiculo',
-        'cantidad',
-        'id_factura',
+        'id_vehiculo', 'id_factura'
     ];
-
-    public function vehiculo()
-    {
-        return $this->belongsTo(Vehiculo::class, 'id_vehiculo');
-    }
 
     public function factura()
     {
         return $this->belongsTo(Factura::class, 'id_factura');
+    }
+
+    public function vehiculo()
+    {
+        return $this->belongsTo(Vehiculo::class, 'id_vehiculo');
     }
 }

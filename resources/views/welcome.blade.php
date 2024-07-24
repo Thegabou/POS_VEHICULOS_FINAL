@@ -95,6 +95,6 @@
         </div>
     </footer>
     <script src="{{ asset('js/nav_encabezado.js') }}"></script>
-    <script src="{{ asset('js/productos.js') }}"></script>
+    
 </body>
 </html>

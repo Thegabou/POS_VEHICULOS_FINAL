@@ -28,7 +28,7 @@ class ProveedorController extends Controller
     // Mostrar formulario de creación
     public function create()
     {
-        return view('partials.proveedor-create');
+        return view('partials.proveedor-create')->render();;
     }
 
     // Guardar nuevo proveedor
@@ -51,7 +51,7 @@ class ProveedorController extends Controller
     public function edit($id)
     {
         $proveedor = Proveedor::findOrFail($id);
-        return view('partials.proveedor-edit', compact('proveedor'));
+        return view('partials.proveedor-edit', compact('proveedor'))->render();
     }
 
     // Actualizar proveedor
@@ -68,7 +68,7 @@ class ProveedorController extends Controller
         $proveedor = Proveedor::findOrFail($id);
         $proveedor->update($request->all());
 
-        return response()->json(['success' => 'Proveedor actualizado correctamente']);
+        return response()->json(['success' => 'Proveedor actualizado correctamente'])->render();
     }
 
     // Eliminar proveedor
