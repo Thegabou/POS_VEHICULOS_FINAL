@@ -18,6 +18,7 @@ use App\Http\Controllers\Auth\LoginController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\CompraPaginaWeb;
 use App\Http\Controllers\CompraPaginaWebController;
+use App\Http\Controllers\ReporteVehiculosController;
 
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -45,6 +46,7 @@ Route::resource('usuarios', UsuarioController::class);
 Route::resource('venta_vehiculos', VentaVehiculoController::class);
 Route::resource('vendedores', VendedorController::class);
 Route::resource('compra_vehiculos', CompraVehiculoController::class);
+Route::resource('reportes-index', ReporteVehiculosController::class);
 
 
 
@@ -72,6 +74,11 @@ Route::middleware(['auth'])->group(function () {
     ///dashboard/ventas
     Route::get('dashboard/ventas', [FacturaController::class, 'index'])->name('dashboard.ventas');
     Route::post('dashboard/ventas', [FacturaController::class, 'store'])->name('venta.store');
+    Route::get('/reportes/entradas', [ReporteVehiculosController::class, 'entradas'])->name('reportes.entradas');
+    Route::get('/reportes/salidas', [ReporteVehiculosController::class, 'salidas'])->name('reportes.salidas');
+    Route::get('/reportes/mas-vendidos', [ReporteVehiculosController::class, 'masVendidos'])->name('reportes.masVendidos');
+    Route::get('/reportes/menos-vendidos', [ReporteVehiculosController::class, 'menosVendidos'])->name('reportes.menosVendidos');
+    Route::get('dashboard/reportes-index', [ReporteVehiculosController::class, 'index'])->name('reportes');
 });    
 
 Route::middleware('auth')->group(function () {
@@ -85,6 +92,7 @@ Route::resource('ventas', VentaVehiculoController::class)->middleware('auth');
 //ruta para compra de vehiculo con parametro id-vehiculo
 Route::get('/compra-vehiculo/{id}', [CompraPaginaWebController::class, 'index'])->name('compra-vehiculo.index');
 Route::post('/compra-vehiculo/store', [CompraPaginaWebController::class, 'store'])->name('compra-vehiculo.store');
+
 
 
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

@@ -122,7 +122,6 @@ function updateCarrito() {
             <td>$${vehiculo.subtotal.toFixed(2)}</td>
             <td>
                 <button class="btn btn-danger" onclick="removeVehiculo(${index})">Eliminar</button>
-                <button class="btn btn-warning" onclick="editVehiculo(${index})">Editar</button>
             </td>
         `;
 

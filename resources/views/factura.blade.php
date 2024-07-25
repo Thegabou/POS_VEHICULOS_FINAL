@@ -56,22 +56,13 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <img src="{{ asset('imagenes/logo.png') }}" alt="Logo" class="logo">
-        <h1>AUTOMOTORA, S.A.S</h1>
-        <p>
-            NIT: xxxxxxx<br>
-            CALLE 1<br>
-            ENVIADO<br>
-            Teléfono: xxxxxxx
-        </p>
-    </div>
 
     <div class="content">
         <table class="details">
-            <tr>
+            <>
                 <td><strong>Ha sido atendido por:</strong></td>
                 <td>Nombre del Vendedor</td>
+                {{-- agregar el nombre del vendedor --}}
                 <td><strong>NIT/Cédula:</strong></td>
                 <td>{{ $cliente->cedula }}</td>
             </tr>
@@ -154,33 +145,12 @@
             </tr>
         </table>
 
-        <h3>Financiación:</h3>
-        <table class="table">
-            <tr>
-                <th>Entidad</th>
-                <th>Plazo</th>
-                <th>T. Interés</th>
-                <th>Gastos</th>
-                <th>Cuota Inicial</th>
-                <th>Valor a Financiar</th>
-                <th>Cuota Mensual</th>
-            </tr>
-            <tr>
-                <td>Entidad 1</td>
-                <td>36 Meses</td>
-                <td>1.5%</td>
-                <td>100,000.00</td>
-                <td>5,000,000.00</td>
-                <td>30,000,000.00</td>
-                <td>900,000.00</td>
-            </tr>
-        </table>
+        
 
-        <p class="text-right">Cotización válida hasta {{ date('Y-m-d', strtotime('+30 days')) }}</p>
-    </div>
+        
 
     <div class="footer">
-        <p>&copy; {{ date('Y') }} AUTOMOTORA, S.A.S. Todos los derechos reservados.</p>
+        <p>&copy; {{ date('Y') }} GROUNDHOGDRIVER Todos los derechos reservados.</p>
     </div>
 </body>
 </html>
