@@ -15,10 +15,10 @@ use App\Http\Controllers\VendedorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\LoginController;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\CompraPaginaWeb;
 use App\Http\Controllers\CompraPaginaWebController;
 use App\Http\Controllers\ReporteVehiculosController;
+use App\Http\Controllers\ReporteClientesController;
 
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -79,6 +79,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reportes/mas-vendidos', [ReporteVehiculosController::class, 'masVendidos'])->name('reportes.masVendidos');
     Route::get('/reportes/menos-vendidos', [ReporteVehiculosController::class, 'menosVendidos'])->name('reportes.menosVendidos');
     Route::get('dashboard/reportes-index', [ReporteVehiculosController::class, 'index'])->name('reportes');
+    Route::get('/clientes/{clienteId}/historial-compras', [ReporteClientesController::class, 'historialCompras'])->name('clientes.historialCompras');
+    Route::get('/clientes/{clienteId}/generar-reportes', [ReporteClientesController::class, 'generarReportes'])->name('clientes.generarReportes');
 });    
 
 Route::middleware('auth')->group(function () {

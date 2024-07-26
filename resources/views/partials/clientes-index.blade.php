@@ -11,7 +11,6 @@
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Correo</th>
-                <th>Cédula</th>
                 <th>Número de Teléfono</th>
                 <th>Acciones</th>
             </tr>
@@ -22,7 +21,6 @@
                     <td>{{ $cliente->nombre }}</td>
                     <td>{{ $cliente->apellido }}</td>
                     <td>{{ $cliente->correo }}</td>
-                    <td>{{ $cliente->cedula }}</td>
                     <td>{{ $cliente->numero_telefono }}</td>
                     <td>
                         <a href="#" onclick="loadContent('{{ route('clientes.edit', $cliente->id) }}')" class="btn btn-warning"><i class="fa-solid fa-pencil"></i> Editar</a>
@@ -31,6 +29,8 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Eliminar</button>
                         </form>
+                        <a href="{{ route('clientes.historialCompras', $cliente->id) }}" class="btn btn-primary">Historial De Compras</a>
+                        <a href="{{ route('clientes.generarReportes', $cliente->id) }}" class="btn btn-primary">Reporte</a>
                     </td>
                 </tr>
             @endforeach

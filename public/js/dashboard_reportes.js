@@ -1,35 +1,13 @@
-window.onload = function() {
+document.addEventListener('DOMContentLoaded', function () {
+    var masVendidosCardBody = document.getElementById('masVendidosCardBody');
+    var menosVendidosCardBody = document.getElementById('menosVendidosCardBody');
+    var entradasCardBody = document.getElementById('entradasCardBody');
+    var salidasCardBody = document.getElementById('salidasCardBody');
+
     var vehiculosMasVendidos = JSON.parse(document.getElementById('vehiculosMasVendidosData').textContent);
     var vehiculosMenosVendidos = JSON.parse(document.getElementById('vehiculosMenosVendidosData').textContent);
 
-    var masVendidosContainer = document.getElementById('masVendidosContainer');
-    var menosVendidosContainer = document.getElementById('menosVendidosContainer');
-
-    vehiculosMasVendidos.forEach(function(vehiculo) {
-        var card = document.createElement('div');
-        card.className = 'card bg-primary text-white mb-4';
-        card.innerHTML = `
-            <div class="card-body">
-                <h5 class="card-title">${vehiculo.marca} ${vehiculo.modelo}</h5>
-                <p class="card-text">Total vendidos: ${vehiculo.total_vendidos}</p>
-            </div>
-        `;
-        masVendidosContainer.appendChild(card);
-    });
-
-    vehiculosMenosVendidos.forEach(function(vehiculo) {
-        var card = document.createElement('div');
-        card.className = 'card bg-warning text-white mb-4';
-        card.innerHTML = `
-            <div class="card-body">
-                <h5 class="card-title">${vehiculo.marca} ${vehiculo.modelo}</h5>
-                <p class="card-text">Total vendidos: ${vehiculo.total_vendidos}</p>
-            </div>
-        `;
-        menosVendidosContainer.appendChild(card);
-    });
-
-    var labelsMasVendidos = vehiculosMasVendidos.map(function(vehiculo) {
+    var labelsMasVendidos = vehiculosMasVendidos.map(function (vehiculo) {
         return vehiculo.marca + ' ' + vehiculo.modelo;
     });
     var dataMasVendidos = vehiculosMasVendidos.map(function (vehiculo) {
@@ -43,7 +21,19 @@ window.onload = function() {
         return vehiculo.total_vendidos;
     });
 
+    // Insertar datos en los card-body
+    masVendidosCardBody.innerHTML = labelsMasVendidos.map(function(label, index) {
+        return `<p>${label}: ${dataMasVendidos[index]} vendidos</p>`;
+    }).join('');
+
+    menosVendidosCardBody.innerHTML = labelsMenosVendidos.map(function(label, index) {
+        return `<p>${label}: ${dataMenosVendidos[index]} vendidos</p>`;
+    }).join('');
+
+    // Gráficos
     var ctxMasVendidos = document.getElementById('myAreaChart').getContext('2d');
+    var ctxMenosVendidos = document.getElementById('myBarChart').getContext('2d');
+
     var myAreaChart = new Chart(ctxMasVendidos, {
         type: 'line',
         data: {
@@ -65,7 +55,6 @@ window.onload = function() {
         }
     });
 
-    var ctxMenosVendidos = document.getElementById('myBarChart').getContext('2d');
     var myBarChart = new Chart(ctxMenosVendidos, {
         type: 'bar',
         data: {
@@ -86,4 +75,4 @@ window.onload = function() {
             }
         }
     });
-};
+});
