@@ -9,8 +9,8 @@ class Vehiculo extends Model
     use HasFactory;
 
     protected $fillable = [
-        'marca',
-        'modelo',
+        'id_marca',
+        'id_modelo',
         'año_modelo',
         'tipo_vehiculo',
         'precio_compra',
@@ -22,8 +22,18 @@ class Vehiculo extends Model
         'estado',
     ];
 
+    public function marca()
+    {
+        return $this->belongsTo(MarcaVehiculo::class, 'id_marca');
+    }
+
+    public function modelo()
+    {
+        return $this->belongsTo(ModeloVehiculo::class, 'id_modelo');
+    }
+
     public function compras()
     {
-        return $this->belongsToMany(Compra::class, 'id_vehiculo');
+        return $this->belongsToMany(Compra::class, 'compra_vehiculo', 'id_vehiculo', 'id_compra');
     }
 }

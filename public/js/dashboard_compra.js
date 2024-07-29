@@ -9,39 +9,47 @@ function loadContent(url) {
         .catch((error) => console.warn(error));
 }
 
-
-
-
 // Attach handlers for the form interactions
 function attachHandlers() {
     const numeroFactura = document.getElementById("num_factura");
-            const proveedor = document.getElementById("proveedor");
-            const montoFinal = document.getElementById("monto_final");
-            const fecha = document.getElementById("fecha");
-    //Poblar marcas y modelos
-    fetch("/marcas")
-        .then((response) => response.json())
-        .then((data) => {
-            const marcasList = document.getElementById("marcasList");
-            data.forEach((marca) => {
-                const option = document.createElement("option");
-                option.value = marca;
-                marcasList.appendChild(option);
-            });
+    const proveedor = document.getElementById("proveedor");
+    const montoFinal = document.getElementById("monto_final");
+    const fecha = document.getElementById("fecha");
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("/vehiculo/marcas")
+            .then((response) => response.json())
+            .then((data) => {
+                const marcasDropdown = document.getElementById("id_marca");
+                data.forEach((marca) => {
+                    const option = document.createElement("option");
+                    option.value = marca.id;
+                    option.text = marca.marca_vehiculo;
+                    marcasDropdown.appendChild(option);
+                });
+            })
+            .catch((error) => console.warn("Error al cargar las marcas:", error));
+    
+        document.getElementById("id_marca").addEventListener("change", function () {
+            const marcaId = this.value;
+            const modelosDropdown = document.getElementById("id_modelo");
+            modelosDropdown.innerHTML = ""; // Limpiar el dropdown de modelos
+    
+            fetch(`/vehiculo/modelos/${marcaId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    data.forEach((modelo) => {
+                        const option = document.createElement("option");
+                        option.value = modelo.id;
+                        option.text = modelo.modelo_vehiculo;
+                        modelosDropdown.appendChild(option);
+                    });
+                })
+                .catch((error) => console.warn("Error al cargar los modelos:", error));
         });
+    });
 
-    fetch("/modelos")
-        .then((response) => response.json())
-        .then((data) => {
-            const modelosList = document.getElementById("modelosList");
-            data.forEach((modelo) => {
-                const option = document.createElement("option");
-                option.value = modelo;
-                modelosList.appendChild(option);
-            });
-        });
-
-        // Autocompletar proveedor
+    // Autocompletar proveedor
     document.getElementById("ruc").addEventListener("blur", function () {
         const ruc = this.value;
         fetch(`/proveedores/${ruc}`)
@@ -55,10 +63,8 @@ function attachHandlers() {
                 document.getElementById("proveedor").value = data.id;
                 document.getElementById("nombre_proveedor").value = data.nombre;
                 document.getElementById("correo_proveedor").value = data.correo;
-                document.getElementById("telefono_proveedor").value =
-                    data.telefono;
-                document.getElementById("direccion_proveedor").value =
-                    data.direccion;
+                document.getElementById("telefono_proveedor").value = data.telefono;
+                document.getElementById("direccion_proveedor").value = data.direccion;
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -67,187 +73,147 @@ function attachHandlers() {
     });
 
     // Agregar vehículo a la tabla
-    document
-        .getElementById("agregarVehiculo")
-        .addEventListener("click", function () {
-            const marca = document.getElementById("marca").value;
-            const modelo = document.getElementById("modelo").value;
-            const precio = parseFloat(
-                document.getElementById("precio_compra").value
-            );
-            const estado = document.getElementById("estado").value;
-            const año = document.getElementById("año_modelo").value;
-            const precio_venta = parseFloat(
-                document.getElementById("precio_venta").value
-            );
-            const kilometraje = parseFloat(
-                document.getElementById("kilometraje").value
-            );
-            const tipo = document.getElementById("tipo_vehiculo").value;
-            const foto = document.getElementById("foto_url").value;
-            const numero_chasis = document.getElementById("numero_chasis").value;
-            const numero_motor = document.getElementById("numero_motor").value;
-            const total = precio;
+    document.getElementById("agregarVehiculo").addEventListener("click", function () {
+        const marca = document.getElementById("id_marca").options[document.getElementById("id_marca").selectedIndex].text;
+        const modelo = document.getElementById("id_modelo").options[document.getElementById("id_modelo").selectedIndex].text;
+        const precio = parseFloat(document.getElementById("precio_compra").value);
+        const estado = document.getElementById("estado").value;
+        const año = document.getElementById("año_modelo").value;
+        const precio_venta = parseFloat(document.getElementById("precio_venta").value);
+        const kilometraje = parseFloat(document.getElementById("kilometraje").value);
+        const tipo = document.getElementById("tipo_vehiculo").value;
+        const foto = document.getElementById("foto_url").value;
+        const numero_chasis = document.getElementById("numero_chasis").value;
+        const numero_motor = document.getElementById("numero_motor").value;
+        const total = precio;
 
-            const tableBody = document
-                .getElementById("detalleVehiculos")
-                .querySelector("tbody");
-            const row = tableBody.insertRow();
-            const imageElement =
-                "<img src='" + foto + "' width='100' height='100'>";
-            row.innerHTML = `
-        <td>${marca}</td>
-        <td>${modelo}</td>
-        <td>${precio.toFixed(2)}</td>
-        <td>${estado}</td>
-        <td>${año}</td>
-        <td>${precio_venta.toFixed(2)}</td>
-        <td>${kilometraje}</td>
-        <td>${tipo}</td>
-        <td>${numero_chasis}</td>
-        <td>${numero_motor}</td>
-        <td>${imageElement}</td>
-        <td>${total.toFixed(2)}</td>
-        <td><button type="button" class="btn btn-danger btn-sm eliminarVehiculo">Eliminar</button></td>
-    `;
+        const tableBody = document.getElementById("detalleVehiculos").querySelector("tbody");
+        const row = tableBody.insertRow();
+        const imageElement = "<img src='" + foto + "' width='100' height='100'>";
+        row.innerHTML = `
+            <td>${marca}</td>
+            <td>${modelo}</td>
+            <td>${precio.toFixed(2)}</td>
+            <td>${estado}</td>
+            <td>${año}</td>
+            <td>${precio_venta.toFixed(2)}</td>
+            <td>${kilometraje}</td>
+            <td>${tipo}</td>
+            <td>${numero_chasis}</td>
+            <td>${numero_motor}</td>
+            <td>${imageElement}</td>
+            <td>${total.toFixed(2)}</td>
+            <td><button type="button" class="btn btn-danger btn-sm eliminarVehiculo">Eliminar</button></td>
+        `;
 
+        updateTotal();
+
+        row.querySelector(".eliminarVehiculo").addEventListener("click", function () {
+            row.remove();
             updateTotal();
-
-            row.querySelector(".eliminarVehiculo").addEventListener(
-                "click",
-                function () {
-                    row.remove();
-                    updateTotal();
-                }
-            );
-
-            // Clear inputs
-            document.getElementById("marca").value = "";
-            document.getElementById("modelo").value = "";
-            document.getElementById("precio_compra").value = "";
-            document.getElementById("año_modelo").value = "";
-            document.getElementById("precio_venta").value = "";
-            document.getElementById("kilometraje").value = "";
-            document.getElementById("tipo_vehiculo").value = "";
-            document.getElementById("numero_chasis").value = "";
-            document.getElementById("numero_motor").value = "";
-            document.getElementById("foto_url").value = "";
         });
+
+        // Clear inputs
+        document.getElementById("id_marca").value = "";
+        document.getElementById("id_modelo").value = "";
+        document.getElementById("precio_compra").value = "";
+        document.getElementById("año_modelo").value = "";
+        document.getElementById("precio_venta").value = "";
+        document.getElementById("kilometraje").value = "";
+        document.getElementById("tipo_vehiculo").value = "";
+        document.getElementById("numero_chasis").value = "";
+        document.getElementById("numero_motor").value = "";
+        document.getElementById("foto_url").value = "";
+    });
 
     // Calcular total
     function updateTotal() {
         let total = 0;
-        document
-            .querySelectorAll("#detalleVehiculos tbody tr")
-            .forEach((row) => {
-                const totalRow = parseFloat(row.cells[11].textContent);
-                total += totalRow;
-            });
+        document.querySelectorAll("#detalleVehiculos tbody tr").forEach((row) => {
+            const totalRow = parseFloat(row.cells[11].textContent);
+            total += totalRow;
+        });
         document.getElementById("monto_final").value = total.toFixed(2);
     }
-     
+
     // Manejar submit del formulario
-    document
-        .getElementById("detalleVehiculoForm")
-        .addEventListener("submit", function (event) {
-            event.preventDefault();
-            const compradata = [];
-            const formData = new FormData(
-                document.getElementById("compraForm")
-            );
-            const vehiculos = [];
+    document.getElementById("detalleVehiculoForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const compradata = [];
+        const formData = new FormData(document.getElementById("compraForm"));
+        const vehiculos = [];
 
-            document
-                .querySelectorAll("#detalleVehiculos tbody tr")
-                .forEach((row) => {
-                    //obtener la url de la imagen a partir del elemento img en la celda 8
-                    const img = row.cells[10].querySelector("img");
-                    const imgSrc = img.getAttribute("src");
-                    vehiculos.push({
-                        marca: row.cells[0].textContent,
-                        modelo: row.cells[1].textContent,
-                        precio_compra: parseFloat(row.cells[2].textContent),
-                        estado: row.cells[3].textContent,
-                        año_modelo: parseInt(row.cells[4].textContent),
-                        precio_venta: parseFloat(row.cells[5].textContent),
-                        kilometraje: parseFloat(row.cells[6].textContent),
-                        tipo: row.cells[7].textContent,
-                        numero_chasis: row.cells[8].textContent,
-                        numero_motor: row.cells[9].textContent,
-                        foto_url: imgSrc, // assuming this is a constant value for all rows
-                    });
-                });
-
-            formData.append("vehiculos", JSON.stringify(vehiculos));
-
-            console.log(numeroFactura);
-            console.log(proveedor);
-            console.log(montoFinal);
-            console.log(fecha);
-
-            if (!numeroFactura || !proveedor || !montoFinal || !fecha) {
-                console.error("Some elements are missing in the DOM");
-                return;
-            }
-
-            compradata.push({
-                numero_factura: numeroFactura.value,
-                id_proveedor: parseInt(proveedor.value),
-                monto_final: parseFloat(montoFinal.value),
-                fecha: fecha.value,
+        document.querySelectorAll("#detalleVehiculos tbody tr").forEach((row) => {
+            const img = row.cells[10].querySelector("img");
+            const imgSrc = img.getAttribute("src");
+            vehiculos.push({
+                marca: row.cells[0].textContent,
+                modelo: row.cells[1].textContent,
+                precio_compra: parseFloat(row.cells[2].textContent),
+                estado: row.cells[3].textContent,
+                año_modelo: parseInt(row.cells[4].textContent),
+                precio_venta: parseFloat(row.cells[5].textContent),
+                kilometraje: parseFloat(row.cells[6].textContent),
+                tipo: row.cells[7].textContent,
+                numero_chasis: row.cells[8].textContent,
+                numero_motor: row.cells[9].textContent,
+                foto_url: imgSrc,
             });
-
-            formData.append("compra", JSON.stringify(compradata));
-
-            fetch("/dashboard/compras", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
-                },
-                body: formData,
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    if (data.success) {
-                        Swal.fire(
-                            "Compra registrada exitosamente",
-                            "",
-                            "success"
-                        );
-                        document.getElementById("compraForm").reset();
-                        document.querySelector(
-                            "#detalleVehiculos tbody"
-                        ).innerHTML = "";
-                        document.getElementById("monto_final").value = "";
-                    } else {
-                        //mostrar error en la respuesta como json
-                       var myerror = data.error;
-                        Swal.fire("Numero de Factura Duplicado", myerror, "error");
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    Swal.fire("Error al registrar la compra", "", "error");
-                });
         });
+
+        formData.append("vehiculos", JSON.stringify(vehiculos));
+
+        if (!numeroFactura || !proveedor || !montoFinal || !fecha) {
+            console.error("Some elements are missing in the DOM");
+            return;
+        }
+
+        compradata.push({
+            numero_factura: numeroFactura.value,
+            id_proveedor: parseInt(proveedor.value),
+            monto_final: parseFloat(montoFinal.value),
+            fecha: fecha.value,
+        });
+
+        formData.append("compra", JSON.stringify(compradata));
+
+        fetch("/dashboard/compras", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+            },
+            body: formData,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.success) {
+                    Swal.fire("Compra registrada exitosamente", "", "success");
+                    document.getElementById("compraForm").reset();
+                    document.querySelector("#detalleVehiculos tbody").innerHTML = "";
+                    document.getElementById("monto_final").value = "";
+                } else {
+                    Swal.fire("Numero de Factura Duplicado", data.error, "error");
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                Swal.fire("Error al registrar la compra", "", "error");
+            });
+    });
 
     // Manejar cancelación
-    document
-        .getElementById("cancelarCompra")
-        .addEventListener("click", function () {
-            document.getElementById("compraForm").reset();
-            document.querySelector("#detalleVehiculos tbody").innerHTML = "";
-            document.getElementById("monto_final").value = "";
-        });
+    document.getElementById("cancelarCompra").addEventListener("click", function () {
+        document.getElementById("compraForm").reset();
+        document.querySelector("#detalleVehiculos tbody").innerHTML = "";
+        document.getElementById("monto_final").value = "";
+    });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-   
+    loadContent("/path/to/initial/content");
 });

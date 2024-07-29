@@ -66,8 +66,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard/clientes', [DashboardController::class, 'Clientes'])->name('clientes');
     Route::get('dashboard/vehiculos', [DashboardController::class, 'Vehiculos'])->name('vehiculos');
     Route::get('dashboard/proveedores', [DashboardController::class, 'Proveedores'])->name('proveedores');
-    Route::get('vehiculo/marcas', [VehiculoController::class, 'getMarcas'])->name('marcas');
-    Route::get('/modelos', [VehiculoController::class, 'getModelos'])->name('modelos');
+    Route::get('vehiculo/marcas', [VehiculoController::class, 'getMarcas'])->name('vehiculo.marcas');
+    Route::get('vehiculo/modelos/{idMarca}', [VehiculoController::class, 'getModelosByMarca'])->name('vehiculo.modelos');
     Route::get('compra/buscar-proveedor/{ruc}', [ProveedorController::class, 'getByRuc'])->name('buscar-proveedor');
     Route::get('dashboard/compras', [CompraController::class, 'index'])->name('dashboard.compras');
     Route::post('dashboard/compras', [CompraController::class, 'store'])->name('compras.store');

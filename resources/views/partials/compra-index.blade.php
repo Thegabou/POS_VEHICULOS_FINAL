@@ -37,18 +37,16 @@
         </div>
         <!-- Vehículo -->
         <div class="form-group">
-            <label for="marca">Marca:</label>
-            <input type="text" class="form-control" id="marca" name="marca" list="marcasList" style="text-transform:uppercase" required>
-            <datalist id="marcasList">
+            <label for="id_marca">Marca:</label>
+            <select class="form-control" id="id_marca" name="id_marca" required>
                 <!-- Options populated dynamically -->
-            </datalist>
+            </select>
         </div>
         <div class="form-group">
-            <label for="modelo">Modelo:</label>
-            <input type="text" class="form-control" id="modelo" name="modelo" list="modelosList" style="text-transform:uppercase" required>
-            <datalist id="modelosList">
+            <label for="id_modelo">Modelo:</label>
+            <select class="form-control" id="id_modelo" name="id_modelo" required>
                 <!-- Options populated dynamically -->
-            </datalist>
+            </select>
         </div>
         <div class="mb-3">
             <label for="año_modelo" class="form-label">Año:</label>

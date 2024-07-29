@@ -46,8 +46,8 @@ class CompraController extends Controller
             foreach ($vehiculosData as $vehiculoData) {
                 // Crear el vehículo
                 $vehiculo = Vehiculo::create([
-                    'marca' => $vehiculoData['marca'],
-                    'modelo' => $vehiculoData['modelo'],
+                    'id_marca' => $vehiculoData['id_marca'],
+                    'id_modelo' => $vehiculoData['id_modelo'],
                     'precio_compra' => $vehiculoData['precio_compra'],
                     'estado' => $vehiculoData['estado'],
                     'año_modelo' => $vehiculoData['año_modelo'],

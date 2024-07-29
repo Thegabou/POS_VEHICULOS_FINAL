@@ -2,6 +2,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehiculo;
+use App\Models\MarcaVehiculo;
+use App\Models\ModeloVehiculo;
 use Illuminate\Http\Request;
 
 class VehiculoController extends Controller
@@ -10,10 +12,12 @@ class VehiculoController extends Controller
     {
         $search = $request->input('search');
         $vehiculos = Vehiculo::when($search, function ($query, $search) {
-            $query->where('marca', 'like', "%$search%")
-                ->orWhere('modelo', 'like', "%$search%")
-                ->orWhere('tipo_vehiculo', 'like', "%$search%")
-                ->orWhere('año_modelo', 'like', "%$search%");
+            $query->whereHas('marca', function ($q) use ($search) {
+                $q->where('marca_vehiculo', 'like', "%$search%");
+            })->orWhereHas('modelo', function ($q) use ($search) {
+                $q->where('modelo_vehiculo', 'like', "%$search%");
+            })->orWhere('tipo_vehiculo', 'like', "%$search%")
+              ->orWhere('año_modelo', 'like', "%$search%");
         })->get();
 
         return view('partials.vehiculos-index', compact('vehiculos'));
@@ -21,20 +25,24 @@ class VehiculoController extends Controller
 
     public function create()
     {
-        return view('partials.compra-index');
+        $marcas = MarcaVehiculo::all();
+        return view('partials.compra-index', compact('marcas'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'marca' => 'required|string|max:255',
-            'modelo' => 'required|string|max:255',
+            'id_marca' => 'required|exists:marca_vehiculos,id',
+            'id_modelo' => 'required|exists:modelo_vehiculos,id',
             'año_modelo' => 'required|integer',
             'tipo_vehiculo' => 'required|string|max:255',
             'precio_compra' => 'required|numeric',
             'kilometraje' => 'required|numeric',
             'precio_venta' => 'required|numeric',
             'foto_url' => 'required|url',
+            'numero_chasis' => 'required|string',
+            'numero_motor' => 'required|string',
+            'estado' => 'required|in:Disponible,Reservado,Vendido',
         ]);
 
         Vehiculo::create($request->all());
@@ -44,20 +52,24 @@ class VehiculoController extends Controller
     public function edit($id)
     {
         $vehiculo = Vehiculo::findOrFail($id);
-        return view('partials.vehiculos-edit', compact('vehiculo'));
+        $marcas = MarcaVehiculo::all();
+        return view('partials.vehiculos-edit', compact('vehiculo', 'marcas'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'marca' => 'required|string|max:255',
-            'modelo' => 'required|string|max:255',
+            'id_marca' => 'required|exists:marca_vehiculos,id',
+            'id_modelo' => 'required|exists:modelo_vehiculos,id',
             'año_modelo' => 'required|integer',
             'tipo_vehiculo' => 'required|string|max:255',
             'precio_compra' => 'required|numeric',
             'kilometraje' => 'required|numeric',
             'precio_venta' => 'required|numeric',
             'foto_url' => 'required|url',
+            'numero_chasis' => 'required|string',
+            'numero_motor' => 'required|string',
+            'estado' => 'required|in:Disponible,Reservado,Vendido',
         ]);
 
         $vehiculo = Vehiculo::findOrFail($id);
@@ -89,13 +101,14 @@ class VehiculoController extends Controller
 
     public function getMarcas()
     {
-        $marcas = Vehiculo::distinct()->pluck('marca');
+        $marcas = MarcaVehiculo::all();
         return response()->json($marcas);
     }
-
-    public function getModelos()
+    
+    public function getModelosByMarca($idMarca)
     {
-        $modelos = Vehiculo::distinct()->pluck('modelo');
+        $modelos = ModeloVehiculo::where('id_marca', $idMarca)->get();
         return response()->json($modelos);
     }
 }
+
