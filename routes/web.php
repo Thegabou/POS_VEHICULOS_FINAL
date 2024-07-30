@@ -19,6 +19,7 @@ use App\Http\Controllers\CompraPaginaWeb;
 use App\Http\Controllers\CompraPaginaWebController;
 use App\Http\Controllers\ReporteVehiculosController;
 use App\Http\Controllers\ReporteClientesController;
+use App\Http\Controllers\PasswordResetController;
 
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -94,8 +95,13 @@ Route::resource('ventas', VentaVehiculoController::class)->middleware('auth');
 //ruta para compra de vehiculo con parametro id-vehiculo
 Route::get('/compra-vehiculo/{id}', [CompraPaginaWebController::class, 'index'])->name('compra-vehiculo.index');
 Route::post('/compra-vehiculo/store', [CompraPaginaWebController::class, 'store'])->name('compra-vehiculo.store');
+Route::post('/password/email', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.emails');
+Route::get('/reset-password', function () {
+    return view('auth.reset-password');
+})->name('reset-password');
 
-
+Route::get('/submint-new-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('/submint-new-password', [PasswordResetController::class, 'reset'])->name('password.updates');
 
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
