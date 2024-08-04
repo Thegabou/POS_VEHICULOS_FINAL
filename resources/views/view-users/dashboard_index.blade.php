@@ -36,11 +36,7 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Core</div>
-                        <a class="nav-link" href="{{ route('dashboard') }}">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Inicio
-                        </a>
+                        <div class="sb-sidenav-menu-heading">Menu</div>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('empleados') }}')">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-user-tie"></i></div>
                             Empleados
@@ -64,6 +60,18 @@
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('vehiculos') }}')">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-car"></i></div>
                             Vehiculos
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('global_variables.index') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-car"></i></div>
+                            IVA/Interes
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('reportes') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-eye"></i></div>
+                            Reportes
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('proveedores') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-parachute-box"></i></div>
+                            Proveedores
                         </a>
                         <!-- Otros elementos del menú -->
                     </div>

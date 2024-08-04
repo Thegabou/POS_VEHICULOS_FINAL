@@ -24,6 +24,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/card/2.5.0/card.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,6 +38,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
         .form-section {
             background: #f9f9f9;
@@ -43,15 +46,20 @@
         .details-section {
             background: #fff;
         }
+        .form-section:hover, .details-section:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
         .btn-primary {
             background-color: #007bff;
             border-color: #007bff;
             border-radius: 50px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
         .btn-primary:hover {
             background-color: #0056b3;
             border-color: #004085;
+            transform: translateY(-3px);
         }
         .img-fluid {
             border-radius: 10px;
@@ -123,6 +131,40 @@
             border-radius: 10px;
             margin-top: 15px;
         }
+        /* Estilos para la tarjeta de crédito */
+        .credit-card {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            border-radius: 15px;
+            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .credit-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .credit-card .logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2em;
+        }
+        .credit-card .card-number, .credit-card .card-holder, .credit-card .expiry-date {
+            font-size: 1.2em;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        .credit-card .card-holder {
+            text-transform: uppercase;
+        }
+        .card-wrapper {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -146,9 +188,8 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-6 form-section">
+            <div class="col-md-6 form-section animate__animated animate__fadeInLeft">
                 <h1>Detalles de Compra</h1>
-
                 @if($error)
                     <p class="text-danger">{{ $error }}</p>
                 @else
@@ -180,31 +221,35 @@
                             <label>
                                 <input type="radio" name="paymentMethod" value="card" checked> Tarjeta
                             </label>
-                            <div class="form-group">
-                                <label for="cardNumber">Número de tarjeta</label>
-                                <input type="text" class="form-control" id="cardNumber" name="cardNumber" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="expiryDate">Caducidad</label>
-                                <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/AA" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="cvc">CVC</label>
-                                <input type="text" class="form-control" id="cvc" name="cvc" required>
+                            <div class="credit-card">
+                                <div class="card-wrapper"></div>
+                                <div class="form-group">
+                                    <label for="cardNumber">Número de tarjeta</label>
+                                    <input type="text" class="form-control card-number" id="cardNumber" name="number" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fullName">Nombre del titular</label>
+                                    <input type="text" class="form-control card-holder" id="fullName" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expiryDate">Caducidad</label>
+                                    <input type="text" class="form-control expiry-date" id="expiryDate" name="expiry" placeholder="MM/AA" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvc">CVC</label>
+                                    <input type="text" class="form-control" id="cvc" name="cvc" required>
+                                </div>
                             </div>
                         </div>
-
                         <input type="hidden" id="vehiculoId" name="vehiculoId" value="{{ $vehiculo->id }}">
                         <input type="hidden" id="subTotal" name="subTotal" value="{{ $vehiculo->precio_venta }}">
                         <input type="hidden" id="total" name="total" value="{{ $vehiculo->precio_venta }}">
-
                         <button type="submit" class="btn btn-primary btn-block mt-4">Comprar</button>
                         <a href="/" class="btn btn-primary btn-block mt-4">Volver</a>
                     </form>
                 @endif
             </div>
-
-            <div class="col-md-6 details-section">
+            <div class="col-md-6 details-section animate__animated animate__fadeInRight">
                 <h1>Detalles del Vehículo</h1>
                 @if(!$error)
                     <img src="{{ $vehiculo->foto_url }}" alt="Foto del vehículo" class="img-fluid">
@@ -262,10 +307,15 @@
         </div>
     </footer>
 
-    <script src="{{ asset('js/compra-vehiculo.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/card/2.5.0/card.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-creditcardvalidator/1.0.0/jquery.creditCardValidator.js" integrity="sha512-lPypXxa0UnlXWUN7ZF1JI1KpAPijnHZe68gte2EYZ2Z8kWWh/xXw+eRFMhOSgugTOmyHGqKuBjhJoU+3DXWBeg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/credit-card-validator@1.0.8/credit-card-validator.min.js"></script>
+    <script src="{{ asset('js/compra-vehiculo.js') }}"></script>
 </body>
 </html>

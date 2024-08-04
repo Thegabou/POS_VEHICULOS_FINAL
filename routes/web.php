@@ -21,6 +21,7 @@ use App\Http\Controllers\ReporteVehiculosController;
 use App\Http\Controllers\ReporteClientesController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ImagenController;
+use App\Http\Controllers\GlobalVariableController;
 
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -89,6 +90,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/image-upload', 'index')->name('image.form');
         Route::post('/upload-image', 'storeImage')->name('image.store');
     });
+    //si es administrado
+
+
+    
 });    
 
 Route::middleware('auth')->group(function () {
@@ -109,6 +114,10 @@ Route::get('/reset-password', function () {
 
 Route::get('/submint-new-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/submint-new-password', [PasswordResetController::class, 'reset'])->name('password.updates');
+
+Route::get('/global-variables', [GlobalVariableController::class, 'index'])->name('global_variables.index');
+Route::post('/global-variables', [GlobalVariableController::class, 'store'])->name('global_variables.store');
+Route::delete('/global-variables/{key}', [GlobalVariableController::class, 'destroy'])->name('global_variables.destroy');
 
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 

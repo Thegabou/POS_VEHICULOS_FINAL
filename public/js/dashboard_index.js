@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             fetch(url, {
                 method: form.method,
+                headers: {
+                    'X-CSRF-TOKEN': formData.get('_token')
+                },
                 body: formData,
             })
                 .then(response => response.json())
