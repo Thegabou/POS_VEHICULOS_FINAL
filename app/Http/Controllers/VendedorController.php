@@ -8,6 +8,7 @@ use App\Models\Vehiculo;
 use App\Models\Empleado;
 use App\Models\Factura;
 use App\Models\VentaVehiculo;
+use App\Models\GlobalVariable;
 
 class VendedorController extends Controller
 {
@@ -16,8 +17,11 @@ class VendedorController extends Controller
         $empleado = auth()->user()->empleado;
         $vehiculos = Vehiculo::with(['marca', 'modelo'])->get();
         $clientes = Cliente::all();
+        $iva = GlobalVariable::get('IVA','12');
+        //variable1 a int
+        $iva = intval($iva);
 
-        return view('partials.ventas.vendedor-index', compact('empleado', 'vehiculos', 'clientes'));
+        return view('partials.ventas.vendedor-index', compact('empleado', 'vehiculos', 'clientes', 'iva'));
     }
 
     public function buscarCliente($cedula)

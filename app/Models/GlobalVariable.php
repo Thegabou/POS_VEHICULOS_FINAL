@@ -8,27 +8,32 @@ class GlobalVariable
 {
     protected static $filePath;
 
-    public function __construct()
+    public static function init()
     {
         self::$filePath = storage_path('app/global_variables.json');
     }
 
     public static function all()
     {
+        self::init();
         if (!File::exists(self::$filePath)) {
             return [];
         }
         return json_decode(File::get(self::$filePath), true);
     }
 
-    public static function get($key)
+    public static function get($key, $default = null)
     {
+        self::init();
         $variables = self::all();
-        return $variables[$key] ?? null;
+        return $variables[$key] ?? $default;
+
+        
     }
 
     public static function set($key, $value)
     {
+        self::init();
         $variables = self::all();
         $variables[$key] = $value;
         File::put(self::$filePath, json_encode($variables));
@@ -36,6 +41,7 @@ class GlobalVariable
 
     public static function delete($key)
     {
+        self::init();
         $variables = self::all();
         if (isset($variables[$key])) {
             unset($variables[$key]);

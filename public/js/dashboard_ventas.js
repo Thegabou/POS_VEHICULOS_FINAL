@@ -132,7 +132,9 @@ function updateCarrito() {
     });
 
     document.getElementById('sub_total').innerText = total.toFixed(2);
-    const iva = total * 0.15;
+    VALORIVA=parseInt( document.getElementById('valor_iva').value)/100;
+    console.log(VALORIVA);
+    const iva = total * VALORIVA;
     document.getElementById('iva').innerText = iva.toFixed(2);
     document.getElementById('total').innerText = (total + iva).toFixed(2);
 }
@@ -314,6 +316,7 @@ function finalizarCompra() {
     if (clienteId && carrito.length > 0) {
         const ventaData = {
             fecha,
+
             id_cliente: clienteId,
             tipo_pago: metodoPago,
             datos_pago: datos_pago,

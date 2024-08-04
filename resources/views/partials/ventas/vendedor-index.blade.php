@@ -84,7 +84,7 @@
             </tr>
             <tr>
                 <td colspan="9"></td>
-                <td>IVA (15%):</td>
+                <td>IVA ({{$iva}}%):</td>
                 <td>$<span id="iva">0.00</span></td>
                 <td></td>
             </tr>
@@ -109,5 +109,7 @@
     <div id="opciones_pago"></div>
     <button class="btn btn-success" onclick="finalizarCompra()">Finalizar Compra</button>
 </div>
+
+<input id="valor_iva" name="valor_iva" value="{{$iva}}" hidden>
 
 <script src="{{asset('js/utilis.js')}}"></script>

@@ -112,8 +112,8 @@
     <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
     <script src="{{ asset('js/dashboard_index.js') }}"></script>
     <script src="{{ asset('js/dashboard_usuarios.js') }}"></script>
-    <script src="{{ asset('js/dashboard_ventas.js') }}"></script>
     <script src="{{asset('js/dashboard_clientes.js')}}"></script>
+    <script src="{{asset('js/dashboard_ventas.js')}}"></script>
     <script src="{{ asset('js/dashboard_vehiculos.js') }}"></script>
     <script src="{{asset('js/dashboard_compra.js')}}"></script>
     <script src="{{asset('js/dashboard_proveedor.js')}}"></script>

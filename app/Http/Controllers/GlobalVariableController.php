@@ -8,38 +8,47 @@ use Illuminate\Support\Facades\Auth;
 
 class GlobalVariableController extends Controller
 {
-    public function checkAdmin(){   
+    public function checkAdmin()
+    {
         $empleado = Auth::user()->empleado;
-        if ($empleado->cargo != 'Administrador') {
-            return redirect()->route('welcome');
+        if ($empleado->cargo != 'Admin') {
+            return false;
         }
-
+        return true;
     }
 
     public function index()
-    {   //verificar si el usuario tiene cargo administrador
-        
+    {
+        if (!$this->checkAdmin()) {
+            return response()->view('partials.admin.index', ['message' => 'No tienes acceso suficiente']);
+        }
+
         $variables = GlobalVariable::all();
-        
         return view('partials.admin.index', compact('variables'));
     }
 
     public function store(Request $request)
     {
-        $this->checkAdmin();
+        if (!$this->checkAdmin()) {
+            return response()->json(['error' => 'No tienes acceso suficiente'], 403);
+        }
+
         $request->validate([
             'key' => 'required|string',
             'value' => 'required|string',
         ]);
 
         GlobalVariable::set($request->key, $request->value);
-        return redirect()->route('global_variables.index')->with('success', 'Variable creada/actualizada');
+        return response()->json(['success' => 'Variable creada/actualizada', 'key' => $request->key, 'value' => $request->value]);
     }
 
     public function destroy($key)
     {
-        $this->checkAdmin();
+        if (!$this->checkAdmin()) {
+            return response()->json(['error' => 'No tienes acceso suficiente'], 403);
+        }
+
         GlobalVariable::delete($key);
-        return redirect()->route('global_variables.index')->with('success', 'Variable eliminada');
+        return response()->json(['success' => 'Variable eliminada', 'key' => $key]);
     }
 }
