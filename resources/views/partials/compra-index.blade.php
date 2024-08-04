@@ -4,8 +4,8 @@
         @csrf
         <!-- Proveedor -->
         <div class="mb-3">
-            <label for="num_factura" class="form-label">Numero de Factura:</label>
-            <input type="text" class="form-control" id="num_factura" name="num_factura" placeholder="XXX-XXX-XXXXXX" required>
+            <label for="num_factura" class="form-label">Número de Factura:</label>
+            <input type="text" class="form-control" id="num_factura" name="num_factura" placeholder="XXX-XXX-XXXXXXX" pattern="\d{3}-\d{3}-\d{7}" required maxlength="15">
         </div>
         <div class="form-group">
             <label for="ruc">RUC del Proveedor:</label>
@@ -39,13 +39,15 @@
         <div class="form-group">
             <label for="id_marca">Marca:</label>
             <select class="form-control" id="id_marca" name="id_marca" required>
-                <!-- Options populated dynamically -->
+                @foreach($marcas as $marca)
+                    <option value="{{ $marca->id }}">{{ $marca->marca_vehiculo }}</option>
+                @endforeach
             </select>
         </div>
         <div class="form-group">
             <label for="id_modelo">Modelo:</label>
             <select class="form-control" id="id_modelo" name="id_modelo" required>
-                <!-- Options populated dynamically -->
+                
             </select>
         </div>
         <div class="mb-3">
@@ -54,7 +56,11 @@
         </div>
         <div class="mb-3">
             <label for="tipo_vehiculo" class="form-label">Tipo:</label>
-            <input type="text" class="form-control" id="tipo_vehiculo" name="tipo_vehiculo" required>
+            <select class="form-control" id="tipo_vehiculo" name="tipo_vehiculo" required>
+                <option value="Manual">Manual</option>
+                <option value="Hibrido">Hibrido</option>
+                <option value="Electrico">Electrico</option>
+            </select>
         </div>
         <div class="mb-3">
             <label for="precio_compra" class="form-label">Precio Compra:</label>
@@ -69,8 +75,12 @@
             <input type="number" class="form-control" id="precio_venta" name="precio_venta" required>
         </div>
         <div class="mb-3">
-            <label for="foto_url" class="form-label">Foto URL:</label>
-            <input type="text" class="form-control" id="foto_url" name="foto_url" required>
+            <label for="imagen" class="form-label">Subir Imagen:</label>
+            <input type="file" class="form-control" id="imagen" name="imagen" required>
+        </div>
+        <div class="mb-3" id="imagePreviewContainer" style="display: none;">
+            <img id="imagePreview" src="#" alt="Vista previa de la imagen" style="max-width: 100%; height: auto;"/>
+            <button type="button" id="removeImage" class="btn btn-danger mt-2">Quitar Imagen</button>
         </div>
         <div class="mb-3">
             <label for="numero_chasis" class="form-label">Numero de Chasis:</label>
@@ -79,6 +89,14 @@
         <div class="mb-3">
             <label for="numero_motor" class="form-label">Numero de Motor:</label>
             <input type="text" class="form-control" id="numero_motor" name="numero_motor" style="text-transform:uppercase" required>
+        </div>
+        <div class="mb-3">
+            <label for="placa" class="form-label">Placa:</label>
+            <input type="text" class="form-control" id="placa" name="placa" style="text-transform:uppercase" required>
+        </div>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripcion:</label>
+            <input type="text" class="form-control" id="descripcion" name="descripcion" required>
         </div>
         <div class="mb-3">
             <label for="estado" class="form-label">Estado:</label>
@@ -106,6 +124,8 @@
                     <th>Tipo</th>
                     <th>Numero Chasis</th>
                     <th>Numero Motor</th>
+                    <th>Placa</th>
+                    <th>Descripcion</th>
                     <th>Foto</th>
                     <th>Total</th>
                     <th>Acciones</th>

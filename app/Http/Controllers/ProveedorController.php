@@ -51,8 +51,14 @@ class ProveedorController extends Controller
     public function edit($id)
     {
         $proveedor = Proveedor::findOrFail($id);
+
+        if (!$proveedor) {
+            return response()->json(['error' => 'Proveedor no encontrado'.$id]);
+        }
+
         return view('partials.proveedor-edit', compact('proveedor'))->render();
     }
+
 
     // Actualizar proveedor
     public function update(Request $request, $id)

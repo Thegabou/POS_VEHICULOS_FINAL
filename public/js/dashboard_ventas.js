@@ -47,10 +47,11 @@ function buscarCliente() {
 
 function addVehiculo() {
     const vehiculoInput = document.getElementById('vehiculo');
-    const vehiculoId = vehiculoInput.value;
-    const vehiculoOption = document.querySelector(`#vehiculosList option[value="${vehiculoId}"]`);
+    const vehiculoPlaca = vehiculoInput.value;
+    const vehiculoOption = document.querySelector(`#vehiculosList option[value="${vehiculoPlaca}"]`);
 
     if (vehiculoOption) {
+        const vehiculoId = vehiculoOption.getAttribute('data-id');
         const vehiculoMarca = vehiculoOption.getAttribute('data-marca');
         const vehiculoModelo = vehiculoOption.getAttribute('data-modelo');
         const vehiculoAño = vehiculoOption.getAttribute('data-año');
@@ -62,7 +63,7 @@ function addVehiculo() {
         const vehiculoFoto = vehiculoOption.getAttribute('data-foto');
 
         // Verificar si el vehículo ya está en el carrito
-        const vehiculoExistente = carrito.find(vehiculo => vehiculo.id === vehiculoId);
+        const vehiculoExistente = carrito.find(vehiculo => vehiculo.placa === vehiculoPlaca);
         if (vehiculoExistente) {
             Swal.fire({
                 title: 'Error',
@@ -74,6 +75,7 @@ function addVehiculo() {
             // Agregar el nuevo vehículo al carrito
             const vehiculo = {
                 id: vehiculoId,
+                placa: vehiculoPlaca,
                 marca: vehiculoMarca,
                 modelo: vehiculoModelo,
                 año: vehiculoAño,
@@ -109,7 +111,7 @@ function updateCarrito() {
         const tr = document.createElement('tr');
 
         tr.innerHTML = `
-            <td>${vehiculo.id}</td>
+            <td>${vehiculo.placa}</td>
             <td>${vehiculo.marca}</td>
             <td>${vehiculo.modelo}</td>
             <td>${vehiculo.año}</td>
@@ -133,32 +135,6 @@ function updateCarrito() {
     const iva = total * 0.15;
     document.getElementById('iva').innerText = iva.toFixed(2);
     document.getElementById('total').innerText = (total + iva).toFixed(2);
-}
-
-// Función para editar un vehículo del carrito
-function editVehiculo(index) {
-    const vehiculo = carrito[index];
-    document.getElementById('editCantidad').value = vehiculo.cantidad;
-    document.getElementById('editPrecio').value = vehiculo.precio;
-    document.getElementById('editIndex').value = index;
-
-    const editModal = new bootstrap.Modal(document.getElementById('editModal'));
-    editModal.show();
-}
-
-// Función para guardar los cambios del vehículo editado
-function saveEdit() {
-    const index = document.getElementById('editIndex').value;
-    const precio = document.getElementById('editPrecio').value;
-
-    
-    carrito[index].precio = parseFloat(precio);
-    carrito[index].subtotal = carrito[index].precio;
-
-    updateCarrito();
-
-    const editModal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
-    editModal.hide();
 }
 
 // Función para eliminar un vehículo del carrito
@@ -243,15 +219,10 @@ function calcularFinanciamiento() {
     }
 }
 
-// Función para obtener el ID del empleado seleccionado
-function getSelectedEmployeeId() {
-    const hiddenInput = document.getElementById('hiddenVendedor');
-    return hiddenInput.value;
-}
 
-/// Función para finalizar la compra
+// Función para finalizar la compra
 function finalizarCompra() {
-    const vehiculos_json=[];
+    const vehiculos_json = [];
     const clienteId = document.getElementById('id_cliente').value;
     const metodoPago = document.getElementById('metodo_pago').value;
     const fecha = new Date().toISOString().slice(0, 10);
@@ -261,7 +232,7 @@ function finalizarCompra() {
     let datosPago = '';
     var datos_pago_json = '';
     carrito.forEach((vehiculo) => {
-        vehiculos_json.push({id:vehiculo.id});
+        vehiculos_json.push({ id: vehiculo.id });
     });
     if (metodoPago === 'efectivo') {
         datosPago = 'Efectivo';
@@ -282,7 +253,7 @@ function finalizarCompra() {
             return;
         }
         datosPago = 'Tarjeta de Crédito';
-        //4ultimos digitos de la tarjeta
+        // 4 últimos dígitos de la tarjeta
         var ultimos4 = numeroTarjeta.slice(-4);
         datos_pago_json = {
             'datos_tarjeta': ultimos4,
@@ -325,12 +296,11 @@ function finalizarCompra() {
         };
     }
 
-    const id_empleado = getSelectedEmployeeId();
-    datos_pago=JSON.stringify(datos_pago_json);
-    var reth_vehiculos=JSON.stringify(vehiculos_json);
+    datos_pago = JSON.stringify(datos_pago_json);
+    var reth_vehiculos = JSON.stringify(vehiculos_json);
 
-    //verificar si hay un cliente seleccionado
-    if(!clienteId){
+    // verificar si hay un cliente seleccionado
+    if (!clienteId) {
         Swal.fire({
             title: 'Error',
             text: 'Seleccione un cliente',
@@ -340,22 +310,11 @@ function finalizarCompra() {
         return;
     }
 
-    //validar que el campo de empleado este lleno
-    if (!id_empleado) {
-        Swal.fire({
-            title: 'Error',
-            text: 'Seleccione un empleado',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-        return;
-    }
 
     if (clienteId && carrito.length > 0) {
         const ventaData = {
             fecha,
-            id_empleado,
-            id_cliente:clienteId,
+            id_cliente: clienteId,
             tipo_pago: metodoPago,
             datos_pago: datos_pago,
             sub_total: sub_total,

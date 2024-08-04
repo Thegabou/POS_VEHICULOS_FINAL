@@ -67,7 +67,7 @@
                 <div class="row">
                     <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                         <h6 class="text-uppercase mb-4 font-weight-bold">Legal</h6>
-                        <p>&copy; 2024 ElectroWorld. Todos los derechos reservados.</p>
+                        <p>&copy; 2024 GROUNDHOGDRIVER. Todos los derechos reservados.</p>
                     </div>
                     <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
                         <h6 class="text-uppercase mb-4 font-weight-bold">Contacto</h6>

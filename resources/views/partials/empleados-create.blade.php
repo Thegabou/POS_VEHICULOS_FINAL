@@ -18,9 +18,13 @@
             <label for="cedula">Cédula:</label>
             <input type="text" class="form-control" id="cedula" name="cedula" required>
         </div>
-        <div class="form-group">
-            <label for="cargo">Cargo:</label>
-            <input type="text" class="form-control" id="cargo" name="cargo" required>
+        <div class="mb-3">
+            <label for="cargo" class="form-label">Cargo:</label>
+            <select class="form-control" id="cargo" name="cargo" required>
+                <option value="Admin">Admin</option>
+                <option value="Gerente">Gerente</option>
+                <option value="Vendedor">Vendedor</option>
+            </select>
         </div>
         <br>
         <button type="submit" class="btn btn-primary">Crear Empleado</button>

@@ -7,7 +7,7 @@
     @if($error)
     <title>Error - {{ $error }}</title>
     @else
-    <title>Comprando vehículo - {{ $vehiculo->marca }} {{ $vehiculo->modelo }}</title>
+    <title>Comprando vehículo - {{ $vehiculo->marca->marca_vehiculo }} {{ $vehiculo->modelo->modelo_vehiculo }}</title>
     @endif
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="apple-touch-icon" href="{{ asset('imagenes/logo_barra.png') }}">
@@ -81,7 +81,6 @@
             width: 100%;
             z-index: 1000;
         }
-
         .nombre_empresa {
             display: flex;
             align-items: center;
@@ -108,6 +107,22 @@
                 display: none;
             }
         }
+        .vehicle-details {
+            text-align: center;
+        }
+        .vehicle-details h2 {
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        .vehicle-details p {
+            margin: 5px 0;
+        }
+        .vehicle-description {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -116,7 +131,7 @@
             <a href="/" class="nombre_empresa">
                 <img src="{{ asset('imagenes/logo_marmota.png') }}" alt="Logo Marmota">
                 <h1>GroundhogDriver</h1>
-            </div>
+            </a>
             <div class="pos_vehiculos">
                 <a href="https://www.facebook.com/people/Gabo-Castro/pfbid0311BethBjm2ErBtADaJ8ZRwoKNReJD4xutZEVNruyVehBj7GZn9KqUoXJuQYtDQibl/?mibextid=ZbWKwL"><i class="fa-brands fa-facebook-f"></i></a>
                 <a href="https://www.instagram.com/gabo_the_shit0?igsh=Z3Z3NTdiM2g4cm42"><i class="fa-brands fa-instagram"></i></a>
@@ -193,14 +208,20 @@
                 <h1>Detalles del Vehículo</h1>
                 @if(!$error)
                     <img src="{{ $vehiculo->foto_url }}" alt="Foto del vehículo" class="img-fluid">
-                    <h2 class="mt-4 text-center">{{ $vehiculo->marca }} {{ $vehiculo->modelo }}</h2>
-                    <p class="text-center">{{ $vehiculo->tipo_vehiculo }}</p>
-                    <p class="text-center">{{ $vehiculo->año_modelo }}</p>
-                    <p class="text-center">{{ $vehiculo->kilometraje }} Km</p>
-
+                    <div class="vehicle-details">
+                        <h2>{{ $vehiculo->marca->marca_vehiculo }} {{ $vehiculo->modelo->modelo_vehiculo }}</h2>
+                        <p>{{ $vehiculo->tipo_vehiculo }}</p>
+                        <p>{{ $vehiculo->año_modelo }}</p>
+                        <p>{{ $vehiculo->kilometraje }} Km</p>
+                        <p><strong>Placa:</strong> {{ $vehiculo->placa }}</p>
+                    </div>
                     <div class="price-breakdown text-center">
                         <p><strong>Precio del coche:</strong> ${{ $vehiculo->precio_venta }}</p>
                         <p><strong>Estado:</strong> {{ $vehiculo->estado }}</p>
+                    </div>
+                    <div class="vehicle-description">
+                        <h3>Descripción</h3>
+                        <p>{{ $vehiculo->descripcion }}</p>
                     </div>
                 @endif
             </div>

@@ -18,6 +18,8 @@ class Vehiculo extends Model
         'precio_venta',
         'foto_url',
         'numero_chasis',
+        'placa',
+        'descripcion',
         'numero_motor',
         'estado',
     ];

@@ -16,9 +16,9 @@ class DashboardController extends Controller
     {
         $empleado = Auth::user()->empleado;
 
-        if ($empleado->cargo == 'gerente') {
+        if ($empleado->cargo == 'Gerente') {
             return view('view-users.dashboard_gerente');
-        } elseif ($empleado->cargo == 'vendedor') {
+        } elseif ($empleado->cargo == 'Vendedor') {
             return view('view-users.dashboard_ventas');
         } else if ($empleado->cargo == 'Admin') {
             return view('view-users.dashboard_index');

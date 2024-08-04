@@ -13,11 +13,11 @@ class VendedorController extends Controller
 {
     public function punto_Ventas()
     {
-        $empleados = Empleado::whereIn('cargo', ['vendedor', 'gerente'])->get();
-        $vehiculos = Vehiculo::all();
+        $empleado = auth()->user()->empleado;
+        $vehiculos = Vehiculo::with(['marca', 'modelo'])->get();
         $clientes = Cliente::all();
 
-        return view('partials.ventas.vendedor-index', compact('empleados', 'vehiculos', 'clientes'));
+        return view('partials.ventas.vendedor-index', compact('empleado', 'vehiculos', 'clientes'));
     }
 
     public function buscarCliente($cedula)

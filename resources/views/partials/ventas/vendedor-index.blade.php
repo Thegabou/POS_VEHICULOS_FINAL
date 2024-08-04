@@ -33,35 +33,23 @@
     <!-- Selección de Vendedor -->
     <div class="mb-3">
         <label for="dropdownVendedor" class="form-label">Vendedor:</label>
-        <div class="dropdown">
-            <input type="text" class="form-control dropdown-toggle" id="dropdownVendedor" readonly aria-haspopup="true" aria-expanded="false" placeholder="Seleccionar" onclick="toggleDropdown('dropdownMenuVendedor')">
-            <div class="dropdown-menu" id="dropdownMenuVendedor" aria-labelledby="dropdownVendedor">
-                <input type="text" class="form-control" placeholder="Buscar..." id="searchInputVendedor" onkeyup="filterFunction('searchInputVendedor', 'dropdownMenuVendedor')">
-                <a class="dropdown-item" href="#" onclick="selectOption('dropdownVendedor', 'hiddenVendedor', this)" data-id="{{ auth()->user()->id }}">{{ auth()->user()->name }}</a> 
-                @foreach ($empleados as $empleado)
-                    @if (in_array($empleado->cargo, ['vendedor', 'gerente']))
-                        <a class="dropdown-item" href="#" onclick="selectOption('dropdownVendedor', 'hiddenVendedor', this)" data-id="{{ $empleado->id }}">{{ $empleado->nombre }} {{ $empleado->apellido }}-{{$empleado->cargo}}</a>
-                    @endif
-                @endforeach
-            </div>
-        </div>
-        <input type="hidden" name="vendedor" id="hiddenVendedor">
+        <input class="form-control" value="{{$empleado->nombre}} {{$empleado->apellido}}" disabled> 
     </div>
+    
 
     <!-- Selección de Vehículo -->
     <div class="mb-3">
         <label for="vehiculo" class="form-label">Vehículo:</label>
-        <input type="text" class="form-control" id="vehiculo" name="vehiculo" placeholder="Buscar Vehículo por Código o Nombre" list="vehiculosList">
+        <input type="text" class="form-control" id="vehiculo" name="vehiculo" placeholder="Buscar Vehículo por Placa" list="vehiculosList">
         <datalist id="vehiculosList">
             @foreach ($vehiculos as $vehiculo)
             @if($vehiculo->estado === 'Disponible' || $vehiculo->estado === 'Reservado')
-                <option value="{{ $vehiculo->id }}" data-marca="{{ $vehiculo->marca }}" data-modelo="{{ $vehiculo->modelo }}" data-año="{{ $vehiculo->año_modelo }}" data-tipo="{{ $vehiculo->tipo_vehiculo }}" data-kilometraje="{{ $vehiculo->kilometraje }}" data-precio="{{ $vehiculo->precio_venta }}" data-chasis="{{$vehiculo->numero_chasis}}" data-motor="{{$vehiculo->numero_motor}}"data-foto="{{ $vehiculo->foto_url }}" data-estado="{{$vehiculo->estado}}">
-                    {{ $vehiculo->marca }} {{ $vehiculo->modelo }} - {{ $vehiculo->año_modelo }} - {{ $vehiculo->tipo_vehiculo }} - {{ $vehiculo->kilometraje }} - ${{ $vehiculo->precio_venta }}
+                <option value="{{ $vehiculo->placa }}" data-id="{{ $vehiculo->id }}" data-marca="{{ $vehiculo->marca->marca_vehiculo }}" data-modelo="{{ $vehiculo->modelo->modelo_vehiculo }}" data-año="{{ $vehiculo->año_modelo }}" data-tipo="{{ $vehiculo->tipo_vehiculo }}" data-kilometraje="{{ $vehiculo->kilometraje }}" data-precio="{{ $vehiculo->precio_venta }}" data-chasis="{{ $vehiculo->numero_chasis }}" data-motor="{{ $vehiculo->numero_motor }}" data-foto="{{ $vehiculo->foto_url }}">
+                    {{$vehiculo->placa}} - {{ $vehiculo->marca->marca_vehiculo }} {{ $vehiculo->modelo->modelo_vehiculo }} - {{ $vehiculo->año_modelo }} - {{ $vehiculo->tipo_vehiculo }} - {{ $vehiculo->kilometraje }} - ${{ $vehiculo->precio_venta }}
                 </option>
             @endif
             @endforeach
         </datalist>
-        
     </div>
     <button class="btn btn-primary" onclick="addVehiculo()">Agregar Vehículo</button>
 
@@ -70,7 +58,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Código</th>
+                <th>Placa</th>
                 <th>Marca</th>
                 <th>Modelo</th>
                 <th>Año</th>
@@ -114,7 +102,6 @@
         <label for="metodo_pago" class="form-label">Método de Pago:</label>
         <select class="form-control" id="metodo_pago" name="metodo_pago" onchange="mostrarOpcionesPago()">
             <option value="efectivo">Efectivo</option>
-            <option value="tarjeta">Tarjeta</option>
             <option value="transferencia">Transferencia Bancaria</option>
             <option value="credito">Financiamiento</option>
         </select>

@@ -10,7 +10,7 @@ class Proveedor extends Model
 
     protected $table = 'proveedores';
 
-    protected $primaryKey = 'ruc';
+    protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'string';
 

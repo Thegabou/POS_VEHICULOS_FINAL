@@ -9,6 +9,8 @@ use App\Models\Vehiculo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use App\Models\MarcaVehiculo;
+use App\Http\Controllers\VehiculoController;
 
 class CompraController extends Controller
 {
@@ -17,7 +19,8 @@ class CompraController extends Controller
         $compras = Compra::with('proveedor')->get();
         $proveedores = Proveedor::all();
         $vehiculos = Vehiculo::all();
-        return view('partials.compra-index', compact('compras', 'proveedores', 'vehiculos'));
+        $marcas= MarcaVehiculo::all();
+        return view('partials.compra-index', compact('compras', 'proveedores', 'vehiculos', 'marcas'));
     }
 
     public function store(Request $request)
@@ -44,6 +47,8 @@ class CompraController extends Controller
 
             // Procesar cada vehículo
             foreach ($vehiculosData as $vehiculoData) {
+                // Verificar si la marca y modelo existen
+                
                 // Crear el vehículo
                 $vehiculo = Vehiculo::create([
                     'id_marca' => $vehiculoData['id_marca'],
@@ -56,6 +61,8 @@ class CompraController extends Controller
                     'numero_chasis' => $vehiculoData['numero_chasis'],
                     'numero_motor' => $vehiculoData['numero_motor'],
                     'precio_venta' => $vehiculoData['precio_venta'],
+                    'placa'=> $vehiculoData['placa'],
+                    'descripcion'=> $vehiculoData['descripcion'],
                     'foto_url' => $vehiculoData['foto_url'], // Si tienes este campo
                 ]);
                 Log::info('Vehiculo creado: ', $vehiculo->toArray());
@@ -78,7 +85,7 @@ class CompraController extends Controller
         }
         catch (Exception $e) {
             Log::error('Error al registrar la compra: ' . $e->getMessage());
-            return response()->json(['error' => 'Error al registrar la compra'], 500);
+            return response()->json(['error' => 'Error al registrar la compra'.$e->getMessage()], 500);
         }
     }
 

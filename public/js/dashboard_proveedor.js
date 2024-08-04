@@ -80,12 +80,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Función para editar un proveedor
 document.addEventListener('DOMContentLoaded', function () {
-    const formEditProveedor = document.getElementById('form-edit-proveedor');
-    if (formEditProveedor) {
-        formEditProveedor.addEventListener('submit', function(event) {
+    document.body.addEventListener('submint', function(event) {
+        if (event.target.matches('#form-edit-proveedor')) {
             event.preventDefault();
 
-            const form = this;
+            const form = event.target;
             const formData = new FormData(form);
             const url = form.action;
 
@@ -117,9 +116,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     title: 'Error',
                     text: 'Hubo un problema al actualizar el proveedor. Por favor, inténtelo nuevamente.',
                 });
-            });
-        });
-    }
+            });            
+        }
+    });
 });
 
 // Función para eliminar un proveedor

@@ -11,13 +11,13 @@ class VehiculoController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $vehiculos = Vehiculo::when($search, function ($query, $search) {
+        $vehiculos = Vehiculo::with(['marca', 'modelo'])->when($search, function ($query, $search) {
             $query->whereHas('marca', function ($q) use ($search) {
                 $q->where('marca_vehiculo', 'like', "%$search%");
             })->orWhereHas('modelo', function ($q) use ($search) {
                 $q->where('modelo_vehiculo', 'like', "%$search%");
             })->orWhere('tipo_vehiculo', 'like', "%$search%")
-              ->orWhere('año_modelo', 'like', "%$search%");
+            ->orWhere('año_modelo', 'like', "%$search%");
         })->get();
 
         return view('partials.vehiculos-index', compact('vehiculos'));
@@ -105,10 +105,9 @@ class VehiculoController extends Controller
         return response()->json($marcas);
     }
     
-    public function getModelosByMarca($idMarca)
+    public static function getModelosByMarca($idMarca)
     {
         $modelos = ModeloVehiculo::where('id_marca', $idMarca)->get();
         return response()->json($modelos);
     }
 }
-
