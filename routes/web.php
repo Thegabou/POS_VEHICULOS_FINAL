@@ -22,6 +22,7 @@ use App\Http\Controllers\ReporteClientesController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\GlobalVariableController;
+use App\Http\Controllers\VentasReportesController;
 
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -84,13 +85,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard/reportes-index', [ReporteVehiculosController::class, 'index'])->name('reportes');
     Route::get('/clientes/{clienteId}/historial-compras', [ReporteClientesController::class, 'historialCompras'])->name('clientes.historialCompras');
     Route::get('/clientes/{clienteId}/generar-reportes', [ReporteClientesController::class, 'generarReportes'])->name('clientes.generarReportes');
+    Route::get('reportes/ventas-diarias', [VentasReportesController::class, 'ventasDiarias'])->name('reportes.ventasDiarias');
+    Route::get('reportes/ventas-semanales', [VentasReportesController::class, 'ventasSemanales'])->name('reportes.ventasSemanales');
+    Route::get('reportes/ventas-mensuales', [VentasReportesController::class, 'ventasMensuales'])->name('reportes.ventasMensuales');
+
     //obtener modelos por marca
     Route::get('vehiculo/modelos/{idMarca}', [VehiculoController::class, 'getModelosByMarca'])->name('vehiculo.modelos');
     Route::controller(ImagenController::class)->group(function(){
         Route::get('/image-upload', 'index')->name('image.form');
         Route::post('/upload-image', 'storeImage')->name('image.store');
     });
-    //si es administrado
+    Route::get('/dashboard/reportes-ventas', [VentasReportesController::class, 'index'])->name('reportes.ventas');
 
 
     

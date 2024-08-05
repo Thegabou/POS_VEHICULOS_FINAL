@@ -42,7 +42,60 @@
                 </div>
             </div>
         </div>
+        
+        <!-- New Container for Report Generation -->
         <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-file-alt me-1"></i>
+                        Generar Reportes
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Daily Report -->
+                            <div class="col-md-4">
+                                <h5>Ventas Diarias</h5>
+                                <input type="date" id="dailyDate" class="form-control mb-2">
+                                <button id="generateDailyReportButton" class="btn btn-primary mb-2">Ver Reporte</button>
+                                <button id="printDailyReportButton" class="btn btn-secondary mb-2" href="{{route('reportes.ventasDiarias')}}" onclick="generateDailyReport()">Imprimir PDF</button>
+                            </div>
+                            <!-- Weekly Report -->
+                            <div class="col-md-4">
+                                <h5>Ventas Semanales</h5>
+                                <input type="date" id="weeklyStartDate" class="form-control mb-2" placeholder="Fecha de inicio">
+                                <input type="date" id="weeklyEndDate" class="form-control mb-2" placeholder="Fecha de fin">
+                                <button id="generateWeeklyReportButton" class="btn btn-primary mb-2">Ver Reporte</button>
+                                <button id="printWeeklyReportButton" class="btn btn-secondary mb-2" hrerf="{{route('reportes.ventasSemanales')}}" onclick="generateWeeklyReport()">Imprimir PDF</button>
+                            </div>
+                            <!-- Monthly Report -->
+                            <div class="col-md-4">
+                                <h5>Ventas Mensuales</h5>
+                                <select id="monthlySelect" class="form-control mb-2">
+                                    <option value="">Seleccione un mes</option>
+                                    <option value="1">Enero</option>
+                                    <option value="2">Febrero</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Mayo</option>
+                                    <option value="6">Junio</option>
+                                    <option value="7">Julio</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
+                                <button id="generateMonthlyReportButton" class="btn btn-primary mb-2">Ver Reporte</button>
+                                <button id="printMonthlyReportButton" class="btn btn-secondary mb-2" href="{{route('reportes.ventasMensuales')}}" >Imprimir PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- <div class="row">
             <div class="col-xl-6">
                 <div class="card mb-4">
                     <div class="card-header">
@@ -71,9 +124,11 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ asset('js/dashboard_reportes.js') }}"></script>
+
+<script src="{{ asset('js/reportes_ventas.js') }}"></script>
+<script src="{{asset('js/dashboard_reportes.js')}}"></script>

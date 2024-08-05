@@ -1,78 +1,95 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var masVendidosCardBody = document.getElementById('masVendidosCardBody');
-    var menosVendidosCardBody = document.getElementById('menosVendidosCardBody');
-    var entradasCardBody = document.getElementById('entradasCardBody');
-    var salidasCardBody = document.getElementById('salidasCardBody');
+    var vehiculosMasVendidosData = JSON.parse(document.getElementById('vehiculosMasVendidosData').textContent);
+    var vendedoresMasVentasData = JSON.parse(document.getElementById('vendedoresMasVentasData').textContent);
 
-    var vehiculosMasVendidos = JSON.parse(document.getElementById('vehiculosMasVendidosData').textContent);
-    var vehiculosMenosVendidos = JSON.parse(document.getElementById('vehiculosMenosVendidosData').textContent);
-
-    var labelsMasVendidos = vehiculosMasVendidos.map(function (vehiculo) {
+    // Data processing for Highcharts
+    var vehiculosMasVendidosLabels = vehiculosMasVendidosData.map(function (vehiculo) {
         return vehiculo.marca + ' ' + vehiculo.modelo;
     });
-    var dataMasVendidos = vehiculosMasVendidos.map(function (vehiculo) {
+    var vehiculosMasVendidosCounts = vehiculosMasVendidosData.map(function (vehiculo) {
         return vehiculo.total_vendidos;
     });
 
-    var labelsMenosVendidos = vehiculosMenosVendidos.map(function (vehiculo) {
-        return vehiculo.marca + ' ' + vehiculo.modelo;
+    var vendedoresMasVentasLabels = vendedoresMasVentasData.map(function (vendedor) {
+        return vendedor.nombre;
     });
-    var dataMenosVendidos = vehiculosMenosVendidos.map(function (vehiculo) {
-        return vehiculo.total_vendidos;
+    var vendedoresMasVentasCounts = vendedoresMasVentasData.map(function (vendedor) {
+        return vendedor.total_ventas;
     });
 
-    // Insertar datos en los card-body
-    masVendidosCardBody.innerHTML = labelsMasVendidos.map(function(label, index) {
-        return `<p>${label}: ${dataMasVendidos[index]} vendidos</p>`;
-    }).join('');
-
-    menosVendidosCardBody.innerHTML = labelsMenosVendidos.map(function(label, index) {
-        return `<p>${label}: ${dataMenosVendidos[index]} vendidos</p>`;
-    }).join('');
-
-    // Gráficos
-    var ctxMasVendidos = document.getElementById('myAreaChart').getContext('2d');
-    var ctxMenosVendidos = document.getElementById('myBarChart').getContext('2d');
-
-    var myAreaChart = new Chart(ctxMasVendidos, {
-        type: 'line',
-        data: {
-            labels: labelsMasVendidos,
-            datasets: [{
-                label: 'Vehículos más vendidos',
-                data: dataMasVendidos,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
+    // Vehículos Más Vendidos Chart
+    Highcharts.chart('vehiculosMasVendidosChart', {
+        chart: {
+            type: 'column'
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        title: {
+            text: 'Vehículos Más Vendidos'
+        },
+        xAxis: {
+            categories: vehiculosMasVendidosLabels,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Total Vendidos'
             }
-        }
+        },
+        series: [{
+            name: 'Vehículos',
+            data: vehiculosMasVendidosCounts,
+            color: '#7cb5ec'
+        }]
     });
 
-    var myBarChart = new Chart(ctxMenosVendidos, {
-        type: 'bar',
-        data: {
-            labels: labelsMenosVendidos,
-            datasets: [{
-                label: 'Vehículos menos vendidos',
-                data: dataMenosVendidos,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
+    // Vendedores con Más Ventas Chart
+    Highcharts.chart('vendedoresMasVentasChart', {
+        chart: {
+            type: 'column'
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        title: {
+            text: 'Vendedores con Más Ventas'
+        },
+        xAxis: {
+            categories: vendedoresMasVentasLabels,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Total Ventas'
             }
-        }
+        },
+        series: [{
+            name: 'Vendedores',
+            data: vendedoresMasVentasCounts,
+            color: '#90ed7d'
+        }]
     });
+
+    
 });
+
+function generateDailyReport() {
+    const date = document.getElementById('dailyReportDate').value;
+    if (date) {
+        window.location.href = `/reportes/ventas-diarias?date=${date}`;
+    } else {
+        alert('Por favor, seleccione una fecha.');
+    }
+}
+
+function generateWeeklyReport() {
+    const startDate = document.getElementById('weeklyReportStartDate').value;
+    const endDate = document.getElementById('weeklyReportEndDate').value;
+    if (startDate && endDate) {
+        window.location.href = `/reportes/ventas-semanales?start_date=${startDate}&end_date=${endDate}`;
+    } else {
+        alert('Por favor, seleccione las fechas de inicio y fin.');
+    }
+}
+
+function generateMonthlyReport() {
+    const month = document.getElementById('monthlyReportMonth').value;
+    window.location.href = `/reportes/ventas-mensuales?month=${month}`;
+}
