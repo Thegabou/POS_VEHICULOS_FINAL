@@ -57,8 +57,8 @@
                             <div class="col-md-4">
                                 <h5>Ventas Diarias</h5>
                                 <input type="date" id="dailyDate" class="form-control mb-2">
-                                <button id="generateDailyReportButton" class="btn btn-primary mb-2">Ver Reporte</button>
-                                <button id="printDailyReportButton" class="btn btn-secondary mb-2" href="{{route('reportes.ventasDiarias')}}" onclick="generateDailyReport()">Imprimir PDF</button>
+                                <button id="generateDailyReportButton" class="btn btn-primary mb-2" onclick="viewDailyReport()">Ver Reporte</button>
+                                <button id="printDailyReportButton" class="btn btn-secondary mb-2" href="{{route('ventasDiarias')}}">Imprimir PDF</button>
                             </div>
                             <!-- Weekly Report -->
                             <div class="col-md-4">
@@ -94,6 +94,7 @@
                 </div>
             </div>
         </div>
+        
 
         {{-- <div class="row">
             <div class="col-xl-6">
@@ -130,5 +131,5 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script src="{{ asset('js/reportes_ventas.js') }}"></script>
-<script src="{{asset('js/dashboard_reportes.js')}}"></script>
+{{-- <script src="{{ asset('js/reportes_ventas.js') }}"></script>
+<script src="{{asset('js/dashboard_reportes.js')}}"></script> --}}

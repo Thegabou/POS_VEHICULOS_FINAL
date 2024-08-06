@@ -36,10 +36,6 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Menu</div>
-                        <a class="nav-link" href="#" onclick="loadContent('{{ route('reportes') }}')">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-eye"></i></div>
-                            Reportes
-                        </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('punto_venta') }}')">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
                             Punta de Venta

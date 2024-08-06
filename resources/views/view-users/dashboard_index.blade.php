@@ -57,6 +57,10 @@
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
                             Clientes
                         </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('marcasModelos.index') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-parachute-box"></i></div>
+                            Marca/Modelo
+                        </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('vehiculos') }}')">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-car"></i></div>
                             Vehiculos
@@ -115,6 +119,7 @@
     <script src="{{asset('js/dashboard_clientes.js')}}"></script>
     <script src="{{asset('js/dashboard_ventas.js')}}"></script>
     <script src="{{ asset('js/dashboard_vehiculos.js') }}"></script>
+    {{-- <script src="{{ asset('js/marcas_modelos.js') }}"></script> --}}
     <script src="{{asset('js/dashboard_compra.js')}}"></script>
     <script src="{{asset('js/dashboard_proveedor.js')}}"></script>
     <script src="{{asset('js/utilis.js')}}"></script>

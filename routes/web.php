@@ -23,6 +23,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\GlobalVariableController;
 use App\Http\Controllers\VentasReportesController;
+use App\Http\Controllers\MarcasModelosController;
 
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -85,9 +86,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard/reportes-index', [ReporteVehiculosController::class, 'index'])->name('reportes');
     Route::get('/clientes/{clienteId}/historial-compras', [ReporteClientesController::class, 'historialCompras'])->name('clientes.historialCompras');
     Route::get('/clientes/{clienteId}/generar-reportes', [ReporteClientesController::class, 'generarReportes'])->name('clientes.generarReportes');
-    Route::get('reportes/ventas-diarias', [VentasReportesController::class, 'ventasDiarias'])->name('reportes.ventasDiarias');
+    Route::get('reportes/ventas-diarias', [VentasReportesController::class, 'ventasDiarias'])->name('ventasDiarias');
     Route::get('reportes/ventas-semanales', [VentasReportesController::class, 'ventasSemanales'])->name('reportes.ventasSemanales');
     Route::get('reportes/ventas-mensuales', [VentasReportesController::class, 'ventasMensuales'])->name('reportes.ventasMensuales');
+    Route::get('/marcas_modelos', [MarcasModelosController::class, 'index'])->name('marcasModelos.index');
+    Route::post('/marcas', [MarcasModelosController::class, 'storeMarca'])->name('marcas.store');
+    Route::post('/modelos', [MarcasModelosController::class, 'storeModelo'])->name('modelos.store');
+    //ruta para editar modelos
+    Route::get('/modelos/{id}/edit', [MarcasModelosController::class, 'editModelo'])->name('modelos.edit');
+    //ruta para eliminar modelos
+    Route::delete('/modelos/{id}', [MarcasModelosController::class, 'destroyModelo'])->name('modelos.destroy');
+    Route::get('/marcas/buscar', [MarcasModelosController::class, 'searchMarcas'])->name('marcas.search');
 
     //obtener modelos por marca
     Route::get('vehiculo/modelos/{idMarca}', [VehiculoController::class, 'getModelosByMarca'])->name('vehiculo.modelos');

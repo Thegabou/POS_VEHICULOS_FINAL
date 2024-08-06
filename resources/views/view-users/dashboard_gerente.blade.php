@@ -46,22 +46,30 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Core</div>
-                        <a class="nav-link" href="{{ route('dashboard') }}">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Inicio
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('clientes') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
+                            Clientes
                         </a>
-                        <div class="sb-sidenav-menu-heading">Interface</div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Herramientas
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('vehiculos') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-car"></i></div>
+                            Vehiculos
                         </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="{{ route('creacion_usuarios') }}">Creacion de Usuario</a>
-                                <a class="nav-link" href="{{ route('inventario') }}">Inventario</a>
-                            </nav>
-                        </div>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('punto_venta') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                            Punta de Venta
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('dashboard.compras') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                            Ingresar Facturas
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('proveedores') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-parachute-box"></i></div>
+                            Proveedores
+                        </a>
+                        <a class="nav-link" href="#" onclick="loadContent('{{ route('reportes') }}')">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-eye"></i></div>
+                            Reportes
+                        </a>
                         <!-- ... Otros elementos del menú ... -->
                     </div>
                 </div>
@@ -98,5 +106,9 @@
     <script src="{{ asset('js/chart-bar-demo.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
+    <script src="{{asset('js/utilis.js')}}"></script> 
+    <script src="{{asset('js/dashboard_proveedor.js')}}"></script>
+    <script src="{{asset('js/dashboard_compra.js')}}"></script>
+    <script src="{{ asset('js/dashboard_ventas.js') }}"></script>
 </body>
 </html>
