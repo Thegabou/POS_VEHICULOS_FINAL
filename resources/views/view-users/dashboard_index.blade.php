@@ -63,7 +63,7 @@
                         </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('global_variables.index') }}')">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-car"></i></div>
-                            IVA/Interes
+                            IVA
                         </a>
                         <a class="nav-link" href="#" onclick="loadContent('{{ route('reportes') }}')">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-eye"></i></div>
