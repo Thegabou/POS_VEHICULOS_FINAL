@@ -2,31 +2,13 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Reporte de Ventas Diarias</title>
+    <title>Reporte de Ventas Mensuales</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            text-align: center;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
+        /* Your custom styles for the PDF */
     </style>
 </head>
 <body>
-    <h1>Reporte de Ventas Diarias - {{ $date }}</h1>
+    <h1>Reporte de Ventas Mensuales - Mes {{ $month }}</h1>
     <table>
         <thead>
             <tr>

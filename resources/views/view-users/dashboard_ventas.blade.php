@@ -95,10 +95,33 @@
     <script src="{{asset('js/utilis.js')}}"></script> 
     <script src="{{asset('js/dashboard_proveedor.js')}}"></script>
     <script src="{{asset('js/dashboard_compra.js')}}"></script>
+    <script src="{{asset('js/dashboard_clientes.js')}}"></script>
     <script src="{{ asset('js/dashboard_ventas.js') }}"></script>
+    <script src="{{asset('js/dashboard_vehiculos.js')}}"></script>
+    <script src="{{asset('js/utilis.js')}}"></script>
     <--!cargar la vista de punto_venta por defecto-->
-    <script>
+   <script>
+    function loadContent(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('main-content').innerHTML = html;
+            attachSearchHandler();
+            try {
+                attachFormHandlerVentas();
+                attachFormHandlerClientes();
+                
+            } catch (error) {
+                console.warn('No se encontró la función attachFormHandler');
+            }
+
+        })
+        .catch(error => console.warn(error));
+}
+   </script>
+   <script>
         loadContent('{{ route('punto_venta') }}');  
     </script>
+    
 </body>
 </html>

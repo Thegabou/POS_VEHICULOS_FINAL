@@ -59,14 +59,12 @@ class VehiculoController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'id_marca' => 'required|exists:marca_vehiculos,id',
-            'id_modelo' => 'required|exists:modelo_vehiculos,id',
+            
             'año_modelo' => 'required|integer',
             'tipo_vehiculo' => 'required|string|max:255',
             'precio_compra' => 'required|numeric',
             'kilometraje' => 'required|numeric',
             'precio_venta' => 'required|numeric',
-            'foto_url' => 'required|url',
             'numero_chasis' => 'required|string',
             'numero_motor' => 'required|string',
             'estado' => 'required|in:Disponible,Reservado,Vendido',
@@ -95,8 +93,11 @@ class VehiculoController extends Controller
 
     public function welcome()
     {
-        $vehiculos = Vehiculo::all();
-        return view('welcome', compact('vehiculos'));
+        $vehiculos = Vehiculo::with(['marca', 'modelo'])->where('estado', 'Disponible')->get();
+        $marcas = MarcaVehiculo::all();
+        $modelos = ModeloVehiculo::all();
+
+        return view('welcome', compact('vehiculos', 'marcas', 'modelos'));
     }
 
     public function getMarcas()
@@ -104,10 +105,11 @@ class VehiculoController extends Controller
         $marcas = MarcaVehiculo::all();
         return response()->json($marcas);
     }
-    
+
     public static function getModelosByMarca($idMarca)
     {
         $modelos = ModeloVehiculo::where('id_marca', $idMarca)->get();
         return response()->json($modelos);
     }
 }
+

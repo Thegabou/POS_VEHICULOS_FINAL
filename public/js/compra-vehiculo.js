@@ -17,20 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    function isCardValid() {
-        const cardNumber = document.querySelector('input[name="number"]').value.replace(/\s+/g, '');
-        const expiry = document.querySelector('input[name="expiry"]').value;
-        const cvc = document.querySelector('input[name="cvc"]').value;
-
-        const creditCardValidator = require('credit-card-validator');
-
-        const isNumberValid = creditCardValidator.validateCard(cardNumber);
-        const isExpiryValid = /^\d{2}\/\d{2}$/.test(expiry);
-        const isCvcValid = creditCardValidator.validateCardSecurityCodeLength(cardNumber, cvc);
-        const isLuhnValid = creditCardValidator.validateCardLuhn(cardNumber);
-
-        return isNumberValid && isExpiryValid && isCvcValid && isLuhnValid;
-    }
+    
 
     cedulaInput.addEventListener('blur', function () {
         buscarCliente();
@@ -91,19 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (purchaseForm) {
         purchaseForm.addEventListener('submit', function (e) {
             e.preventDefault();
-
-            if (!isCardValid()) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Detalles de tarjeta inválidos',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar',
-                    showClass: {
-                        popup: 'animate__animated animate__shakeX'
-                    }
-                });
-                return;
-            }
 
             Swal.fire({
                 title: 'Procesando compra',

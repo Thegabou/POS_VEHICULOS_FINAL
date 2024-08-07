@@ -84,13 +84,14 @@ class CompraPaginaWebController extends Controller
             ]);
 
             DB::commit();
-
+            $empleadonombre='Pagina Web';
             // Generar PDF
             $options = new Options();
             $options->set('isRemoteEnabled', true);
             $dompdf = new Dompdf($options);
 
-            $view = view('factura', compact('factura', 'vehiculo', 'cliente'))->render();
+            // Pasar todos los datos relevantes del vehículo
+            $view = view('factura', compact('factura', 'empleadonombre','vehiculo', 'cliente'))->render();
             $dompdf->loadHtml($view);
             $dompdf->setPaper('A4', 'landscape');
             $dompdf->render();

@@ -1,21 +1,7 @@
 // Función para cargar contenido dinámicamente
-function loadContent(url) {
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('main-content').innerHTML = html;
-            attachSearchHandler();
-        })
-        .catch(error => console.warn(error));
-}
+
 
 // Función para adjuntar el manejador de búsqueda
-function attachSearchHandler() {
-    const searchInput = document.getElementById('search');
-    if (searchInput) {
-        searchInput.addEventListener('input', filterClientes);
-    }
-}
 
 // Función para filtrar los clientes
 function filterClientes() {
@@ -42,7 +28,8 @@ function filterClientes() {
 }
 
 // Función para crear un cliente
-document.addEventListener('DOMContentLoaded', function () {
+function attachFormHandlerClientes() {
+    console.log('attachFormHandlerClientes');
     document.body.addEventListener('submit', function(event) {
         if (event.target.matches('#form-crear-cliente')) {
             
@@ -86,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
-});
+
 
 // Función para editar un cliente
     document.body.addEventListener('submit', function (event) {
@@ -128,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
-
+}
 // Función para eliminar un cliente
 function deleteCliente(event, form) {
     event.preventDefault();

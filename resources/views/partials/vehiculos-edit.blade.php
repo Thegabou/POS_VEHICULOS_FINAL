@@ -35,14 +35,14 @@
             <label for="precio_venta">Precio Venta:</label>
             <input type="number" class="form-control" id="precio_venta" name="precio_venta" value="{{ $vehiculo->precio_venta }}" required>
         </div>
-        <div class="form-goup">
+        {{-- <div class="form-goup">
             <label for="imagen" class="form-label">Subir Imagen:</label>
             <input type="file" class="form-control" id="imagen" name="imagen" required>
         </div>
         <div class="form-goup" id="imagePreviewContainer" style="display: none;">
             <img id="imagePreview" src="#" alt="Vista previa de la imagen" style="max-width: 100%; height: auto;"/>
             <button type="button" id="removeImage" class="btn btn-danger mt-2">Quitar Imagen</button>
-        </div>
+        </div> --}}
         <div class="form-group">
             <label for="numero_chasis">Numero Chasis:</label>
             <input type="text" class="form-control" id="numero_chasis" name="numero_chasis" value="{{ $vehiculo->numero_chasis }}" required>

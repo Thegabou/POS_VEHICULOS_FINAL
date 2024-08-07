@@ -1,3 +1,4 @@
+<script src="{{ asset('js/reportes_ventas.js') }}"></script>
 <main>
     <div class="container-fluid px-4">
         <h1 class="mt-4">Reportes Generales</h1>
@@ -57,15 +58,14 @@
                             <div class="col-md-4">
                                 <h5>Ventas Diarias</h5>
                                 <input type="date" id="dailyDate" class="form-control mb-2">
-                                <button id="generateDailyReportButton" class="btn btn-primary mb-2" onclick="viewDailyReport()">Ver Reporte</button>
-                                <button id="printDailyReportButton" class="btn btn-secondary mb-2" href="{{route('ventasDiarias')}}">Imprimir PDF</button>
+                                <button id="printDailyReportButton" class="btn btn-secondary mb-2" onclick="generateDailyReport()">Imprimir PDF</button>
                             </div>
                             <!-- Weekly Report -->
                             <div class="col-md-4">
                                 <h5>Ventas Semanales</h5>
                                 <input type="date" id="weeklyStartDate" class="form-control mb-2" placeholder="Fecha de inicio">
                                 <input type="date" id="weeklyEndDate" class="form-control mb-2" placeholder="Fecha de fin">
-                                <button id="generateWeeklyReportButton" class="btn btn-primary mb-2">Ver Reporte</button>
+    
                                 <button id="printWeeklyReportButton" class="btn btn-secondary mb-2" hrerf="{{route('reportes.ventasSemanales')}}" onclick="generateWeeklyReport()">Imprimir PDF</button>
                             </div>
                             <!-- Monthly Report -->
@@ -86,8 +86,7 @@
                                     <option value="11">Noviembre</option>
                                     <option value="12">Diciembre</option>
                                 </select>
-                                <button id="generateMonthlyReportButton" class="btn btn-primary mb-2">Ver Reporte</button>
-                                <button id="printMonthlyReportButton" class="btn btn-secondary mb-2" href="{{route('reportes.ventasMensuales')}}" >Imprimir PDF</button>
+                                <button id="printMonthlyReportButton" class="btn btn-secondary mb-2" href="{{route('reportes.ventasMensuales')}}"  onclick="generateMonthlyReport()">Imprimir PDF</button>
                             </div>
                         </div>
                     </div>
@@ -131,5 +130,5 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-{{-- <script src="{{ asset('js/reportes_ventas.js') }}"></script>
-<script src="{{asset('js/dashboard_reportes.js')}}"></script> --}}
+
+

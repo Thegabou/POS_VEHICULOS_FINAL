@@ -1,16 +1,29 @@
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('generateDailyReportButton').addEventListener('click', generateDailyReport);
+console.log('reportes_ventas.js');
+
+function loadContent(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('main-content').innerHTML = html;
+            attachSearchHandler();
+        })
+        .catch(error => console.warn(error));
+}
+
+
+    document.getElementById('printDailyReportButton').addEventListener('click', generateDailyReport);
     document.getElementById('generateWeeklyReportButton').addEventListener('click', generateWeeklyReport);
     document.getElementById('generateMonthlyReportButton').addEventListener('click', generateMonthlyReport);
-});
+
 
 function generateDailyReport() {
+    console.log('click');
     const date = document.getElementById('dailyDate').value;
     if (!date) {
         alert('Por favor seleccione una fecha.');
         return;
     }
-    window.open(`/reportes/ventas-diarias?date=${date}`, '_blank');
+    window.open(`/reportes/ventas-diarias/${date}`, '_blank');
 }
 
 function generateWeeklyReport() {

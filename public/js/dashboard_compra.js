@@ -10,7 +10,8 @@ function loadContent(url) {
 }
 
 // Attach handlers for the form interactions
-function attachHandlers() {
+function attachHandlersCompra() {
+    console.log("attachHandlersCompra");
     const numeroFactura = document.getElementById("num_factura");
     const proveedor = document.getElementById("proveedor");
     const montoFinal = document.getElementById("monto_final");

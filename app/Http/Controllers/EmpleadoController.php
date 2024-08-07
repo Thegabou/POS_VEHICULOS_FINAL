@@ -37,11 +37,12 @@ class EmpleadoController extends Controller
             'apellido' => 'required|string|max:255',
             'correo' => 'required|string|email|max:255|unique:empleados',
             'cedula' => 'required|string|max:20|unique:empleados',
-            'cargo' => 'required|string|max:100',
         ]);
 
-        Empleado::create($request->all());
-
+        $newempelado=Empleado::create($request->all());
+        if($request->has('cargo')){
+            $newempelado->cargo=$request->input('cargo');
+        }
         return response()->json(['success' => 'Empleado creado exitosamente.']);
     }
 

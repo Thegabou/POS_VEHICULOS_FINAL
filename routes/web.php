@@ -56,9 +56,8 @@ Route::resource('reportes-index', ReporteVehiculosController::class);
 
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [VehiculoController::class, 'welcome'])->name('home');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -86,9 +85,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard/reportes-index', [ReporteVehiculosController::class, 'index'])->name('reportes');
     Route::get('/clientes/{clienteId}/historial-compras', [ReporteClientesController::class, 'historialCompras'])->name('clientes.historialCompras');
     Route::get('/clientes/{clienteId}/generar-reportes', [ReporteClientesController::class, 'generarReportes'])->name('clientes.generarReportes');
-    Route::get('reportes/ventas-diarias', [VentasReportesController::class, 'ventasDiarias'])->name('ventasDiarias');
-    Route::get('reportes/ventas-semanales', [VentasReportesController::class, 'ventasSemanales'])->name('reportes.ventasSemanales');
-    Route::get('reportes/ventas-mensuales', [VentasReportesController::class, 'ventasMensuales'])->name('reportes.ventasMensuales');
+    Route::get('/reportes/ventas-diarias/{date}', [VentasReportesController::class, 'ventasDiarias'])->name('ventasDiarias');
+    Route::get('/reportes/ventas-semanales', [VentasReportesController::class, 'ventasSemanales'])->name('reportes.ventasSemanales');
+    Route::get('/reportes/ventas-mensuales', [VentasReportesController::class, 'ventasMensuales'])->name('reportes.ventasMensuales');
     Route::get('/marcas_modelos', [MarcasModelosController::class, 'index'])->name('marcasModelos.index');
     Route::post('/marcas', [MarcasModelosController::class, 'storeMarca'])->name('marcas.store');
     Route::post('/modelos', [MarcasModelosController::class, 'storeModelo'])->name('modelos.store');

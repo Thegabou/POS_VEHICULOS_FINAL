@@ -39,7 +39,31 @@
         <img src="{{ asset('imagenes/logo_marmota.png') }}" alt="" width="160" />
         <h1>"GroundhogDriver:<br> Todo lo que hagas sobre ruedas"</h1>
     </section>
-
+    <div class="d-flex justify-content-center filtros">
+        <div class="d-inline-block">
+            <label for="marca_filtro" class="form-label label-primary">Marca:</label>
+            <select id="marca_filtro" class="form-select mb-3">
+                <option value="">Todas</option>
+                @foreach($marcas as $marca)
+                    <option value="{{ $marca->marca_vehiculo }}">{{ $marca->marca_vehiculo }}</option>
+                @endforeach
+            </select>
+    
+            <label for="modelo_filtro" class="form-label label-primary">Modelo:</label>
+            <select id="modelo_filtro" class="form-select mb-3">
+                <option value="">Todos</option>
+                @foreach($modelos as $modelo)
+                    <option value="{{ $modelo->modelo_vehiculo }}">{{ $modelo->modelo_vehiculo }}</option>
+                @endforeach
+            </select>
+    
+            {{-- <label for="precio_filtro" class="form-label">Precio Máximo:</label>
+            <input type="number" id="precio_filtro" class="form-control mb-3" placeholder="Precio Máximo">
+    
+            <button class="btn btn-primary" onclick="aplicarFiltros()">Aplicar Filtros</button> --}}
+        </div>
+    </div>
+    
     <section class="contenedor">
         <div class="contenedor_productos">
             @include('partials.index.contenedor-vehiculos', ['vehiculos' => $vehiculos])
@@ -95,6 +119,42 @@
         </div>
     </footer>
     <script src="{{ asset('js/nav_encabezado.js') }}"></script>
+    <script>
+        function comprarVehiculo(id) {
+            window.location.href = `/compra-vehiculo/${id}`;
+        }
+
+        function aplicarFiltros() {
+            var marcaFiltro = document.getElementById('marca_filtro').value.toLowerCase();
+            var modeloFiltro = document.getElementById('modelo_filtro').value.toLowerCase();
+            var precioFiltro = document.getElementById('precio_filtro').value;
+
+            var productos = document.getElementsByClassName('producto');
+
+            for (var i = 0; i < productos.length; i++) {
+                var producto = productos[i];
+                var marca = producto.getAttribute('data-marca').toLowerCase();
+                var modelo = producto.getAttribute('data-modelo').toLowerCase();
+                var precioVenta = parseFloat(producto.getAttribute('data-precio-venta'));
+
+                var mostrar = true;
+
+                if (marcaFiltro && marca !== marcaFiltro) {
+                    mostrar = false;
+                }
+
+                if (modeloFiltro && modelo !== modeloFiltro) {
+                    mostrar = false;
+                }
+
+                if (precioFiltro && precioVenta > precioFiltro) {
+                    mostrar = false;
+                }
+
+                producto.style.display = mostrar ? 'block' : 'none';
+            }
+        }
+    </script>
     
 </body>
 </html>

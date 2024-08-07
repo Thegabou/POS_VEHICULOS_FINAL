@@ -213,7 +213,7 @@ function calcularFinanciamiento() {
     const entrada = parseFloat(document.getElementById('entrada').value) || 0;
     const plazo = document.getElementById('plazo').value === 'otro' ? parseInt(document.getElementById('plazo_otro').value) : parseInt(document.getElementById('plazo').value);
     const total = parseFloat(document.getElementById('total').innerText) - entrada;
-    const tasaInteres = 0.03; // 3% anual
+    const tasaInteres = 0.17; // 3% anual
 
     if (plazo && total) {
         const cuotaMensual = (total * (1 + tasaInteres)) / plazo;

@@ -21,9 +21,9 @@
         <div class="mb-3">
             <label for="cargo" class="form-label">Cargo:</label>
             <select class="form-control" id="cargo" name="cargo" required>
-                <option value="Admin">Admin</option>
-                <option value="Gerente">Gerente</option>
                 <option value="Vendedor">Vendedor</option>
+                <option value="Gerente">Gerente</option>
+                <option value="Adamin">Mecánico</option>
             </select>
         </div>
         <br>

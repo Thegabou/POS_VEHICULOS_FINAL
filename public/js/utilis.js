@@ -4,9 +4,16 @@ function loadContent(url) {
         .then(html => {
             document.getElementById('main-content').innerHTML = html;
             attachSearchHandler();
+            try {
+                attachFormHandlerVentas();
+            } catch (error) {
+                console.warn('No se encontró la función attachFormHandler');
+            }
+
         })
         .catch(error => console.warn(error));
 }
+
 
 function filterFunction(searchInputId, dropdownMenuId) {
     var input, filter, div, a, i;

@@ -1,16 +1,6 @@
-//
-function loadContent(url) {
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('main-content').innerHTML = html;
-            attachSearchHandler();
-        })
-        .catch(error => console.warn(error));
-}
 
-document.getElementById('search').addEventListener('input', filterVehiculos);
 
+console.log('cargando dashboard_vehiculos.js');
 function filterVehiculos() {
     const input = document.getElementById('search');
     const filter = input.value.toLowerCase();
@@ -34,13 +24,7 @@ function filterVehiculos() {
     }
 }
 
-//Funcion para adjuntar el manejador de busqueda
-function attachSearchHandler() {
-    const searchValue = document.getElementById('search');
-    if (searchValue) {
-        searchValue.addEventListener('input', filterVehiculos);
-    }
-}
+
 //Funcion para crear un vehiculo
 document.addEventListener('DOMContentLoaded', function () {
     document.body.addEventListener('submit', function(event) {
@@ -86,9 +70,12 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+
 });
 
 // Función para editar un vehículo
+function attachFormHandlerVentas(){
+    console.log('attachFormHandler vehiculos' );
     document.body.addEventListener('submit', function(event) {
         if (event.target.matches('#form-editar-vehiculo')) { // Asegúrate de que el ID del formulario sea correcto
             event.preventDefault();
@@ -132,6 +119,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+}
+    
 
 
 //Funcion para eliminar un vehiculo
